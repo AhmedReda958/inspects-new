@@ -1,7 +1,34 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+@font-face {
+  font-family: "Lama Sans";
+  src: url("/fonts/LamaSans-Regular.woff2") format("woff2"),
+    url("/fonts/LamaSans-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Lama Sans";
+  src: url("/fonts/LamaSans-Medium.woff2") format("woff2"),
+    url("/fonts/LamaSans-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Lama Sans";
+  src: url("/fonts/LamaSans-Bold.woff2") format("woff2"),
+    url("/fonts/LamaSans-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* @custom-variant dark (&:is(.dark *)); */
 
 @theme inline {
   --color-background: var(--background);
@@ -45,7 +72,7 @@
 
 :root {
   --radius: 0.625rem;
-  --font-lama-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+  --font-lama-sans: "Lama Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, sans-serif;
   --background: #ffffff;
   --foreground: #333333;
