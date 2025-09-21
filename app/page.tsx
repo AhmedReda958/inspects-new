@@ -210,35 +210,212 @@ export default function Home() {
 
           {/* Typography Section */}
           <section>
-            <h2 className="text-3xl font-bold mb-6 text-foreground">
-              Typography
+            <h2 className="text-h2 font-bold mb-6 text-foreground">
+              Typography System
             </h2>
-            <div className="space-y-4">
-              <h1 className="text-4xl font-bold text-foreground">
-                Heading 1 - Main Title
-              </h1>
-              <h2 className="text-3xl font-bold text-foreground">
-                Heading 2 - Section Title
-              </h2>
-              <h3 className="text-2xl font-semibold text-foreground">
-                Heading 3 - Subsection
-              </h3>
-              <h4 className="text-xl font-semibold text-foreground">
-                Heading 4 - Component Title
-              </h4>
-              <p className="text-base text-foreground">
-                This is regular body text using the primary foreground color. It
-                should be easily readable against the background in both light
-                and dark modes.
-              </p>
-              <p className="text-sm text-muted-foreground">
-                This is smaller, muted text typically used for descriptions,
-                captions, or secondary information.
-              </p>
-              <p className="text-xs text-muted-foreground">
-                This is the smallest text size, often used for footnotes or
-                legal text.
-              </p>
+            <div className="space-y-8">
+              {/* Headings */}
+              <div>
+                <h3 className="text-h3 font-bold mb-4 text-foreground">
+                  Headings
+                </h3>
+                <div className="space-y-4">
+                  <div className="border border-border rounded-lg p-4">
+                    <h1 className="mb-2">Heading 1 - Main Title</h1>
+                    <small className="text-muted-foreground">
+                      Font: Inter Bold, text-4xl/leading-tight (HTML h1)
+                    </small>
+                  </div>
+
+                  <div className="border border-border rounded-lg p-4">
+                    <h2 className="mb-2">Heading 2 - Section Title</h2>
+                    <small className="text-muted-foreground">
+                      Font: Inter Bold, text-3xl/leading-tight (HTML h2)
+                    </small>
+                  </div>
+
+                  <div className="border border-border rounded-lg p-4">
+                    <h3 className="mb-2">Heading 3 - Subsection</h3>
+                    <small className="text-muted-foreground">
+                      Font: Inter Bold, text-2xl/leading-tight (HTML h3)
+                    </small>
+                  </div>
+
+                  <div className="border border-border rounded-lg p-4">
+                    <h4 className="mb-2">Heading 4 - Component Title</h4>
+                    <small className="text-muted-foreground">
+                      Font: Inter Bold, text-xl/leading-tight (HTML h4)
+                    </small>
+                  </div>
+
+                  <div className="border border-border rounded-lg p-4">
+                    <h5 className="mb-2">Heading 5 - Small Heading</h5>
+                    <small className="text-muted-foreground">
+                      Font: Inter Medium, text-lg/leading-tight (HTML h5)
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+              {/* Body Text */}
+              <div>
+                <h3 className="mb-4">Body Text</h3>
+                <div className="space-y-4">
+                  <div className="border border-border rounded-lg p-4">
+                    <p className="mb-2">
+                      Body 1 - This is the primary body text used for main
+                      content. It should be easily readable and provide good
+                      contrast against the background.
+                    </p>
+                    <small className="text-muted-foreground">
+                      Font: Inter Normal, text-base/leading-relaxed (HTML p)
+                    </small>
+                  </div>
+
+                  <div className="border border-border rounded-lg p-4">
+                    <small className="block mb-2 text-foreground">
+                      Small - This is smaller text, often used for descriptions
+                      and supporting content.
+                    </small>
+                    <small className="text-muted-foreground">
+                      Font: Inter Normal, text-sm/leading-normal (HTML small)
+                    </small>
+                  </div>
+
+                  <div className="border border-border rounded-lg p-4">
+                    <p className="text-body-3 text-foreground mb-2">
+                      Body 3 - Small text for captions, labels, and metadata.
+                    </p>
+                    <p className="text-body-3 text-muted-foreground">
+                      Font: Inter Regular, Dynamic: 0.75rem/1.125rem
+                      (text-body-3)
+                    </p>
+                  </div>
+
+                  <div className="border border-border rounded-lg p-4">
+                    <p className="text-body-4 text-foreground mb-2">
+                      Body 4 - Very small text for fine print and disclaimers.
+                    </p>
+                    <p className="text-body-3 text-muted-foreground">
+                      Font: Inter Regular, Dynamic: 0.625rem/0.9375rem
+                      (text-body-4)
+                    </p>
+                  </div>
+
+                  <div className="border border-border rounded-lg p-4">
+                    <p className="text-body-5 text-foreground mb-2">
+                      Body 5 - Micro text for extremely compact layouts.
+                    </p>
+                    <p className="text-body-3 text-muted-foreground">
+                      Font: Inter Regular, Dynamic: 0.5rem/0.75rem (text-body-5)
+                    </p>
+                  </div>
+
+                  <div className="border border-border rounded-lg p-4">
+                    <p className="text-body-6 text-foreground mb-2">
+                      Body 6 - Ultra-small text for minimal interfaces.
+                    </p>
+                    <p className="text-body-3 text-muted-foreground">
+                      Font: Inter Regular, Dynamic: 0.375rem/0.5625rem
+                      (text-body-6)
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Available Classes */}
+              <div>
+                <h3 className="mb-4">HTML Tag Typography System</h3>
+                <div className="bg-muted/50 border border-border rounded-lg p-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <h4 className="mb-3">Styled HTML Tags</h4>
+                      <div className="space-y-2">
+                        <code className="block text-sm font-mono text-accent">
+                          h1, h2, h3, h4, h5, h6
+                        </code>
+                        <code className="block text-sm font-mono text-accent">
+                          p, small, ul, ol
+                        </code>
+                        <code className="block text-sm font-mono text-accent">
+                          code, pre
+                        </code>
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="mb-3">Tailwind Classes Used</h4>
+                      <div className="space-y-2">
+                        <code className="block text-sm font-mono text-accent">
+                          text-4xl, text-3xl, text-2xl, text-xl, text-lg
+                        </code>
+                        <code className="block text-sm font-mono text-accent">
+                          leading-tight, leading-relaxed, leading-normal
+                        </code>
+                        <code className="block text-sm font-mono text-accent">
+                          font-bold, font-medium, font-normal
+                        </code>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-6 space-y-4">
+                    <div className="p-4 bg-background rounded-lg border border-border">
+                      <h4 className="mb-2">CSS Implementation:</h4>
+                      <code className="text-sm font-mono text-muted-foreground block">
+                        h1 &#123;
+                        <br />
+                        &nbsp;&nbsp;@apply text-4xl leading-tight font-bold
+                        text-foreground;
+                        <br />
+                        &#125;
+                      </code>
+                    </div>
+
+                    <div className="p-4 bg-background rounded-lg border border-border">
+                      <h4 className="mb-2">Usage Examples:</h4>
+                      <code className="text-sm font-mono text-muted-foreground">
+                        &lt;h1&gt;Automatic styling applied&lt;/h1&gt;
+                        <br />
+                        &lt;p&gt;Paragraph with default styling&lt;/p&gt;
+                        <br />
+                        &lt;small&gt;Small text with muted color&lt;/small&gt;
+                      </code>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Color Variations */}
+              <div>
+                <h3 className="text-h3 font-bold mb-4 text-foreground">
+                  Text Colors
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="border border-border rounded-lg p-4">
+                    <p className="text-body-1 text-foreground mb-1">
+                      Primary Text
+                    </p>
+                    <p className="text-body-3 text-muted-foreground">
+                      Used for main content
+                    </p>
+                  </div>
+                  <div className="border border-border rounded-lg p-4">
+                    <p className="text-body-1 text-muted-foreground mb-1">
+                      Muted Text
+                    </p>
+                    <p className="text-body-3 text-muted-foreground">
+                      Used for secondary content
+                    </p>
+                  </div>
+                  <div className="border border-border rounded-lg p-4">
+                    <p className="text-body-1 text-primary mb-1">
+                      Primary Color
+                    </p>
+                    <p className="text-body-3 text-muted-foreground">
+                      Used for emphasis
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
         </main>
