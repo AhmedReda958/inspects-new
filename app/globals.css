@@ -74,7 +74,7 @@
   --radius: 0.625rem;
   --font-lama-sans: "Lama Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, sans-serif;
-  --background: #ffffff;
+  --background: #fafbfd;
   --foreground: #333333;
   --card: #ffffff;
   --card-foreground: #333333;
@@ -82,8 +82,8 @@
   --popover-foreground: #333333;
   --primary: #021a60;
   --primary-foreground: #ffffff;
-  --secondary: #fafbfd;
-  --secondary-foreground: #021a60;
+  --secondary: #f25b06;
+  --secondary-foreground: #ffffff;
   --muted: #fafbfd;
   --muted-foreground: #606060;
   --accent: #f25b06;
@@ -116,7 +116,7 @@
   --popover-foreground: #ffffff;
   --primary: #ffffff;
   --primary-foreground: #021a60;
-  --secondary: #032da6;
+  --secondary: #f25b06;
   --secondary-foreground: #ffffff;
   --muted: #032da6;
   --muted-foreground: #e5e7eb;
@@ -140,7 +140,14 @@
   --sidebar-border: rgba(255, 255, 255, 0.1);
   --sidebar-ring: #ffffff;
 }
+html {
+  scroll-behavior: smooth;
+}
 
+/* Ensure smooth scrolling works on all scrollable elements */
+* {
+  scroll-behavior: smooth;
+}
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -199,4 +206,17 @@
   pre {
     @apply text-sm font-mono leading-relaxed;
   }
+
+  /* Navigation active section styling */
+  :target {
+    scroll-margin-top: 2rem;
+  }
+
+  /* Smooth scrolling for all sections */
+  section[id] {
+    scroll-margin-top: 2rem;
+  }
+}
+@utility no-scrollbar {
+  @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
 }

@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function HeroSection() {
   return (
-    <div className="min-h-screen bg-secondary ">
+    <div className="min-h-screen bg-background " id="hero">
       {/* Main Content Container */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-20">
         <div className="flex flex-col items-center gap-10 max-w-4xl text-center">
