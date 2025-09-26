@@ -3,9 +3,9 @@ import Link from "next/link";
 
 export default function HeroSection() {
   return (
-    <div className="min-h-screen bg-background " id="hero">
+    <div className="bg-background " id="hero">
       {/* Main Content Container */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-20">
+      <div className="relative z-10 flex flex-col items-center justify-center lg:min-h-screen min-h-[calc(100vh-86px)] px-4 py-20">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-5xl">
           <Image
             src="/images/bg/hero-bg.png"
@@ -15,7 +15,7 @@ export default function HeroSection() {
             priority
           />
         </div>
-        <div className="flex flex-col items-center gap-10 max-w-4xl text-center -mt-40">
+        <div className="flex flex-col items-center gap-10 max-w-4xl text-center -mt-20 lg:-mt-40">
           {/* Logo */}
           <div className="flex-shrink-0">
             <Image
@@ -52,7 +52,7 @@ export default function HeroSection() {
           className=" absolute bottom-20 left-1/2 -translate-x-1/2 group "
           aria-label="Scroll to next section"
         >
-          <div className="-rotate-45 flex flex-col items-center w-[76px] h-[76px] bg-secondary border-8 border-white outline outline-secondary/10  gap-3 p-4 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"></div>
+          <div className="-rotate-45 flex flex-col items-center lg:w-[76px] lg:h-[76px] w-[44px] h-[44px] bg-secondary border-8 border-white outline outline-secondary/10  gap-3 p-4 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"></div>
           <ScrollIcon />
         </Link>
       </div>
@@ -65,7 +65,7 @@ const ScrollIcon = () => {
     <svg
       width={30}
       height={23}
-      className=" group-hover:animate-bounce absolute top-2/3 left-1/2 -translate-x-1/2 -translate-y-1/2 size-14"
+      className=" group-hover:animate-bounce absolute top-2/3 left-1/2 -translate-x-1/2 -translate-y-1/2 lg:size-14 size-[28px] "
       viewBox="0 0 30 38"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

@@ -1,11 +1,13 @@
 import HeroSection from "@/components/sections/hero";
 import Sidebar from "@/components/layout/sidebar";
+import MobileNavbar from "@/components/layout/sidebar/mobile-navbar";
 
 const Page = () => {
   return (
-    <div className="h-screen bg-secondary overflow-hidden flex">
+    <div className="h-screen overflow-hidden flex">
       <Sidebar />
       <main className="w-full overflow-y-auto scroll-smooth">
+        <MobileNavbar />
         <HeroSection />
         <section
           id="service-description"

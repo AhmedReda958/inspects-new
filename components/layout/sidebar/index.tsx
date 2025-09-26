@@ -4,7 +4,7 @@ import { Navigation } from "./navigation";
 
 const Sidebar = () => {
   return (
-    <aside className="h-screen w-[340px] bg-primary p-6">
+    <aside className="hidden lg:block h-screen w-full lg:w-[340px] bg-primary p-6">
       <div className="h-full flex flex-col justify-start items-start gap-6">
         <Image
           src="/logo-full-dark.svg"
