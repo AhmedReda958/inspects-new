@@ -15,7 +15,7 @@ const Sidebar = () => {
       {/* Mobile overlay */}
       {isMobileOpen && (
         <div
-          className=" lg:hidden fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity duration-300"
+          className=" fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity duration-300"
           onClick={closeMobileSidebar}
         />
       )}
