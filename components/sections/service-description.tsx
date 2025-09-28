@@ -11,7 +11,7 @@ export default function ServiceDescriptionSection() {
   return (
     <section
       id="service-description"
-      className="bg-white py-20 lg:py-32 h-fit lg:h-screen"
+      className="bg-white py-20 lg:py-32 h-fit lg:h-screen overflow-hidden relative"
     >
       <div className="container mx-auto px-4 max-w-6xl h-full relative">
         <div className="flex flex-col items-center h-full lg:flex-row gap-12 lg:gap-16">
@@ -25,6 +25,7 @@ export default function ServiceDescriptionSection() {
               className="absolute top-10 -start-10  object-cover z-0 object-center opacity-20 w-7/12"
             />
           )}
+
           <div className="relative w-full h-[445px] lg:h-full lg:flex-1 flex items-center justify-center">
             <Image
               src="/images/sections/service-description/section-image.png"
@@ -46,7 +47,10 @@ export default function ServiceDescriptionSection() {
             <div className="space-y-6 max-w-[500px] w-full">
               {content.serviceDescription.description.map(
                 (paragraph, index) => (
-                  <p key={index} className="text-lg leading-relaxed">
+                  <p
+                    key={index}
+                    className="text-lg leading-relaxed text-muted-foreground"
+                  >
                     {paragraph}
                   </p>
                 )
@@ -55,6 +59,17 @@ export default function ServiceDescriptionSection() {
           </div>
         </div>
       </div>
+
+      {/* Background Image - Desktop Only */}
+      {!isMobile && (
+        <Image
+          src="/images/bg/hero-bg.png"
+          alt="Hero Background"
+          width={400}
+          height={400}
+          className="absolute -bottom-10 -left-30 object-cover z-10  w-1/2 opacity-70"
+        />
+      )}
     </section>
   );
 }
