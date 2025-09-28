@@ -1,9 +1,18 @@
+"use client";
+
 import React from "react";
+import { useSidebar } from "./sidebar-context";
 
 const MobileNavbar = () => {
+  const { toggleMobileSidebar } = useSidebar();
+
   return (
     <div className="block lg:hidden h-[86px] relative bg-white">
-      <div className="absolute top-full left-1/2 -translate-x-1/2 -translate-y-1/2 size-11 bg-primary flex items-center justify-center -rotate-45">
+      <button
+        onClick={toggleMobileSidebar}
+        className="absolute z-20 top-full left-1/2 -translate-x-1/2 -translate-y-1/2 size-11 bg-primary flex items-center justify-center -rotate-45 hover:bg-primary/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
+        aria-label="فتح القائمة الجانبية"
+      >
         <svg
           width={24}
           height={25}
@@ -29,8 +38,8 @@ const MobileNavbar = () => {
             fill="white"
           />
         </svg>
-      </div>
-      <span className="text-black text-xl  font-bold absolute top-full left-1/2 -translate-x-1/2 translate-y-10">
+      </button>
+      <span className="text-black text-xl font-bold absolute top-full left-1/2 -translate-x-1/2 translate-y-10">
         جدول المحتويات
       </span>
     </div>

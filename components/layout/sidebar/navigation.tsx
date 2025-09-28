@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useSidebar } from "./sidebar-context";
 
 interface NavigationItem {
   label: string;
@@ -53,6 +54,7 @@ const navigationItems: NavigationItem[] = [
 
 export function Navigation() {
   const [activeSection, setActiveSection] = useState<string>("");
+  const { closeMobileSidebar } = useSidebar();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -139,8 +141,9 @@ export function Navigation() {
           <Link
             key={index}
             href={item.href}
+            onClick={() => closeMobileSidebar()}
             className={cn(
-              "block w-full text-right text-base font-medium tracking-none text-nowrap transition-colors",
+              "block w-full text-center lg:text-right text-sm lg:text-base font-medium tracking-none text-nowrap transition-colors",
               isActive ? "text-secondary" : "text-white/80 hover:text-secondary"
             )}
           >
