@@ -23,6 +23,7 @@ export default function ServiceDescriptionSection() {
               width={762}
               height={762}
               className="absolute top-10 -start-10  object-cover z-0 object-center opacity-20 w-7/12"
+              draggable={false}
             />
           )}
 
@@ -68,6 +69,7 @@ export default function ServiceDescriptionSection() {
           width={400}
           height={400}
           className="absolute -bottom-10 -left-30 object-cover z-10  w-1/2 opacity-70"
+          draggable={false}
         />
       )}
     </section>

@@ -6,67 +6,7 @@ interface Feature {
   highlighted?: boolean;
 }
 
-export default function WhySections() {
-  return (
-    <>
-      <WhyImportantSection />
-      <WhyInspectexSection />
-    </>
-  );
-}
-
-function WhyImportantSection() {
-  return (
-    <section id="why-important" className="bg-background py-20 lg:py-32">
-      <div className="container mx-auto px-4 max-w-7xl">
-        <div className="space-y-16" dir="rtl">
-          {/* Header */}
-          <div className="text-center space-y-4">
-            <h2 className="text-2xl lg:text-3xl font-bold text-foreground">
-              {content.whyImportant.title}
-            </h2>
-            <div className="w-48 h-1.5 bg-gradient-to-r from-primary via-secondary to-primary rounded-full mx-auto"></div>
-          </div>
-
-          {/* Reasons Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {content.whyImportant.reasons.map((reason, index) => (
-              <div
-                key={index}
-                className={`p-8 rounded-lg space-y-4 ${
-                  reason.highlighted
-                    ? "bg-white border-2 border-secondary shadow-lg"
-                    : "bg-background border border-gray-100"
-                }`}
-              >
-                {/* Number */}
-                <div
-                  className={`w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-xl ${
-                    reason.highlighted ? "bg-secondary" : "bg-primary"
-                  }`}
-                >
-                  {reason.number}
-                </div>
-
-                {/* Title */}
-                <h3 className="text-xl font-bold text-foreground leading-tight">
-                  {reason.title}
-                </h3>
-
-                {/* Description */}
-                <p className="text-muted-foreground leading-relaxed">
-                  {reason.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function WhyInspectexSection() {
+export default function WhyInspectexSection() {
   return (
     <section
       id="why-inspectex"

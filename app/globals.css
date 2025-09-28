@@ -216,6 +216,10 @@ html {
   section[id] {
     scroll-margin-top: 2rem;
   }
+
+  .container {
+    @apply mx-auto px-4   max-w-7xl;
+  }
 }
 @utility no-scrollbar {
   @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;

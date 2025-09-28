@@ -1,7 +1,8 @@
 import HeroSection from "@/components/sections/hero";
 import ServiceDescriptionSection from "@/components/sections/service-description";
 import ProblemsGallerySection from "@/components/sections/problems-gallery";
-import WhySections from "@/components/sections/why-sections";
+import WhyImportantSection from "@/components/sections/why-important";
+import WhyInspectexSection from "@/components/sections/why-inspectex";
 import Sidebar from "@/components/layout/sidebar";
 import MobileNavbar from "@/components/layout/sidebar/mobile-navbar";
 import { SidebarProvider } from "@/components/layout/sidebar/sidebar-context";
@@ -16,7 +17,8 @@ const Page = () => {
           <HeroSection />
           <ServiceDescriptionSection />
           <ProblemsGallerySection />
-          <WhySections />
+          <WhyImportantSection />
+          <WhyInspectexSection />
           <section
             id="inspection-contents"
             className="min-h-screen bg-red-100 flex items-center justify-center"
