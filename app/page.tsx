@@ -1,4 +1,7 @@
 import HeroSection from "@/components/sections/hero";
+import ServiceDescriptionSection from "@/components/sections/service-description";
+import ProblemsGallerySection from "@/components/sections/problems-gallery";
+import WhySections from "@/components/sections/why-sections";
 import Sidebar from "@/components/layout/sidebar";
 import MobileNavbar from "@/components/layout/sidebar/mobile-navbar";
 import { SidebarProvider } from "@/components/layout/sidebar/sidebar-context";
@@ -11,28 +14,9 @@ const Page = () => {
         <main className="w-full overflow-y-auto scroll-smooth">
           <MobileNavbar />
           <HeroSection />
-          <section
-            id="service-description"
-            className="min-h-screen bg-blue-100 flex items-center justify-center"
-          >
-            <h2 className="text-4xl font-bold text-primary">
-              ما هي خدمة الفحص الهندسي؟
-            </h2>
-          </section>
-          <section
-            id="importance"
-            className="min-h-screen bg-green-100 flex items-center justify-center"
-          >
-            <h2 className="text-4xl font-bold text-primary">
-              لماذا الفحص مهم قبل شراء العقار؟
-            </h2>
-          </section>
-          <section
-            id="why-us"
-            className="min-h-screen bg-yellow-100 flex items-center justify-center"
-          >
-            <h2 className="text-4xl font-bold text-primary">لماذا انسبكتكس؟</h2>
-          </section>
+          <ServiceDescriptionSection />
+          <ProblemsGallerySection />
+          <WhySections />
           <section
             id="inspection-contents"
             className="min-h-screen bg-red-100 flex items-center justify-center"

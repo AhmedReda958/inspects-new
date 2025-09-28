@@ -18,9 +18,9 @@ const navigationItems: NavigationItem[] = [
   },
   {
     label: "لماذا الفحص مهم قبل شراء العقار؟",
-    href: "#importance",
+    href: "#why-important",
   },
-  { label: "لماذا انسبكتكس؟", href: "#why-us" },
+  { label: "لماذا انسبكتكس؟", href: "#why-inspectex" },
   {
     label: "محتويات الفحص الهندسي",
     href: "#inspection-contents",
