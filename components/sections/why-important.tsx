@@ -19,7 +19,7 @@ function ReasonCard({
   return (
     <div
       className={cn(
-        "p-1 group hover:z-10 transition-all duration-500 relative cursor-pointer",
+        "p-[2px] group hover:z-10 transition-all duration-500 relative cursor-pointer",
         "bg-gradient-to-bl from-transparent via-transparent to-transparent",
         "hover:bg-gradient-to-bl hover:from-secondary hover:via-white hover:to-white",
         "hover:shadow-[0_58px_83px_rgba(93,104,126,0.09),0_132px_112px_rgba(93,104,126,0.05),0_234px_132px_rgba(93,104,126,0.01)]",
