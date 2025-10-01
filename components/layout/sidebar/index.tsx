@@ -22,13 +22,13 @@ const Sidebar = () => {
 
       <aside
         className={cn(
-          "h-screen w-screen lg:w-[340px] bg-primary p-6 z-50",
+          "h-screen w-screen lg:w-[340px] bg-primary z-50",
           "lg:relative lg:translate-x-0",
           "fixed top-0 right-0 transition-transform duration-300 ease-in-out",
           isMobileOpen ? "translate-x-0" : "translate-x-full lg:translate-x-0"
         )}
       >
-        <div className="h-full flex flex-col justify-start items-center lg:items-start gap-6">
+        <div className="h-full flex flex-col justify-start items-center lg:items-start gap-6 p-6 px-8 bg-black/20">
           <button
             onClick={closeMobileSidebar}
             className="flex lg:hidden justify-center items-center bg-white/10 hover:bg-white/20 cursor-pointer size-11 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white/30"
