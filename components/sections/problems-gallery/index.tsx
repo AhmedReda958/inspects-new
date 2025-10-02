@@ -34,7 +34,11 @@ export default function ProblemsGallerySection() {
               {content.problemsGallery.callToAction.companyName}
             </span>
           </h3>
-          <AnimatedButton variant="primary" size="default">
+          <AnimatedButton
+            variant="primary"
+            size="default"
+            href="#price-calculator"
+          >
             {content.problemsGallery.callToAction.buttonText}
           </AnimatedButton>
         </div>

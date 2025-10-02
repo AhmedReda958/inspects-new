@@ -1,9 +1,10 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const animatedButtonVariants = cva(
-  "relative group transition-all duration-300 font-medium border overflow-hidden",
+  "relative group transition-all duration-300 font-medium border overflow-hidden cursor-pointer",
   {
     variants: {
       variant: {
@@ -36,6 +37,7 @@ interface AnimatedButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof animatedButtonVariants> {
   children: React.ReactNode;
+  href?: string;
 }
 
 function AnimatedButton({
@@ -44,6 +46,7 @@ function AnimatedButton({
   size,
   animation,
   children,
+  href,
   ...props
 }: AnimatedButtonProps) {
   const getAnimationClasses = () => {
@@ -65,7 +68,15 @@ function AnimatedButton({
       )}
       {...props}
     >
-      <span className="relative z-10">{children}</span>
+      {href ? (
+        <Link href={href} className="relative z-10">
+          {children}
+        </Link>
+      ) : (
+        <>
+          <span className="relative z-10">{children}</span>
+        </>
+      )}
       <div className={getAnimationClasses()} />
     </button>
   );
