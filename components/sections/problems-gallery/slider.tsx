@@ -12,53 +12,12 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 import { ChevronLeft } from "lucide-react";
 import { ChevronRight } from "lucide-react";
-
-const problemImages = [
-  {
-    src: "/images/problems-gallery/problem-1.png",
-    alt: "مشكلة هندسية 1",
-  },
-  {
-    src: "/images/problems-gallery/problem-2.png",
-    alt: "مشكلة هندسية 2",
-  },
-  {
-    src: "/images/problems-gallery/problem-3.png",
-    alt: "مشكلة هندسية 3",
-  },
-  {
-    src: "/images/problems-gallery/problem-4.png",
-    alt: "مشكلة هندسية 4",
-  },
-  {
-    src: "/images/problems-gallery/problem-5.png",
-    alt: "مشكلة هندسية 5",
-  },
-  {
-    src: "/images/problems-gallery/problem-1.png",
-    alt: "مشكلة هندسية 1",
-  },
-  {
-    src: "/images/problems-gallery/problem-2.png",
-    alt: "مشكلة هندسية 2",
-  },
-  {
-    src: "/images/problems-gallery/problem-3.png",
-    alt: "مشكلة هندسية 3",
-  },
-  {
-    src: "/images/problems-gallery/problem-4.png",
-    alt: "مشكلة هندسية 4",
-  },
-  {
-    src: "/images/problems-gallery/problem-5.png",
-    alt: "مشكلة هندسية 5",
-  },
-];
+import content from "@/content";
 
 export function ProblemsGallerySlider() {
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
+  const problemImages = content.problemsGallery.images;
 
   React.useEffect(() => {
     if (!api) return;
@@ -124,6 +83,7 @@ export function ProblemsGallerySlider() {
                     src={image.src}
                     alt={image.alt}
                     fill
+                    priority={index < 5}
                     className="object-cover"
                     sizes="(max-width: 768px) 202px, (max-width: 1024px) 240px, 300px"
                   />
@@ -135,7 +95,7 @@ export function ProblemsGallerySlider() {
         <div className="flex justify-between items-center gap-4 md:gap-8 ">
           <button
             onClick={() => api?.scrollPrev()}
-            className="w-12 h-12 md:w-14 md:h-14 bg-[#021A60] text-white flex items-center justify-center hover:bg-[#021A60]/90 transition-all duration-200 shadow-sm cursor-pointer"
+            className="w-12 h-12 md:w-14 md:h-14 bg-primary text-white flex items-center justify-center hover:bg-primary/90 transition-all duration-200 shadow-sm cursor-pointer"
             aria-label="Previous image"
           >
             <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
@@ -146,7 +106,7 @@ export function ProblemsGallerySlider() {
 
           <button
             onClick={() => api?.scrollNext()}
-            className="w-12 h-12 md:w-14 md:h-14 bg-[#F25B06] text-white flex items-center justify-center hover:bg-[#F25B06]/90 transition-all duration-200 shadow-sm cursor-pointer"
+            className="w-12 h-12 md:w-14 md:h-14 bg-secondary text-white flex items-center justify-center hover:bg-secondary/90 transition-all duration-200 shadow-sm cursor-pointer"
             aria-label="Next image"
           >
             <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />

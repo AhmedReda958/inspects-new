@@ -20,6 +20,48 @@ const content = {
       companyName: "انسبكتكس",
       buttonText: "ابدأ بالفحص اليوم",
     },
+    images: [
+      {
+        src: "/images/problems-gallery/problem-1.png",
+        alt: "مشكلة هندسية 1",
+      },
+      {
+        src: "/images/problems-gallery/problem-2.png",
+        alt: "مشكلة هندسية 2",
+      },
+      {
+        src: "/images/problems-gallery/problem-3.png",
+        alt: "مشكلة هندسية 3",
+      },
+      {
+        src: "/images/problems-gallery/problem-4.png",
+        alt: "مشكلة هندسية 4",
+      },
+      {
+        src: "/images/problems-gallery/problem-5.png",
+        alt: "مشكلة هندسية 5",
+      },
+      {
+        src: "/images/problems-gallery/problem-1.png",
+        alt: "مشكلة هندسية 1",
+      },
+      {
+        src: "/images/problems-gallery/problem-2.png",
+        alt: "مشكلة هندسية 2",
+      },
+      {
+        src: "/images/problems-gallery/problem-3.png",
+        alt: "مشكلة هندسية 3",
+      },
+      {
+        src: "/images/problems-gallery/problem-4.png",
+        alt: "مشكلة هندسية 4",
+      },
+      {
+        src: "/images/problems-gallery/problem-5.png",
+        alt: "مشكلة هندسية 5",
+      },
+    ],
   },
   whyImportant: {
     title: "لماذا الفحص مهم قبل شراء العقار؟",
