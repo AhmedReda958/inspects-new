@@ -9,11 +9,11 @@ const animatedButtonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-transparent text-primary hover:text-primary-foreground border-primary",
+          "bg-transparent text-primary-foreground lg:text-primary hover:text-primary-foreground border-primary",
         secondary:
-          "bg-transparent text-secondary hover:text-secondary-foreground border-secondary",
+          "bg-transparent text-secondary-foreground lg:text-secondary hover:text-secondary-foreground border-secondary",
         accent:
-          "bg-transparent text-accent hover:text-accent-foreground border-accent",
+          "bg-transparent text-accent-foreground lg:text-accent hover:text-accent-foreground border-accent",
       },
       size: {
         default: "px-8 py-4",
@@ -52,11 +52,11 @@ function AnimatedButton({
   const getAnimationClasses = () => {
     switch (variant) {
       case "secondary":
-        return "absolute inset-0 w-2.5 h-2.5 bg-secondary group-hover:w-full group-hover:h-full transition-all duration-300 z-0";
+        return "absolute inset-0 w-full h-full lg:w-2.5 lg:h-2.5 bg-secondary group-hover:w-full group-hover:h-full transition-all duration-300 z-0";
       case "accent":
-        return "absolute inset-0 w-2.5 h-2.5 bg-accent group-hover:w-full group-hover:h-full transition-all duration-300 z-0";
+        return "absolute inset-0 w-full h-full lg:w-2.5 lg:h-2.5 bg-accent group-hover:w-full group-hover:h-full transition-all duration-300 z-0";
       default:
-        return "absolute inset-0 w-2.5 h-2.5 bg-primary group-hover:w-full group-hover:h-full transition-all duration-300 z-0";
+        return "absolute inset-0 w-full h-full lg:w-2.5 lg:h-2.5 bg-primary group-hover:w-full group-hover:h-full transition-all duration-300 z-0";
     }
   };
 
