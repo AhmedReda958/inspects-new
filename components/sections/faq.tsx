@@ -35,6 +35,7 @@ const ContentItem = ({ item }: { item: InspectionItem }) => {
       <AccordionTrigger
         className={cn(
           "hover:no-underline px-6 py-3 lg:py-5 text-right gap-6 lg:gap-8 [&>svg]:hidden",
+          "[&[data-state=open]]:ps-5",
           "[&[data-state=open]_.icon]:hidden",
           "[&[data-state=open]_.icon-minus]:block",
           "[&[data-state=open]]:text-primary-light",
@@ -51,16 +52,16 @@ const ContentItem = ({ item }: { item: InspectionItem }) => {
       </AccordionTrigger>
       {item.subItems.length > 0 && (
         <AccordionContent className="px-6 pb-6 pt-0">
-          <ul className="space-y-5 text-right">
+          <ol className="space-y-5 text-right list-disc list-inside list-foreground">
             {item.subItems.map((subItem, subIndex) => (
               <li
                 key={subIndex}
-                className="text-base lg:text-xl leading-[1.45]"
+                className="text-sm lg:text-base leading-[1.45]"
               >
                 {subItem}
               </li>
             ))}
-          </ul>
+          </ol>
         </AccordionContent>
       )}
     </AccordionItem>
