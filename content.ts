@@ -155,6 +155,127 @@ const content = {
       },
     ],
   },
+  inspectionContents: {
+    title: "ماذا يشمل الفحص الهندسي لدى انسبكتكس ( نقاط الفحص )",
+    tabs: [
+      {
+        id: "architectural",
+        label: "الفحوصات المعمارية والانشائية",
+      },
+      {
+        id: "electrical",
+        label: "الفحوصات الكهربائية",
+      },
+      {
+        id: "mechanical",
+        label: "الفحوصات الميكانيكية",
+      },
+    ],
+    content: {
+      mechanical: {
+        image: "/images/sections/inspection-contents/mechanical.png",
+        items: [
+          {
+            title: "أنظمة التكييف والتهوية",
+            subItems: [
+              "فحص وحدات التكييف المركزي والمنفصل",
+              "قياس كفاءة التبريد والتدفئة",
+              "فحص أنظمة التهوية والتكييف",
+            ],
+          },
+          {
+            title: "أنظمة السباكة",
+            subItems: [
+              "فحص التمديدات الساخنة والباردة",
+              "الكشف عن التسريبات",
+              "فحص الصرف الصحي",
+            ],
+          },
+          {
+            title: "أنظمة الصرف",
+            subItems: [],
+          },
+          {
+            title: "المضخات والخزانات",
+            subItems: [],
+          },
+          {
+            title: "السخانات المركزية والفردية",
+            subItems: [],
+          },
+        ],
+      },
+      electrical: {
+        image: "/images/sections/inspection-contents/electrical.png",
+        items: [
+          {
+            title: "اللوحات الكهربائية الرئيسية والفرعية",
+            subItems: [
+              "فحص اللوحات الكهربائية الرئيسية",
+              "التأكد من سلامة التوصيلات",
+              "قياس الأحمال الكهربائية",
+            ],
+          },
+          {
+            title: "القواطع الكهربائية",
+            subItems: [],
+          },
+          {
+            title: "التأريض والحماية من الصواعق",
+            subItems: [],
+          },
+          {
+            title: "نقاط الكهرباء والإضاءة",
+            subItems: [],
+          },
+          {
+            title: "أنظمة الإنذار والحريق",
+            subItems: [],
+          },
+        ],
+      },
+      architectural: {
+        image: "/images/sections/inspection-contents/architectural.png",
+        items: [
+          {
+            title: "تكسيات الحوائط الجافة",
+            subItems: [],
+          },
+          {
+            title: "المساحات والأبعاد",
+            subItems: [
+              "مطابقة المساحات والأبعاد مع المخططات المعمارية للمبنى.",
+              "مطابقة المساحات والأبعاد مع متطلبات كود البناء السعودي",
+            ],
+          },
+          {
+            title: "بلاط الأرضيات والجدران",
+            subItems: [],
+          },
+          {
+            title: "مقاطع الألمنيوم والزجاج",
+            subItems: [],
+          },
+          {
+            title: "الأبواب (المعدنية والخشبية):",
+            subItems: [],
+          },
+          {
+            title: "الأسقف المستعارة",
+            subItems: [],
+          },
+          {
+            title: "الأدراج",
+            subItems: [],
+          },
+          {
+            title: "العزل المائي",
+            subItems: [],
+          },
+        ],
+      },
+    },
+  },
 };
 
 export default content;

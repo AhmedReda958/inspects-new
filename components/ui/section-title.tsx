@@ -97,7 +97,7 @@ export function SectionTitle({
 
       <h2
         className={cn(
-          "text-2xl lg:text-3xl font-bold text-foreground ",
+          "text-2xl lg:text-3xl font-bold text-foreground max-w-[489px] mx-auto",
           alignmentClasses.title,
           className
         )}

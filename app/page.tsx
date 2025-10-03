@@ -7,6 +7,7 @@ import Sidebar from "@/components/layout/sidebar";
 import MobileNavbar from "@/components/layout/sidebar/mobile-navbar";
 import { SidebarProvider } from "@/components/layout/sidebar/sidebar-context";
 import { Footer } from "@/components/sections/footer";
+import InspectionContentsSection from "@/components/sections/inspection-contents";
 
 const Page = () => {
   return (
@@ -20,14 +21,7 @@ const Page = () => {
           <ProblemsGallerySection />
           <WhyImportantSection />
           <WhyInspectexSection />
-          <section
-            id="inspection-contents"
-            className="min-h-screen bg-red-100 flex items-center justify-center"
-          >
-            <h2 className="text-4xl font-bold text-primary">
-              محتويات الفحص الهندسي
-            </h2>
-          </section>
+          <InspectionContentsSection />
           <section
             id="work-mechanism"
             className="min-h-screen bg-purple-100 flex items-center justify-center"
