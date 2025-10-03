@@ -97,7 +97,7 @@ export default function FaqSection() {
       id="faq"
       className="bg-background py-20 lg:py-32 min-h-screen relative overflow-hidden"
     >
-      <div className="container space-y-12 lg:space-y-[70px] ">
+      <div className="container space-y-12 lg:space-y-[70px] relative z-10">
         {/* Header */}
         <SectionTitle variant="center">{content.faq.title}</SectionTitle>
 
@@ -142,7 +142,7 @@ export default function FaqSection() {
         alt="Hero Background"
         width={400}
         height={700}
-        className="absolute -bottom-30 left-20 object-cover -z-10  w-2/3 h-full opacity-70 hidden lg:block mix-blend-luminosity"
+        className="absolute top-30 left-20 object-cover -z-0  w-2/3 h-[130vh] opacity-70 hidden lg:block mix-blend-luminosity"
         draggable={false}
         loading="lazy"
       />
