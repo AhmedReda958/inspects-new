@@ -1,5 +1,3 @@
-"use client";
-
 import content from "@/content";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -10,7 +8,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
-import { useState } from "react";
+import { Fragment } from "react";
 import { SectionTitle } from "../ui/section-title";
 import { PlusIcon } from "lucide-react";
 
@@ -89,8 +87,6 @@ function TabContentSection({ items, image }: TabContentProps) {
 }
 
 export default function InspectionContentsSection() {
-  const [activeTab, setActiveTab] = useState("architectural");
-
   return (
     <section id="inspection-contents" className="bg-white py-20 lg:py-32">
       <div className="container space-y-12 lg:space-y-[70px]">
@@ -100,20 +96,14 @@ export default function InspectionContentsSection() {
         </SectionTitle>
 
         {/* Tabs */}
-        <Tabs
-          value={activeTab}
-          onValueChange={setActiveTab}
-          className="w-full"
-          dir="rtl"
-        >
+        <Tabs defaultValue="architectural" className="w-full" dir="rtl">
           <div className="flex justify-center mb-8 lg:mb-12">
             <TabsList className="inline-flex flex-col lg:flex-row h-auto w-full lg:w-fit bg-transparent p-0 gap-5">
               {content.inspectionContents.tabs.map((tab, index) => (
-                <>
+                <Fragment key={tab.id}>
                   <TabsTrigger
-                    key={tab.id}
                     value={tab.id}
-                    className="p-4 lg:p-0 text-base font-semibold"
+                    className="p-4 lg:p-0 text-base font-semibold cursor-pointer"
                   >
                     {tab.label}
                   </TabsTrigger>
@@ -122,7 +112,7 @@ export default function InspectionContentsSection() {
                       {"//"}
                     </div>
                   )}
-                </>
+                </Fragment>
               ))}
             </TabsList>
           </div>

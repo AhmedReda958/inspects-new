@@ -8,6 +8,7 @@ import MobileNavbar from "@/components/layout/sidebar/mobile-navbar";
 import { SidebarProvider } from "@/components/layout/sidebar/sidebar-context";
 import { Footer } from "@/components/sections/footer";
 import InspectionContentsSection from "@/components/sections/inspection-contents";
+import FaqSection from "@/components/sections/faq";
 
 const Page = () => {
   return (
@@ -86,12 +87,7 @@ const Page = () => {
           >
             <h2 className="text-4xl font-bold text-primary">حاسبة الأسعار</h2>
           </section>
-          <section
-            id="faq"
-            className="min-h-screen bg-slate-100 flex items-center justify-center"
-          >
-            <h2 className="text-4xl font-bold text-primary">الاسئلة الشائعة</h2>
-          </section>
+          <FaqSection />
           <Footer />
         </main>
       </div>
