@@ -61,7 +61,7 @@ export default function WhyImportantSection() {
           </SectionTitle>
 
           {/* Reasons Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
             {content.whyImportant.reasons.map((reason, index) => (
               <ReasonCard
                 key={index}

@@ -22,10 +22,10 @@ export default function WhyInspectexSection() {
   return (
     <section
       id="why-inspectex"
-      className="bg-primary h-screen py-20 lg:py-32 relative overflow-hidden"
+      className="bg-primary py-20 lg:py-32 relative overflow-hidden"
     >
       <div className="container mx-auto px-4 max-w-6xl relative z-10">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-16 gap-y-24">
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-16 gap-y-24">
           {/* header */}
           <div className="flex items-center justify-start">
             <SectionTitle variant="start-dark" className="text-white">
@@ -48,7 +48,7 @@ export default function WhyInspectexSection() {
           src="/images/bg/why-inspectex-bg.svg"
           alt="Why Inspectex Background"
           fill
-          className="h-full"
+          className="h-full hidden xl:block"
         />
       </div>
     </section>
