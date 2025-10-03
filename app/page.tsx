@@ -6,6 +6,7 @@ import WhyInspectexSection from "@/components/sections/why-inspectex";
 import Sidebar from "@/components/layout/sidebar";
 import MobileNavbar from "@/components/layout/sidebar/mobile-navbar";
 import { SidebarProvider } from "@/components/layout/sidebar/sidebar-context";
+import { Footer } from "@/components/sections/footer";
 
 const Page = () => {
   return (
@@ -97,6 +98,7 @@ const Page = () => {
           >
             <h2 className="text-4xl font-bold text-primary">الاسئلة الشائعة</h2>
           </section>
+          <Footer />
         </main>
       </div>
     </SidebarProvider>
