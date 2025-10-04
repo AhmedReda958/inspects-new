@@ -8,6 +8,7 @@ import MobileNavbar from "@/components/layout/sidebar/mobile-navbar";
 import { SidebarProvider } from "@/components/layout/sidebar/sidebar-context";
 import { Footer } from "@/components/sections/footer";
 import InspectionContentsSection from "@/components/sections/inspection-contents";
+import { WorkflowSection } from "@/components/sections/workflow";
 import FaqSection from "@/components/sections/faq";
 
 const Page = () => {
@@ -23,14 +24,7 @@ const Page = () => {
           <WhyImportantSection />
           <WhyInspectexSection />
           <InspectionContentsSection />
-          <section
-            id="work-mechanism"
-            className="min-h-screen bg-purple-100 flex items-center justify-center"
-          >
-            <h2 className="text-4xl font-bold text-primary">
-              آلية العمل في انسبكتكس
-            </h2>
-          </section>
+          <WorkflowSection />
           <section
             id="technologies"
             className="min-h-screen bg-pink-100 flex items-center justify-center"
