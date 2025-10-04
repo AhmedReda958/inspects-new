@@ -531,6 +531,53 @@ const content = {
       },
     ],
   },
+  testimonials: {
+    title: "شهادات العملاء",
+    items: [
+      {
+        name: "محمد إبراهيم",
+        role: "مالك عقار",
+        image: "/images/sections/service-description/section-image.png",
+        text: "هذا النص يمكن أن يتم تركيبه على أي تصميم دون مشكلة فلن يبدو وكأنه نص منسوخ، غير منظم، غير منسق، أو حتى غير مفهوم. لأنه مازال نصاً بديلاً ومؤقتاً.",
+        rating: 5,
+      },
+      {
+        name: "محمود عبد الله",
+        role: "مشتري عقار",
+        image: "/images/sections/service-description/section-image.png",
+        text: "هذا النص يمكن أن يتم تركيبه على أي تصميم دون مشكلة فلن يبدو وكأنه نص منسوخ، غير منظم، غير منسق، أو حتى غير مفهوم. لأنه مازال نصاً بديلاً ومؤقتاً.",
+        rating: 5,
+      },
+      {
+        name: "كمال إبراهيم",
+        role: "مستثمر عقاري",
+        image: "/images/sections/service-description/section-image.png",
+        text: "هذا النص يمكن أن يتم تركيبه على أي تصميم دون مشكلة فلن يبدو وكأنه نص منسوخ، غير منظم، غير منسق، أو حتى غير مفهوم. لأنه مازال نصاً بديلاً ومؤقتاً.",
+        rating: 5,
+      },
+      {
+        name: "أحمد السالم",
+        role: "مالك عقار",
+        image: "/images/sections/service-description/section-image.png",
+        text: "هذا النص يمكن أن يتم تركيبه على أي تصميم دون مشكلة فلن يبدو وكأنه نص منسوخ، غير منظم، غير منسق، أو حتى غير مفهوم. لأنه مازال نصاً بديلاً ومؤقتاً.",
+        rating: 5,
+      },
+      {
+        name: "فاطمة العتيبي",
+        role: "مستثمرة عقارية",
+        image: "/images/sections/service-description/section-image.png",
+        text: "هذا النص يمكن أن يتم تركيبه على أي تصميم دون مشكلة فلن يبدو وكأنه نص منسوخ، غير منظم، غير منسق، أو حتى غير مفهوم. لأنه مازال نصاً بديلاً ومؤقتاً.",
+        rating: 5,
+      },
+      {
+        name: "خالد العمري",
+        role: "مستثمر",
+        image: "/images/sections/service-description/section-image.png",
+        text: "هذا النص يمكن أن يتم تركيبه على أي تصميم دون مشكلة فلن يبدو وكأنه نص منسوخ، غير منظم، غير منسق، أو حتى غير مفهوم. لأنه مازال نصاً بديلاً ومؤقتاً.",
+        rating: 4,
+      },
+    ],
+  },
 };
 
 export default content;

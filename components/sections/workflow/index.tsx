@@ -4,7 +4,10 @@ import content from "@/content";
 
 export function WorkflowSection() {
   return (
-    <section className="py-20 lg:py-32 min-h-screen bg-background">
+    <section
+      className="py-20 lg:py-32 min-h-screen bg-background"
+      id="work-mechanism"
+    >
       <div className="container">
         <SectionTitle variant="center">{content.workflow.title}</SectionTitle>
 

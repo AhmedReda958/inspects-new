@@ -10,6 +10,7 @@ import { Footer } from "@/components/sections/footer";
 import InspectionContentsSection from "@/components/sections/inspection-contents";
 import { WorkflowSection } from "@/components/sections/workflow";
 import FaqSection from "@/components/sections/faq";
+import TestimonialsSection from "@/components/sections/testimonials";
 
 const Page = () => {
   return (
@@ -55,12 +56,7 @@ const Page = () => {
               العملاء المميزون
             </h2>
           </section>
-          <section
-            id="testimonials"
-            className="min-h-screen bg-teal-100 flex items-center justify-center"
-          >
-            <h2 className="text-4xl font-bold text-primary">شهادات العملاء</h2>
-          </section>
+          <TestimonialsSection />
           <section
             id="report-sample"
             className="min-h-screen bg-cyan-100 flex items-center justify-center"
