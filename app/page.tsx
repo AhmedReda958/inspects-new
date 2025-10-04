@@ -12,6 +12,7 @@ import { WorkflowSection } from "@/components/sections/workflow";
 import FaqSection from "@/components/sections/faq";
 import TestimonialsSection from "@/components/sections/testimonials";
 import FeaturedClients from "@/components/sections/featured-clients";
+import TechnologiesSection from "@/components/sections/technologies";
 
 const Page = () => {
   return (
@@ -27,14 +28,7 @@ const Page = () => {
           <WhyInspectexSection />
           <InspectionContentsSection />
           <WorkflowSection />
-          <section
-            id="technologies"
-            className="min-h-screen bg-pink-100 flex items-center justify-center"
-          >
-            <h2 className="text-4xl font-bold text-primary">
-              التقنيات والأجهزة المستخدمة
-            </h2>
-          </section>
+          <TechnologiesSection />
           <section
             id="comparison"
             className="min-h-screen bg-indigo-100 flex items-center justify-center"

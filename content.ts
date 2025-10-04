@@ -463,6 +463,38 @@ const content = {
       },
     },
   },
+  technologies: {
+    title: "التقنيات والأجهزة المستخدمة",
+    items: [
+      {
+        id: 1,
+        name: "Rebound hammer or Schmidt hammer",
+        description: "اداه لتقدير قوة الخرسانة",
+        image: "/images/technologies/technology-1.png",
+      },
+      {
+        id: 2,
+        name: "pundit pl-200 proceq",
+        description:
+          "جهاز يستخدم لدراسة جودة الخرسانة وعرض التشققات وعمقها ومجموعة من خصائص الخرسانات",
+        image: "/images/technologies/technology-2.png",
+      },
+      {
+        id: 3,
+        name: "Profometer 630 AI",
+        description:
+          "تحديد مواقع الأعمدة وأعداد وأقطار حديد التسليح وقياس سمك الغطاء الخرساني",
+        image: "/images/technologies/technology-3.png",
+      },
+      {
+        id: 4,
+        name: "GP8100",
+        description:
+          "تحديد مواقع الأعمدة وحديد التسليح داخل الجدران وتحديد مواقع الكابلات وانابيب التزويد والصرف",
+        image: "/images/technologies/technology-4.png",
+      },
+    ],
+  },
   workflow: {
     title: "آلية العمل في انسبكتكس",
     steps: [
