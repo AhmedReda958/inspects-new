@@ -44,9 +44,14 @@ export function TestimonialsSlider() {
                 "border-x-1": current === index,
               })}
             >
-              <div className="p-6 md:p-8  flex flex-col items-center text-center h-full bg-[url('/images/bg/quotation-bg.png')] bg-fit bg-center bg-no-repeat">
+              <div
+                className="p-6 md:p-8 flex flex-col items-center text-center h-full bg-[url('/images/bg/quotation-bg.png')] bg-center bg-no-repeat"
+                style={{
+                  backgroundSize: "350px 276px",
+                }}
+              >
                 {/* Client Image - Circular */}
-                <div className="relative  mb-6">
+                <div className="relative mb-6">
                   <Image
                     src={testimonial.image}
                     alt={testimonial.name}
