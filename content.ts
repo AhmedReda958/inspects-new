@@ -610,6 +610,9 @@ const content = {
       },
     ],
   },
+  video: {
+    url: "https://youtube.com/shorts/XbJ3ZN8EoiE?si=FPLuSWhLwMu7uLfj",
+  },
 };
 
 export default content;

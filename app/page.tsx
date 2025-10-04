@@ -13,6 +13,7 @@ import FaqSection from "@/components/sections/faq";
 import TestimonialsSection from "@/components/sections/testimonials";
 import FeaturedClients from "@/components/sections/featured-clients";
 import TechnologiesSection from "@/components/sections/technologies";
+import VideoSection from "@/components/sections/video-section";
 
 const Page = () => {
   return (
@@ -59,6 +60,7 @@ const Page = () => {
           >
             <h2 className="text-4xl font-bold text-primary">الباقات</h2>
           </section>
+          <VideoSection />
           <section
             id="price-calculator"
             className="min-h-screen bg-emerald-100 flex items-center justify-center"
