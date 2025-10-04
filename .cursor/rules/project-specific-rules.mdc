@@ -1,0 +1,103 @@
+---
+description: Project-specific rules for component usage, content management, and design system
+globs: ["**/*.{ts,tsx,js,jsx}"]
+alwaysApply: true
+---
+
+# Project-Specific Development Rules
+
+## Section Title Component Usage
+
+- **ALWAYS** use the `SectionTitle` component from `@/components/ui/section-title` for all new sections
+- Import: `import { SectionTitle } from "@/components/ui/section-title"`
+- Use appropriate variants: `"center"`, `"start"`, or `"start-dark"` based on design requirements
+- Configure props as needed: `showDivider`, `showLogo`, `className`, etc.
+
+## UI Components Usage
+
+- **ALWAYS** use components from `@/components/ui/` directory
+- Available components: `Button`, `Card`, `Accordion`, `Tabs`, `Carousel`, `Form`, `Label`, `AnimatedButton`
+- Import pattern: `import { ComponentName } from "@/components/ui/component-name"`
+- Never create custom UI components when equivalent exists in `@/components/ui/`
+
+## Content Management
+
+- **ALWAYS** use content from `@/content.ts` file
+- Import: `import content from "@/content.ts"`
+- Access content using the structured object: `content.sectionName.propertyName`
+- Never hardcode text content - always reference from `content.ts`
+- Add new content sections to `content.ts` when creating new features
+
+## Design System and Styling
+
+- **ALWAYS** use Tailwind CSS classes from the design system defined in `@/app/globals.css`
+- Use CSS custom properties: `--color-primary`, `--color-secondary`, `--color-foreground`, etc.
+- Apply typography classes: `text-4xl`, `text-3xl`, `text-2xl`, etc. as defined in the base layer
+- Use spacing utilities: `space-y-4`, `space-x-4`, `p-4`, `m-4`, etc.
+- Follow responsive design patterns: `lg:text-3xl`, `md:px-6`, etc.
+- Use container class: `container` (defined in globals.css with max-width and padding)
+
+## Color System
+
+- Primary: `#021a60` (--primary)
+- Primary Light: `#032da6` (--primary-light)
+- Secondary: `#f25b06` (--secondary)
+- Background: `#fafbfd` (--background)
+- Foreground: `#333333` (--foreground)
+- Use CSS custom properties instead of hardcoded hex values
+
+## Typography
+
+- Use the Lama Sans font family as defined in globals.css
+- Apply heading styles: `h1`, `h2`, `h3`, `h4`, `h5`, `h6` with predefined classes
+- Use body text styling: `p`, `small` with appropriate classes
+- Follow the typography hierarchy defined in the base layer
+
+## Component Structure
+
+- Create new sections in `@/components/sections/` directory
+- Use lowercase with dashes for file names: `new-section.tsx`
+- Export as named exports: `export function NewSection() {}`
+- Follow the established pattern of other section components
+
+## Example Implementation
+
+```tsx
+import { SectionTitle } from "@/components/ui/section-title";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import content from "@/content.ts";
+
+export function NewSection() {
+  return (
+    <section className="py-16 bg-background">
+      <div className="container">
+        <SectionTitle variant="center">{content.newSection.title}</SectionTitle>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+          {content.newSection.items.map((item, index) => (
+            <Card key={index} className="p-6">
+              <h3 className="text-xl font-bold text-foreground mb-4">
+                {item.title}
+              </h3>
+              <p className="text-muted-foreground mb-4">{item.description}</p>
+              <Button className="bg-primary text-primary-foreground">
+                {item.buttonText}
+              </Button>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+```
+
+## Prohibited Practices
+
+- ❌ Hardcoding text content in components
+- ❌ Creating custom UI components when existing ones are available
+- ❌ Using hardcoded color values instead of CSS custom properties
+- ❌ Creating sections without using SectionTitle component
+- ❌ Using inline styles instead of Tailwind classes
+- ❌ Not following the established file structure and naming conventions
