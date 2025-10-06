@@ -14,6 +14,7 @@ import TestimonialsSection from "@/components/sections/testimonials";
 import FeaturedClients from "@/components/sections/featured-clients";
 import TechnologiesSection from "@/components/sections/technologies";
 import VideoSection from "@/components/sections/video-section";
+import PackagesSection from "@/components/sections/packages";
 
 const Page = () => {
   return (
@@ -54,12 +55,7 @@ const Page = () => {
               الاطلاع على نموذج التقرير
             </h2>
           </section>
-          <section
-            id="packages"
-            className="min-h-screen bg-lime-100 flex items-center justify-center"
-          >
-            <h2 className="text-4xl font-bold text-primary">الباقات</h2>
-          </section>
+          <PackagesSection />
           <VideoSection />
           <section
             id="price-calculator"
