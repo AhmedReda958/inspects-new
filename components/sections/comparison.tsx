@@ -76,10 +76,19 @@ export function Comparison() {
 
               {/* Competitors Column */}
               <div className="py-12 px-8 bg-background">
-                <p className="text-base font-medium text-foreground/80 leading-relaxed flex items-start gap-2">
-                  <span className="mt-1 flex-shrink-0 text-[8px]">●</span>
-                  {item.competitors}
-                </p>
+                <ul className="space-y-4">
+                  {item.competitors.map((point, idx) => (
+                    <li
+                      key={idx}
+                      className="flex items-start gap-2 text-foreground/80 "
+                    >
+                      <span className="mt-1 flex-shrink-0 text-[8px]">●</span>
+                      <span className="text-base leading-relaxed font-medium">
+                        {point}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           ))}
