@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
+import Autoplay from "embla-carousel-autoplay";
 
 import {
   Carousel,
@@ -33,6 +34,11 @@ export function TestimonialsSlider() {
       <Carousel
         setApi={setApi}
         opts={{ loop: true, align: "center" }}
+        plugins={[
+          Autoplay({
+            delay: 2500,
+          }),
+        ]}
         className="w-full"
         dir="ltr"
       >
@@ -41,7 +47,7 @@ export function TestimonialsSlider() {
             <CarouselItem
               key={index}
               className={cn("ml-4 basis-full md:basis-1/2 lg:basis-1/3", {
-                "border-x-1": current === index,
+                "lg:border-x-1": current === index,
               })}
             >
               <div

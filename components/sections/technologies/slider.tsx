@@ -9,6 +9,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import content from "@/content";
 import { cn } from "@/lib/utils";
@@ -33,6 +34,11 @@ export function TechnologiesSlider() {
       <Carousel
         setApi={setApi}
         opts={{ loop: true, align: "end" }}
+        plugins={[
+          Autoplay({
+            delay: 2500,
+          }),
+        ]}
         className="w-full"
         dir="ltr"
       >

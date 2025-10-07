@@ -123,7 +123,15 @@ export default function PackagesSection() {
         {isMobile ? (
           // Mobile: Carousel
           <div className="relative px-4">
-            <Carousel setApi={setApi} className="w-full " dir="ltr">
+            <Carousel
+              setApi={setApi}
+              opts={{
+                align: "center",
+                startIndex: 1,
+              }}
+              className="w-full "
+              dir="ltr"
+            >
               <CarouselContent>
                 {packages.map((pkg) => (
                   <CarouselItem

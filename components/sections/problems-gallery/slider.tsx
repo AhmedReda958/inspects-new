@@ -61,7 +61,6 @@ export function ProblemsGallerySlider() {
         opts={{ loop: true, align: "center", duration: 500 }}
         plugins={[
           Autoplay({
-            stopOnInteraction: false,
             delay: 2500,
           }),
         ]}
