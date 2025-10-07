@@ -3,7 +3,10 @@ import { Button } from "../ui/button";
 
 export function ReportSampleSection() {
   return (
-    <section className="bg-primary bg-[url('/images/bg/report-bg.png')] bg-cover bg-center">
+    <section
+      className="bg-primary bg-[url('/images/bg/report-bg.png')] bg-cover bg-center"
+      id="report-sample"
+    >
       <div className=" container max-w-[1070px] mx-auto  py-16 lg:py-44 flex flex-col lg:flex-row items-center justify-between gap-8">
         <Image
           src="/logo-full-dark.svg"

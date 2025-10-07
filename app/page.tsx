@@ -16,6 +16,7 @@ import TechnologiesSection from "@/components/sections/technologies";
 import VideoSection from "@/components/sections/video-section";
 import PackagesSection from "@/components/sections/packages";
 import { ReportSampleSection } from "@/components/sections/report-sample";
+import CalculatorSection from "@/components/sections/calculator";
 
 const Page = () => {
   return (
@@ -51,6 +52,7 @@ const Page = () => {
           <ReportSampleSection />
           <PackagesSection />
           <VideoSection />
+          <CalculatorSection />
           <FaqSection />
           <Footer />
         </main>

@@ -663,6 +663,82 @@ const content = {
       },
     ],
   },
+  calculator: {
+    title: "حاسبة الأسعار",
+    fields: {
+      familyName: {
+        label: "اسم العائلة",
+        placeholder: "هنا يكتب اسم العائلة",
+      },
+      firstName: {
+        label: "الرسالة الأول",
+        placeholder: "هنا يكتب الرسالة الأول مثال: (محمد)",
+      },
+      city: {
+        label: "المدينة",
+        placeholder: "اختر المدينة",
+        options: [
+          "الرياض",
+          "جدة",
+          "مكة المكرمة",
+          "المدينة المنورة",
+          "الدمام",
+          "الخبر",
+          "الأحساء",
+          "القطيف",
+          "الطائف",
+          "بريدة",
+        ],
+      },
+      mobileNumber: {
+        label: "رقم الجوال",
+        placeholder: "رقم الجوال",
+      },
+      propertyType: {
+        label: "نوع العقار",
+        placeholder: "اختر نوع العقار",
+        options: ["فيلا", "شقة", "دور", "عمارة", "قصر", "استراحة"],
+      },
+      neighborhood: {
+        label: "اختر الحي",
+        placeholder: "اختر الحي",
+        options: [],
+      },
+      landArea: {
+        label: "مساحة الأرض",
+        placeholder: "اكتب مساحة الأرض",
+        suffix: "م²",
+      },
+      propertyAge: {
+        label: "عمر العقار",
+        placeholder: "اختر متوسط عمر العقار",
+        options: [
+          "أقل من سنة",
+          "من 1 إلى 3 سنوات",
+          "من 3 إلى 5 سنوات",
+          "من 5 إلى 10 سنوات",
+          "أكثر من 10 سنوات",
+        ],
+      },
+      inspectionPurpose: {
+        label: "الهدف من الفحص",
+        placeholder: "اختر الهدف من الفحص",
+        options: [
+          "قبل الشراء",
+          "قبل البيع",
+          "صيانة دورية",
+          "تقييم عقاري",
+          "فحص ما بعد البناء",
+        ],
+      },
+      coveredArea: {
+        label: "مساحة البناء المسقوفة",
+        placeholder: "مساحة البناء المسقوفة",
+        suffix: "م²",
+      },
+    },
+    submitButton: "إرسال",
+  },
 };
 
 export default content;

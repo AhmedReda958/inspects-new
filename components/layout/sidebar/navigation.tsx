@@ -48,7 +48,7 @@ const navigationItems: NavigationItem[] = [
     href: "#report-sample",
   },
   { label: "الباقات", href: "#packages" },
-  { label: "حاسبة الأسعار", href: "#price-calculator" },
+  { label: "حاسبة الأسعار", href: "#calculator" },
   { label: "الاسئلة الشائعة", href: "#faq" },
 ];
 
