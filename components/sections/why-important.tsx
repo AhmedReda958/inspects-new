@@ -30,7 +30,7 @@ function ReasonCard({
         {/* Number */}
         <div
           className={cn(
-            "w-16 h-16 rotate-45 group-hover:rotate-0 flex items-center justify-center text-white font-bold text-xl bg-primary group-hover:bg-secondary transition-all duration-300 will-change-auto cursor-pointer"
+            "w-16 h-16 rotate-45 group-hover:rotate-0 flex items-center justify-center text-white font-bold text-xl bg-primary-light group-hover:bg-secondary transition-all duration-300 will-change-auto cursor-pointer"
           )}
         >
           <span className="-rotate-45 group-hover:-rotate-0 transition-all duration-300">
@@ -44,7 +44,9 @@ function ReasonCard({
         </h3>
 
         {/* Description */}
-        <p className="text-muted-foreground leading-relaxed">{description}</p>
+        <p className="text-muted-foreground leading-loose whitespace-pre-wrap">
+          {description}
+        </p>
       </div>
     </div>
   );

@@ -34,7 +34,7 @@ const ContentItem = ({ item }: { item: InspectionItem }) => {
     >
       <AccordionTrigger
         className={cn(
-          "hover:no-underline px-6 py-3 lg:py-5 text-right gap-6 lg:gap-8 [&>svg]:hidden",
+          "hover:no-underline px-6 lg:py-6 text-right gap-6 lg:gap-8 [&>svg]:hidden",
           "[&[data-state=open]]:ps-5",
           "[&[data-state=open]_.icon]:hidden",
           "[&[data-state=open]_.icon-minus]:block",
@@ -74,7 +74,7 @@ function TabContentSection({ items }: TabContentProps) {
   const secondHalf = items.slice(midPoint);
 
   return (
-    <div className="grid lg:grid-cols-2 gap-8">
+    <div className="grid lg:grid-cols-2 gap-4 lg:gap-8">
       {/* First half */}
       <Accordion type="single" collapsible className="space-y-4">
         {firstHalf.map((item) => (
