@@ -744,7 +744,7 @@ const content = {
     subtitle: "مؤهلات فريق الفحص والاعتمادات المهنية",
     inspects: {
       title: "انسبكتكس",
-      logo: "/logo.svg",
+      logo: "/logo.png",
     },
     items: [
       {

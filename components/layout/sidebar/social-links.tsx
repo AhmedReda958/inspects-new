@@ -34,7 +34,7 @@ export function SocialLinks() {
           size={"icon"}
           asChild
         >
-          <Link href={link.href}>
+          <Link href={link.href} target="_blank" aria-label={link.href}>
             <link.icon className="w-5 h-5" />
           </Link>
         </Button>

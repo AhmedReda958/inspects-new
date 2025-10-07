@@ -75,9 +75,9 @@ export function TestimonialsSlider() {
 
                 {/* Client Info */}
                 <div className="mt-auto">
-                  <h4 className="font-bold text-primary text-sm  mb-1">
+                  <div className="font-bold text-primary text-sm  mb-1">
                     {testimonial.name}
-                  </h4>
+                  </div>
                 </div>
               </div>
             </CarouselItem>

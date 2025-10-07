@@ -13,7 +13,7 @@ export default function ServiceDescriptionSection() {
           {/* Background Logo Image - Desktop Only */}
 
           <Image
-            src="/logo.svg"
+            src="/logo.png"
             alt="Service Description"
             width={762}
             height={762}

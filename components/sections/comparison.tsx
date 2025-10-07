@@ -32,7 +32,7 @@ export function Comparison() {
             <div className="p-10  bg-white">
               <div className="flex items-center justify-start gap-3">
                 <Image
-                  src={"/logo.svg"}
+                  src={"/logo.png"}
                   alt={"انسبكتكس"}
                   width={50}
                   height={50}
@@ -117,7 +117,7 @@ export function Comparison() {
                   <div className="mb-6 border-b border-border pb-6">
                     <div className="flex items-center justify-start gap-3 mb-4">
                       <Image
-                        src={"/logo.svg"}
+                        src={"/logo.png"}
                         alt={"انسبكتكس"}
                         width={50}
                         height={50}

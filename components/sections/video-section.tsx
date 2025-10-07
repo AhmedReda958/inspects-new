@@ -12,6 +12,7 @@ const VideoSection = () => {
         href={content.video.url}
         target="_blank"
         rel="noopener noreferrer"
+        aria-label={content.video.url}
       >
         <div className="relative h-16 w-16 lg:h-28 lg:w-28 bg-white rounded-full z-10 flex items-center justify-center">
           <FaPlay className="w-8 h-8 text-primary" />

@@ -86,7 +86,7 @@ export function SectionTitle({
           )}
         >
           <Image
-            src="/logo.svg"
+            src="/logo.png"
             alt="Logo"
             width={50}
             height={50}

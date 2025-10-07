@@ -61,14 +61,14 @@ export function TechnologiesSlider() {
                 </div>
 
                 {/* Technology Title */}
-                <h4
+                <div
                   className={cn(
                     "font-bold text-primary text-lg mb-4 leading-tight",
                     { "text-secondary": current === index }
                   )}
                 >
                   {technology.name}
-                </h4>
+                </div>
 
                 {/* Technology Description */}
                 <p className="text-sm text-gray-600 leading-relaxed text-center">
