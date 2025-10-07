@@ -6,31 +6,33 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import content from "@/content";
 import Image from "next/image";
 import BrandBlueSquare from "@/icons/brand-blue-square.svg";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useState } from "react";
 
 export function CaseStudies() {
   const { caseStudies } = content;
+
+  const [currentCaseStudy, setCurrentCaseStudy] = useState(0);
 
   return (
     <section className="py-16 bg-white" id="case-studies">
       <div className="container">
         <SectionTitle variant="center">{caseStudies.title}</SectionTitle>
 
-        <Carousel className="w-full max-w-6xl mx-auto mt-12">
+        <Carousel className="w-full max-w-6xl mx-auto mt-12" dir="ltr">
           <CarouselContent>
             {caseStudies.items.map((caseStudy) => (
               <CarouselItem key={caseStudy.id}>
                 <Card className="border-none shadow-none bg-transparent">
-                  <CardContent className="p-0">
-                    {/* Responsive Layout - Same HTML structure for both desktop and mobile */}
-                    <div className="flex flex-col lg:flex-row gap-8 items-start">
-                      {/* Image Section */}
-                      <div className="w-full lg:flex-1 relative aspect-[4/3] overflow-hidden">
+                  <CardContent className="p-0" dir="rtl">
+                    {/* Grid Layout - Content takes 2/3 on desktop, full width on mobile */}
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                      {/* Image Section - 1/3 on desktop, full width on mobile */}
+                      <div className="lg:col-span-5 relative aspect-[4/3] lg:aspect-auto lg:h-[calc(100vh-100px)] overflow-hidden lg:order-last">
                         <Image
                           src={caseStudy.image}
                           alt="Case Study"
@@ -39,29 +41,29 @@ export function CaseStudies() {
                         />
                       </div>
 
-                      {/* Content Section */}
-                      <div className="w-full lg:flex-1 space-y-6 ">
+                      {/* Content Section - 2/3 on desktop, full width on mobile */}
+                      <div className="lg:col-span-7 space-y-6">
                         {/* Property Details */}
-                        <div className="flex flex-col lg:flex-row items-center justify-center gap-4  bg-background p-10 text-center *:space-y-2 *:pb-4 *:border-b *:w-fit mb-10">
-                          <div>
-                            <h3 className="font-bold text-primary">
+                        <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-4  bg-background p-10 text-center *:space-y-2 *:pb-4 *:border-b *:lg:border-b-0  *:w-fit *:lg:text-start mb-10 ">
+                          <div className="lg:border-l-1 lg:pl-4">
+                            <h3 className="lg:text-base font-bold text-primary">
                               قيمة العقار
                             </h3>
-                            <p className="text-foreground font-medium">
+                            <p className="lg:text-sm font-medium">
                               {caseStudy.propertyValue}
                             </p>
                           </div>
-                          <div>
-                            <h3 className="font-bold text-primary">الموقع</h3>
-                            <p className="text-foreground">
-                              {caseStudy.location}
-                            </p>
+                          <div className="lg:border-l-1 lg:pl-4">
+                            <h3 className="lg:text-base font-bold text-primary">
+                              الموقع
+                            </h3>
+                            <p className="lg:text-sm">{caseStudy.location}</p>
                           </div>
                           <div>
-                            <h3 className="font-bold text-primary">المشكلة</h3>
-                            <p className="text-foreground">
-                              {caseStudy.problem}
-                            </p>
+                            <h3 className="lg:text-base font-bold text-primary">
+                              المشكلة
+                            </h3>
+                            <p className="lg:text-sm">{caseStudy.problem}</p>
                           </div>
                         </div>
 
@@ -123,8 +125,41 @@ export function CaseStudies() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="bg-primary text-white hover:bg-primary-light border-primary" />
-          <CarouselNext className="bg-secondary text-white hover:bg-secondary/90 border-secondary" />
+          {/* Navigation Controls */}
+          <div className="flex justify-between items-center gap-4 mt-8">
+            <button
+              onClick={() => setCurrentCaseStudy(currentCaseStudy - 1)}
+              className="w-15 h-15 bg-primary text-white flex items-center justify-center hover:bg-primary/90 transition-all duration-200 cursor-pointer"
+              aria-label="Previous technologies"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            {/* Dot Indicators */}
+            <div className="flex gap-2 p-4 border border-gray-200">
+              {Array.from({ length: caseStudies.items.length }).map(
+                (_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentCaseStudy(index)}
+                    className={`w-2.5 h-2.5 rounded-full transition-all duration-200 ${
+                      currentCaseStudy === index
+                        ? "bg-secondary"
+                        : "bg-gray-300 hover:bg-gray-400"
+                    }`}
+                    aria-label={`Go to technology ${index + 1}`}
+                  />
+                )
+              )}
+            </div>
+
+            <button
+              onClick={() => setCurrentCaseStudy(currentCaseStudy + 1)}
+              className="w-15 h-15 bg-secondary text-white flex items-center justify-center hover:bg-secondary/90 transition-all duration-200 cursor-pointer"
+              aria-label="Next technologies"
+            >
+              <ArrowRight className="w-5 h-5" />
+            </button>
+          </div>
         </Carousel>
       </div>
     </section>
