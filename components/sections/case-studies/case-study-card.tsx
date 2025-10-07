@@ -5,11 +5,12 @@ import { CaseStudyContent } from "./case-study-content";
 
 interface CaseStudy {
   id: number;
+  title: string;
+  subtitle: string;
   image: string;
   propertyValue: string;
   location: string;
-  problem: string;
-  story: {
+  challenge: {
     title: string;
     content: string;
   };
@@ -19,7 +20,12 @@ interface CaseStudy {
   };
   result: {
     title: string;
-    content: string;
+    items?: string[];
+    content?: string;
+  };
+  impact?: {
+    title: string;
+    items: string[];
   };
 }
 
@@ -45,18 +51,28 @@ export function CaseStudyCard({ caseStudy }: CaseStudyCardProps) {
 
           {/* Content Section - 2/3 on desktop, full width on mobile */}
           <div className="lg:col-span-7 space-y-6">
+            {/* Case Study Title and Subtitle */}
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold text-primary mb-2">
+                {caseStudy.title}
+              </h2>
+              <p className="text-lg text-foreground leading-relaxed">
+                {caseStudy.subtitle}
+              </p>
+            </div>
+
             {/* Property Details */}
             <CaseStudyDetails
               propertyValue={caseStudy.propertyValue}
               location={caseStudy.location}
-              problem={caseStudy.problem}
             />
 
-            {/* Story, What We Provided, and Result Sections */}
+            {/* Challenge, What We Provided, Result, and Impact Sections */}
             <CaseStudyContent
-              story={caseStudy.story}
+              challenge={caseStudy.challenge}
               whatWeProvided={caseStudy.whatWeProvided}
               result={caseStudy.result}
+              impact={caseStudy.impact}
             />
           </div>
         </div>

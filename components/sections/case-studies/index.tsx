@@ -21,7 +21,11 @@ export function CaseStudies() {
       <div className="container">
         <SectionTitle variant="center">{caseStudies.title}</SectionTitle>
 
-        <Carousel className="w-full max-w-6xl mx-auto mt-12" dir="ltr">
+        <Carousel
+          className="w-full max-w-6xl mx-auto mt-12"
+          dir="ltr"
+          opts={{ loop: true }}
+        >
           <CarouselContent>
             {caseStudies.items.map((caseStudy) => (
               <CarouselItem key={caseStudy.id}>
