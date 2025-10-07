@@ -15,6 +15,7 @@ import FeaturedClients from "@/components/sections/featured-clients";
 import TechnologiesSection from "@/components/sections/technologies";
 import VideoSection from "@/components/sections/video-section";
 import PackagesSection from "@/components/sections/packages";
+import { ReportSampleSection } from "@/components/sections/report-sample";
 
 const Page = () => {
   return (
@@ -47,22 +48,9 @@ const Page = () => {
           </section>
           <FeaturedClients />
           <TestimonialsSection />
-          <section
-            id="report-sample"
-            className="min-h-screen bg-cyan-100 flex items-center justify-center"
-          >
-            <h2 className="text-4xl font-bold text-primary">
-              الاطلاع على نموذج التقرير
-            </h2>
-          </section>
+          <ReportSampleSection />
           <PackagesSection />
           <VideoSection />
-          <section
-            id="price-calculator"
-            className="min-h-screen bg-emerald-100 flex items-center justify-center"
-          >
-            <h2 className="text-4xl font-bold text-primary">حاسبة الأسعار</h2>
-          </section>
           <FaqSection />
           <Footer />
         </main>
