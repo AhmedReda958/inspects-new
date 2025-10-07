@@ -111,7 +111,7 @@ export function WorkflowStepCard({
         </h3>
 
         {/* Step Description */}
-        <p className="text-base font-medium text-neutral-500 leading-[1.875em] text-center max-w-[256px] whitespace-pre-wrap">
+        <p className="text-base font-medium text-neutral-500 leading-loose text-center  whitespace-pre-wrap">
           {description}
         </p>
       </div>
