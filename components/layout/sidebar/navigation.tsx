@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSidebar } from "./sidebar-context";
-
+import SidbarSquaresIcon from "@/icons/sidebar-square.svg";
 interface NavigationItem {
   label: string;
   href: string;
@@ -143,10 +143,11 @@ export function Navigation() {
             href={item.href}
             onClick={() => closeMobileSidebar()}
             className={cn(
-              "block w-full text-center lg:text-right text-sm lg:text-base font-medium tracking-none text-nowrap transition-colors",
+              "flex w-full text-center lg:text-right text-sm lg:text-base font-medium tracking-none text-nowrap transition-colors",
               isActive ? "text-secondary" : "text-white/80 hover:text-secondary"
             )}
           >
+            {isActive && <SidbarSquaresIcon className="absolute start-0" />}
             {item.label}
           </Link>
         );
