@@ -14,7 +14,7 @@ import { MinusIcon, PlusIcon } from "lucide-react";
 export function Comparison() {
   return (
     <section id="comparison" className="py-18 lg:py-24 bg-background">
-      <div className="container">
+      <div className="container px-8">
         <SectionTitle
           variant="center"
           className="text-primary lg:text-foreground max-w-[358px] lg:max-w-none"
@@ -23,65 +23,66 @@ export function Comparison() {
         </SectionTitle>
 
         {/* Desktop View - Table Layout */}
-        <div className="hidden lg:block">
-          <div className="space-y-0">
-            {content.comparison.items.map((item) => (
-              <div key={item.id}>
-                {/* Category Title */}
-                <div className="bg-primary py-4 px-6">
-                  <h3 className="text-lg font-bold text-primary-foreground text-center">
-                    {item.title}
-                  </h3>
-                </div>
-
-                {/* Comparison Row */}
-                <div className="grid grid-cols-2 gap-0 border-b border-border">
-                  {/* Inspects Column */}
-                  <div className="bg-white p-8 border-l border-border">
-                    <div className="flex items-center justify-center gap-3 mb-6">
-                      <Image
-                        src={"/logo.svg"}
-                        alt={"انسبكتكس"}
-                        width={40}
-                        height={40}
-                        className="w-10 h-10"
-                      />
-                      <h4 className="text-xl font-bold text-primary">
-                        انسبكتكس
-                      </h4>
-                    </div>
-                    <ul className="space-y-3">
-                      {item.inspects.map((point, idx) => (
-                        <li
-                          key={idx}
-                          className="flex items-start gap-3 text-foreground"
-                        >
-                          <span className="text-secondary mt-1 flex-shrink-0">
-                            ●
-                          </span>
-                          <span className="text-sm leading-relaxed">
-                            {point}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Competitors Column */}
-                  <div className="bg-gray-50 p-8 border-r border-border">
-                    <div className="flex items-center justify-center gap-3 mb-6">
-                      <h4 className="text-xl font-bold text-foreground">
-                        المنافسين
-                      </h4>
-                    </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed text-center">
-                      {item.competitors}
-                    </p>
-                  </div>
-                </div>
+        <div className=" hidden lg:block mt-16 overflow-hidden bg-background">
+          {/* Table Header */}
+          <div className="grid grid-cols-3  border-primary-light/10 border-b-2 ">
+            <div className="p-10  ps-0">
+              <h3 className="text-primary">المقياس</h3>
+            </div>
+            <div className="p-10  bg-white">
+              <div className="flex items-center justify-start gap-3">
+                <Image
+                  src={"/logo.svg"}
+                  alt={"انسبكتكس"}
+                  width={50}
+                  height={50}
+                  className="w-12 h-12"
+                />
+                <h3 className="text-primary">انسبكتكس</h3>
               </div>
-            ))}
+            </div>
+            <div className="p-10 ">
+              <h3 className="text-primary">المنافسين</h3>
+            </div>
           </div>
+
+          {/* Table Rows */}
+          {content.comparison.items.map((item, index) => (
+            <div
+              key={item.id}
+              className={`grid grid-cols-3 border-primary-light/10 border-b-2 last:border-b-0`}
+            >
+              {/* Metric Column */}
+              <div className="p-12 ps-0 bg-background">
+                <h3>{item.title}</h3>
+              </div>
+
+              {/* Inspectex Column */}
+              <div className="py-12 px-8  bg-white">
+                <ul className="space-y-4">
+                  {item.inspects.map((point, idx) => (
+                    <li
+                      key={idx}
+                      className="flex items-start gap-2 text-foreground/80 "
+                    >
+                      <span className="mt-1 flex-shrink-0 text-[8px]">●</span>
+                      <span className="text-base leading-relaxed font-medium">
+                        {point}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Competitors Column */}
+              <div className="py-12 px-8 bg-background">
+                <p className="text-base font-medium text-foreground/80 leading-relaxed flex items-start gap-2">
+                  <span className="mt-1 flex-shrink-0 text-[8px]">●</span>
+                  {item.competitors}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Mobile View - Accordion */}
