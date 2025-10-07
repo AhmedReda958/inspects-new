@@ -12,6 +12,7 @@ export default function HeroSection() {
             alt="Hero Background"
             fill
             className="object-cover"
+            fetchPriority="high"
             priority
           />
         </div>
@@ -24,6 +25,7 @@ export default function HeroSection() {
               width={144}
               height={144}
               className="w-36 h-36"
+              fetchPriority="high"
               priority
             />
           </div>
