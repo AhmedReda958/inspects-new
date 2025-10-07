@@ -17,6 +17,7 @@ import VideoSection from "@/components/sections/video-section";
 import PackagesSection from "@/components/sections/packages";
 import { ReportSampleSection } from "@/components/sections/report-sample";
 import CalculatorSection from "@/components/sections/calculator";
+import { Comparison } from "@/components/sections/comparison";
 
 const Page = () => {
   return (
@@ -33,14 +34,7 @@ const Page = () => {
           <InspectionContentsSection />
           <WorkflowSection />
           <TechnologiesSection />
-          <section
-            id="comparison"
-            className="min-h-screen bg-indigo-100 flex items-center justify-center"
-          >
-            <h2 className="text-4xl font-bold text-primary">
-              المقارنة بين انسبكتكس والمنافسين
-            </h2>
-          </section>
+          <Comparison />
           <section
             id="case-studies"
             className="min-h-screen bg-gray-100 flex items-center justify-center"
