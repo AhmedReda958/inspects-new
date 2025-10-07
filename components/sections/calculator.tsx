@@ -491,7 +491,7 @@ export default function CalculatorSection() {
               alt="Calculator illustration"
               fill
               className="object-fit"
-              priority
+              loading="lazy"
             />
           </div>
         </div>
