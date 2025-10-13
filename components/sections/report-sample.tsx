@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 export function ReportSampleSection() {
   return (
@@ -27,13 +28,19 @@ export function ReportSampleSection() {
           </p>
         </div>
 
-        <Button
-          variant={"secondary"}
-          size={"lg"}
-          className="text-white rounded-none h-[50px] w-[190px] lg:h-[70px] lg:w-[230px] text-lg lg:text-xl cursor-pointer"
+        <Link
+          href="/عينة تقرير شامل .pdf"
+          download="عينة تقرير شامل.pdf"
+          className="inline-block"
         >
-          تحميل
-        </Button>
+          <Button
+            variant={"secondary"}
+            size={"lg"}
+            className="text-white rounded-none h-[50px] w-[190px] lg:h-[70px] lg:w-[230px] text-lg lg:text-xl cursor-pointer"
+          >
+            تحميل
+          </Button>
+        </Link>
       </div>
     </section>
   );
