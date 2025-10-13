@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import content from "@/content";
+import { WhatsAppFloat } from "@/components/ui/whatsapp-float";
 
 import "./globals.css";
 
@@ -78,7 +79,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar" dir="rtl" className="scroll-smooth">
-      <body className={`${lamaSans.variable} antialiased`}>{children}</body>
+      <body className={`${lamaSans.variable} antialiased`}>
+        {children}
+        <WhatsAppFloat phoneNumber="+966920005543" />
+      </body>
     </html>
   );
 }
