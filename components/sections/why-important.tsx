@@ -19,21 +19,21 @@ function ReasonCard({
   return (
     <div
       className={cn(
-        "p-[2px] group hover:z-10 transition-all duration-500 relative cursor-pointer",
+        "p-[2px] group md:hover:z-10 transition-all duration-500 relative cursor-pointer",
         "bg-gradient-to-bl from-transparent via-transparent to-transparent",
-        "hover:bg-gradient-to-bl hover:from-secondary hover:via-white hover:to-white",
-        "hover:shadow-[0_58px_83px_rgba(93,104,126,0.09),0_132px_112px_rgba(93,104,126,0.05),0_234px_132px_rgba(93,104,126,0.01)]",
+        "md:hover:bg-gradient-to-bl md:hover:from-secondary md:hover:via-white md:hover:to-white",
+        "md:hover:shadow-[0_58px_83px_rgba(93,104,126,0.09),0_132px_112px_rgba(93,104,126,0.05),0_234px_132px_rgba(93,104,126,0.01)]",
         className
       )}
     >
-      <div className="h-full p-8 pb-16 space-y-6 bg-background group-hover:bg-white">
+      <div className="h-full p-8 pb-16 space-y-6 bg-background md:group-hover:bg-white">
         {/* Number */}
         <div
           className={cn(
-            "w-16 h-16 rotate-45 group-hover:rotate-0 flex items-center justify-center text-white font-bold text-xl bg-primary-light group-hover:bg-secondary transition-all duration-300 will-change-auto cursor-pointer"
+            "w-16 h-16 rotate-45 md:group-hover:rotate-0 flex items-center justify-center text-white font-bold text-xl bg-primary-light md:group-hover:bg-secondary transition-all duration-300 will-change-auto cursor-pointer"
           )}
         >
-          <span className="-rotate-45 group-hover:-rotate-0 transition-all duration-300">
+          <span className="-rotate-45 md:group-hover:-rotate-0 transition-all duration-300">
             {number}
           </span>
         </div>
