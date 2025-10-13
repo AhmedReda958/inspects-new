@@ -948,32 +948,246 @@ const content = {
   technologies: {
     title: "التقنيات والأجهزة المستخدمة",
     items: [
+      // معماري وإنشائي - Architectural & Structural
       {
         id: 1,
-        name: "Rebound hammer or Schmidt hammer",
-        description: "اداه لتقدير قوة الخرسانة",
-        image: "/images/technologies/technology-1.png",
-      },
-      {
-        id: 2,
-        name: "pundit pl-200 proceq",
-        description:
-          "جهاز يستخدم لدراسة جودة الخرسانة وعرض التشققات وعمقها ومجموعة من خصائص الخرسانات",
-        image: "/images/technologies/technology-2.png",
-      },
-      {
-        id: 3,
-        name: "Profometer 630 AI",
-        description:
-          "تحديد مواقع الأعمدة وأعداد وأقطار حديد التسليح وقياس سمك الغطاء الخرساني",
-        image: "/images/technologies/technology-3.png",
-      },
-      {
-        id: 4,
         name: "GP8100",
         description:
           "تحديد مواقع الأعمدة وحديد التسليح داخل الجدران وتحديد مواقع الكابلات وانابيب التزويد والصرف",
-        image: "/images/technologies/technology-4.png",
+        image: "/images/sections/technologies/معماري وإنشائي/1.png",
+      },
+      {
+        id: 2,
+        name: "Profometer 630 AI",
+        description:
+          "تحديد مواقع الأعمدة وأقطار حديد التسليح وقياس سمك الغطاء الخرساني",
+        image: "/images/sections/technologies/معماري وإنشائي/2.png",
+      },
+      {
+        id: 3,
+        name: "pundit pl-200 proceq",
+        description:
+          "جهاز يستخدم لدراسة جودة الخرسانة وعرض التشققات وعمقها ومجموعة من خصائص الخرسانات",
+        image: "/images/sections/technologies/معماري وإنشائي/3.png",
+      },
+      {
+        id: 4,
+        name: "Rebound hammer or Schmidt hammer",
+        description: "اداه لتقدير قوة الخرسانة",
+        image: "/images/sections/technologies/معماري وإنشائي/4.png",
+      },
+      {
+        id: 5,
+        name: "Ultrasonic pulse velocity test",
+        description:
+          "جهاز لفحص جودة قوة الخرسانة بعمل موجات تتعلق بفحص الخرسانة",
+        image: "/images/sections/technologies/معماري وإنشائي/5.png",
+      },
+      {
+        id: 6,
+        name: "Digital Coating Thickness Gauge, On Concrete Paint Field",
+        description: "جهاز لقياس سماكة الطلاء للمواد غير المعدنية",
+        image: "/images/sections/technologies/معماري وإنشائي/6.png",
+      },
+      {
+        id: 7,
+        name: "Laser Distance Meter",
+        description: "اداة لقياس المسافات باستخدام الليزر",
+        image: "/images/sections/technologies/معماري وإنشائي/7.png",
+      },
+      {
+        id: 8,
+        name: "Crack Width Tester",
+        description: "اداة لقياس عرض التشقوق",
+        image: "/images/sections/technologies/معماري وإنشائي/8.png",
+      },
+      {
+        id: 9,
+        name: "Laser Levelling",
+        description: "جهاز لقياس الاستواء الجدران والأرضية",
+        image: "/images/sections/technologies/معماري وإنشائي/9.png",
+      },
+      {
+        id: 10,
+        name: "digital Caliper - Small",
+        description: "اداة لقياس السماكة + كمية دقيقة",
+        image: "/images/sections/technologies/معماري وإنشائي/10.png",
+      },
+      {
+        id: 11,
+        name: "Rubber hammar",
+        description: "اداة للكشف عن التفريغات خلف البلاط",
+        image: "/images/sections/technologies/معماري وإنشائي/11.png",
+      },
+      {
+        id: 12,
+        name: "Spirit Level",
+        description: "اداة للكشف عن استقامة الاسطح",
+        image: "/images/sections/technologies/معماري وإنشائي/12.png",
+      },
+      {
+        id: 13,
+        name: "Digetal Angle ruler & spirite",
+        description: "اداة لقياس كيل تعامد الزوايا",
+        image: "/images/sections/technologies/معماري وإنشائي/13.png",
+      },
+
+      // ميكانيك - Mechanical
+      {
+        id: 14,
+        name: "Moisture Meter",
+        description: "يقيس الرطوبة السطحية للخشب ومواد البناء الأخرى",
+        image: "/images/sections/technologies/ميكانيك/1.png",
+      },
+      {
+        id: 15,
+        name: "Infrared heater",
+        description:
+          "ميكانيك للكشف الحراري يقدم الطيف الحراري لتحديد تسرب المياه من الأسطح",
+        image: "/images/sections/technologies/ميكانيك/2.png",
+      },
+      {
+        id: 16,
+        name: "Refrigerant leak detector",
+        description:
+          "كاشف عن تسرب الغازات الهوائية من وحدات تكييف الهواء وأنابيع التبريد",
+        image: "/images/sections/technologies/ميكانيك/3.png",
+      },
+      {
+        id: 17,
+        name: "ecflow combustible gas detector",
+        description: "كاشف عن تسرب الغازات القابلة للاحتراق",
+        image: "/images/sections/technologies/ميكانيك/4.png",
+      },
+      {
+        id: 18,
+        name: "Air velocity meter",
+        description:
+          "قياس حركة الهواء وقياس الهواء الخارج من وحدات تكييف وأنظمة التهوية في المباني والمنشآت",
+        image: "/images/sections/technologies/ميكانيك/5.png",
+      },
+      {
+        id: 19,
+        name: "Thermometer",
+        description: "قياسات درجة الحرارة لأنظمة تسخين المياه",
+        image: "/images/sections/technologies/ميكانيك/6.png",
+      },
+      {
+        id: 20,
+        name: "VSC203I Pipe Inspection Video Scope",
+        description: "منظومة تحديد مسار الأنابيب والوحدة الداخلية لها",
+        image: "/images/sections/technologies/ميكانيك/7.png",
+      },
+      {
+        id: 21,
+        name: "Thermal imaging camera",
+        description:
+          "قياس درجات الحرارة وتحديد قياس ارتفاع الحرارة لتحديد مواقع الرطوبة التشبع كما يستخدم في تحديد درجات الحرارة الداخلية والخارجية الكهربائية",
+        image: "/images/sections/technologies/ميكانيك/8.png",
+      },
+      {
+        id: 22,
+        name: "Surface thermometer",
+        description: "مقياس حرارة السطح لقياس درجة الحرارة لعمل الأجهزة",
+        image: "/images/sections/technologies/ميكانيك/9.png",
+      },
+      {
+        id: 23,
+        name: "Wall scanner D-tect 200c",
+        description:
+          "البحث عن الأجسام والمواد والتمديدات الكهربائية وتحديد مواقع الأنابيب والتمديدات الكهربائية في التمديدات",
+        image: "/images/sections/technologies/ميكانيك/10.png",
+      },
+      {
+        id: 24,
+        name: "EACAM 4 IN 1 WATER ANALYTICAL INSTRUMENTS",
+        description: "تحليل جودة المياه",
+        image: "/images/sections/technologies/ميكانيك/11.png",
+      },
+      {
+        id: 25,
+        name: "POWT-17000 Multi-Sensor Water Pipeline Leak detector",
+        description: "قنوات كشف تسريب المياه",
+        image: "/images/sections/technologies/ميكانيك/12.png",
+      },
+
+      // كهرباء - Electrical
+      {
+        id: 26,
+        name: "High Voltage Insulation resistance test",
+        description: "لقياس مقاومة عزل الكابلات",
+        image: "/images/sections/technologies/كهرباء/1.png",
+      },
+      {
+        id: 27,
+        name: "Earth clamp Tester",
+        description: "قياس مقاومة شبكة الأرضي",
+        image: "/images/sections/technologies/كهرباء/2.png",
+      },
+      {
+        id: 28,
+        name: "Light-meter",
+        description: "قياس شدة الإضاءة",
+        image: "/images/sections/technologies/كهرباء/3.png",
+      },
+      {
+        id: 29,
+        name: "Multimeter",
+        description:
+          "قياس التيار المستمر وقياس الجهد وقياس المقاومة والتردد وقياس درجة الحرارة وقياس جهد المتناوب وقياس التيار المتناوب للدوائر",
+        image: "/images/sections/technologies/كهرباء/4.png",
+      },
+      {
+        id: 30,
+        name: "Clamp-meter",
+        description:
+          "قياس التيار وقياس الجهد وقياس المقاومة وقياس التردد وقياس المقاومة وقياس جهد المتناوب وقياس السعة للدوائر وقياس درجة الحرارة وقياس التيار المستمر",
+        image: "/images/sections/technologies/كهرباء/5.png",
+      },
+      {
+        id: 31,
+        name: "Power Quality Analyzer",
+        description:
+          "قياس كمية ال RMS للجهد والتيار وقياس قيمة الطور والجهد الفعلي وقياس قيم الطاقة الفعلية وقياس معامل القدرة وقياس قيمة التوافقيات وبالشبكة وقياس هذه الموجات ومعلومات",
+        image: "/images/sections/technologies/كهرباء/6.png",
+      },
+      {
+        id: 32,
+        name: "Socket Tester",
+        description: "قياس قوة الجهد الكهربائي للأفياش وتحديد القطبية",
+        image: "/images/sections/technologies/كهرباء/7.png",
+      },
+      {
+        id: 33,
+        name: "Cable Tracer",
+        description: "تحديد مسارات الكابلات",
+        image: "/images/sections/technologies/كهرباء/8.png",
+      },
+      {
+        id: 34,
+        name: "Earth tester",
+        description: "لقياس مقاومة الأرضي لضمان التأريض",
+        image: "/images/sections/technologies/كهرباء/9.png",
+      },
+      {
+        id: 35,
+        name: "Electromagnetic Field RF",
+        description:
+          "لقياس شدة المجال الكهرومغناطيسي من أجل محطة قاعدة من الهواتف والتمديدات الراديو وأجهزة الأمان وعرض الشعاعات الكهرومغناطيسية إلى دلك",
+        image: "/images/sections/technologies/كهرباء/10.png",
+      },
+      {
+        id: 36,
+        name: "Radiodetection Transmitter (Cable Locator)",
+        description: "تحديد مسارات الكابلات تحت الأرض",
+        image: "/images/sections/technologies/كهرباء/11.png",
+      },
+      {
+        id: 37,
+        name: "Thermal imaging camera",
+        description:
+          "قياس درجات الحرارة وتحديد نقاط ارتفاع الحرارة وتحديد أماكن التشبع كما يستخدم في تحديد درجات الحرارة الداخلية والخارجية والكهربائية",
+        image: "/images/sections/technologies/كهرباء/12.png",
       },
     ],
   },

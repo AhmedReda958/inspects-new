@@ -90,7 +90,7 @@ export function TechnologiesSlider() {
           </button>
           {/* Dot Indicators */}
           <div className="flex gap-2 p-4 border border-gray-200">
-            {Array.from({ length: technologies.length }).map((_, index) => (
+            {Array.from({ length: 5 }).map((_, index) => (
               <button
                 key={index}
                 onClick={() => api?.scrollTo(index)}
