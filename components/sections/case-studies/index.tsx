@@ -8,20 +8,44 @@ import {
   CarouselApi,
 } from "@/components/ui/carousel";
 import content from "@/content";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { CaseStudyCard } from "./case-study-card";
 import { CaseStudyNavigation } from "./case-study-navigation";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export function CaseStudies() {
   const { caseStudies } = content;
   const [api, setApi] = useState<CarouselApi>();
+  const contentRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
+
+  useEffect(() => {
+    if (!api || !isMobile) return;
+
+    const onSelect = () => {
+      // Scroll to the beginning of the content when carousel changes (mobile only)
+      if (contentRef.current) {
+        contentRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    };
+
+    api.on("select", onSelect);
+
+    // Cleanup function
+    return () => {
+      api.off("select", onSelect);
+    };
+  }, [api, isMobile]);
 
   return (
     <section className="py-16 bg-white" id="case-studies">
       <div className="container">
         <SectionTitle variant="center">{caseStudies.title}</SectionTitle>
 
-        <div className="w-full max-w-6xl mx-auto mt-12">
+        <div ref={contentRef} className="w-full max-w-6xl mx-auto mt-12">
           <Carousel
             setApi={setApi}
             className="w-full"
