@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import Script from "next/script";
 import content from "@/content";
 import { WhatsAppFloat } from "@/components/ui/whatsapp-float";
 
@@ -69,6 +70,7 @@ export const metadata: Metadata = {
     rating: content.metadata.rating,
     "revisit-after": content.metadata.revisit,
     expires: content.metadata.expires,
+    "facebook-domain-verification": "hxk48vt5nisdvhgj3qd3d4d18sugln",
   },
 };
 
@@ -80,6 +82,19 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" className="scroll-smooth">
       <body className={`${lamaSans.variable} antialiased`}>
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-WX6M8YY0CY"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-WX6M8YY0CY');
+          `}
+        </Script>
         {children}
         <WhatsAppFloat phoneNumber="+966920005543" />
       </body>
