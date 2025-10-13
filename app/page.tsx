@@ -5,7 +5,6 @@ import WhyImportantSection from "@/components/sections/why-important";
 import WhyInspectexSection from "@/components/sections/why-inspectex";
 import Sidebar from "@/components/layout/sidebar";
 import MobileNavbar from "@/components/layout/sidebar/mobile-navbar";
-import { SidebarProvider } from "@/components/layout/sidebar/sidebar-context";
 import { Footer } from "@/components/sections/footer";
 import InspectionContentsSection from "@/components/sections/inspection-contents";
 import { WorkflowSection } from "@/components/sections/workflow";
@@ -22,32 +21,30 @@ import { CaseStudies } from "@/components/sections/case-studies";
 
 const Page = () => {
   return (
-    <SidebarProvider>
-      <div className="h-screen overflow-hidden flex">
-        <Sidebar />
-        <main className="w-full overflow-y-auto scroll-smooth">
-          <MobileNavbar />
-          <HeroSection />
-          <ServiceDescriptionSection />
-          <ProblemsGallerySection />
-          <WhyImportantSection />
-          <WhyInspectexSection />
-          <InspectionContentsSection />
-          <WorkflowSection />
-          <TechnologiesSection />
-          <Comparison />
-          <CaseStudies />
-          <FeaturedClients />
-          <TestimonialsSection />
-          <ReportSampleSection />
-          <PackagesSection />
-          <VideoSection />
-          <CalculatorSection />
-          <FaqSection />
-          <Footer />
-        </main>
-      </div>
-    </SidebarProvider>
+    <div className="h-screen overflow-hidden flex">
+      <Sidebar />
+      <main className="w-full overflow-y-auto scroll-smooth">
+        <MobileNavbar />
+        <HeroSection />
+        <ServiceDescriptionSection />
+        <ProblemsGallerySection />
+        <WhyImportantSection />
+        <WhyInspectexSection />
+        <InspectionContentsSection />
+        <WorkflowSection />
+        <TechnologiesSection />
+        <Comparison />
+        <CaseStudies />
+        <FeaturedClients />
+        <TestimonialsSection />
+        <ReportSampleSection />
+        <PackagesSection />
+        <VideoSection />
+        <CalculatorSection />
+        <FaqSection />
+        <Footer />
+      </main>
+    </div>
   );
 };
 

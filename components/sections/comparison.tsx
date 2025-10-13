@@ -47,7 +47,7 @@ export function Comparison() {
           </div>
 
           {/* Table Rows */}
-          {content.comparison.items.map((item, index) => (
+          {content.comparison.items.map((item) => (
             <div
               key={item.id}
               className={`grid grid-cols-3 border-primary-light/10 border-b-2 last:border-b-0`}
