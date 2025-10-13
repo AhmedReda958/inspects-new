@@ -217,45 +217,182 @@ const content = {
       buttonText: "ابدأ بالفحص اليوم",
     },
     images: [
+      // Architectural Problems
       {
-        src: "/images/problems-gallery/problem-1.png",
-        alt: "مشكلة هندسية 1",
+        src: "/images/sections/problems-gallery/Arch/اثار رطوبة في الجدران الداخلية.jpg",
+        alt: "اثار رطوبة في الجدران الداخلية",
       },
       {
-        src: "/images/problems-gallery/problem-2.png",
-        alt: "مشكلة هندسية 2",
+        src: "/images/sections/problems-gallery/Arch/تسنين في البلاط.jpg",
+        alt: "تسنين في البلاط",
       },
       {
-        src: "/images/problems-gallery/problem-3.png",
-        alt: "مشكلة هندسية 3",
+        src: "/images/sections/problems-gallery/Arch/تشققات عامودية في جدران الاسوار.jpg",
+        alt: "تشققات عامودية في جدران الاسوار",
       },
       {
-        src: "/images/problems-gallery/problem-4.png",
-        alt: "مشكلة هندسية 4",
+        src: "/images/sections/problems-gallery/Arch/تشققات في الاسقف المستعارة.jpg",
+        alt: "تشققات في الاسقف المستعارة",
       },
       {
-        src: "/images/problems-gallery/problem-5.png",
-        alt: "مشكلة هندسية 5",
+        src: "/images/sections/problems-gallery/Arch/تشققات قطرية في جدران السور.jpg",
+        alt: "تشققات قطرية في جدران السور",
       },
       {
-        src: "/images/problems-gallery/problem-1.png",
-        alt: "مشكلة هندسية 1",
+        src: "/images/sections/problems-gallery/Arch/تضرر وانتفاخ في قشرة الباب الخشبي.jpg",
+        alt: "تضرر وانتفاخ في قشرة الباب الخشبي",
       },
       {
-        src: "/images/problems-gallery/problem-2.png",
-        alt: "مشكلة هندسية 2",
+        src: "/images/sections/problems-gallery/Arch/تعبئة الفواصل بين البلاط (روبة)..jpg",
+        alt: "تعبئة الفواصل بين البلاط (روبة)",
       },
       {
-        src: "/images/problems-gallery/problem-3.png",
-        alt: "مشكلة هندسية 3",
+        src: "/images/sections/problems-gallery/Arch/تموج في الجدران والسقف.jpg",
+        alt: "تموج في الجدران والسقف",
       },
       {
-        src: "/images/problems-gallery/problem-4.png",
-        alt: "مشكلة هندسية 4",
+        src: "/images/sections/problems-gallery/Arch/صدأ في الباب المعدني.jpg",
+        alt: "صدأ في الباب المعدني",
       },
       {
-        src: "/images/problems-gallery/problem-5.png",
-        alt: "مشكلة هندسية 5",
+        src: "/images/sections/problems-gallery/Arch/عدم استقامة زوايا الجدران.jpg",
+        alt: "عدم استقامة زوايا الجدران",
+      },
+      {
+        src: "/images/sections/problems-gallery/Arch/عدم استكمال اعمال فواصل التمدد .jpg",
+        alt: "عدم استكمال اعمال فواصل التمدد",
+      },
+      {
+        src: "/images/sections/problems-gallery/Arch/فصل بين السور والمبنى نتيجة هبوط.jpg",
+        alt: "فصل بين السور والمبنى نتيجة هبوط",
+      },
+      {
+        src: "/images/sections/problems-gallery/Arch/فصل في رخام الدرج نتيجة هبوط.jpg",
+        alt: "فصل في رخام الدرج نتيجة هبوط",
+      },
+      {
+        src: "/images/sections/problems-gallery/Arch/وجود تشققات متفرقة.jpg",
+        alt: "وجود تشققات متفرقة",
+      },
+      {
+        src: "/images/sections/problems-gallery/Arch/يوجد فصل بين اعمال رخام المغاسل.jpg",
+        alt: "يوجد فصل بين اعمال رخام المغاسل",
+      },
+
+      // Electrical Problems
+      {
+        src: "/images/sections/problems-gallery/Elec/اسلاك بدون أنابيب كهربائية ونقاط تجميع.jpg",
+        alt: "اسلاك بدون أنابيب كهربائية ونقاط تجميع",
+      },
+      {
+        src: "/images/sections/problems-gallery/Elec/التبديل بين الفاز والنيوترال .jpg",
+        alt: "التبديل بين الفاز والنيوترال",
+      },
+      {
+        src: "/images/sections/problems-gallery/Elec/تركيب قاطع فرعي مخالف لمتطلبات السلامة.jpg",
+        alt: "تركيب قاطع فرعي مخالف لمتطلبات السلامة",
+      },
+      {
+        src: "/images/sections/problems-gallery/Elec/تمديد مخالف لمتطلبات السلامة .jpg",
+        alt: "تمديد مخالف لمتطلبات السلامة",
+      },
+      {
+        src: "/images/sections/problems-gallery/Elec/تمديدات كهربائية بالقرب من مصادر المياه .jpg",
+        alt: "تمديدات كهربائية بالقرب من مصادر المياه",
+      },
+      {
+        src: "/images/sections/problems-gallery/Elec/توزيع احمال سيء .jpg",
+        alt: "توزيع احمال سيء",
+      },
+      {
+        src: "/images/sections/problems-gallery/Elec/توصيل الكابلات سيء.jpg",
+        alt: "توصيل الكابلات سيء",
+      },
+      {
+        src: "/images/sections/problems-gallery/Elec/توصيل خاطىء مباشر من القاطع الرئيسي.jpg",
+        alt: "توصيل خاطىء مباشر من القاطع الرئيسي",
+      },
+      {
+        src: "/images/sections/problems-gallery/Elec/سعة القواطع غير مناسبة لمساحة مقطع الأسلاك المستخدمة.jpg",
+        alt: "سعة القواطع غير مناسبة لمساحة مقطع الأسلاك المستخدمة",
+      },
+      {
+        src: "/images/sections/problems-gallery/Elec/سلك بدون استخدام راس الكيبل لتثبيت محكم.jpg",
+        alt: "سلك بدون استخدام راس الكيبل لتثبيت محكم",
+      },
+      {
+        src: "/images/sections/problems-gallery/Elec/صندوق الفيش خارج الجدار مخالف للمواصفات الفنية.jpg",
+        alt: "صندوق الفيش خارج الجدار مخالف للمواصفات الفنية",
+      },
+      {
+        src: "/images/sections/problems-gallery/Elec/عازلية الكوابل الكهربائية سيئة .jpg",
+        alt: "عازلية الكوابل الكهربائية سيئة",
+      },
+      {
+        src: "/images/sections/problems-gallery/Elec/عدم تركيب علب مطرية .jpg",
+        alt: "عدم تركيب علب مطرية",
+      },
+      {
+        src: "/images/sections/problems-gallery/Elec/لم يتم سحب اسلاك التأريض للفيش.jpg",
+        alt: "لم يتم سحب اسلاك التأريض للفيش",
+      },
+      {
+        src: "/images/sections/problems-gallery/Elec/لم يتم سحب اسلاك التأريض.jpg",
+        alt: "لم يتم سحب اسلاك التأريض",
+      },
+      {
+        src: "/images/sections/problems-gallery/Elec/مقاومة تأريض اعلى من الحد المسموح به بالكود السعودي.jpg",
+        alt: "مقاومة تأريض اعلى من الحد المسموح به بالكود السعودي",
+      },
+      {
+        src: "/images/sections/problems-gallery/Elec/هبوط الجهد الكهربائي .jpg",
+        alt: "هبوط الجهد الكهربائي",
+      },
+      {
+        src: "/images/sections/problems-gallery/Elec/وجود الأفياش في مناطق الاستحمام يشكل خطر على السلامة .jpg",
+        alt: "وجود الأفياش في مناطق الاستحمام يشكل خطر على السلامة",
+      },
+
+      // Mechanical Problems
+      {
+        src: "/images/sections/problems-gallery/mechanic/أثر التسريبات تجاه جدران بئر المصعد.jpg",
+        alt: "أثر التسريبات تجاه جدران بئر المصعد",
+      },
+      {
+        src: "/images/sections/problems-gallery/mechanic/تجمع مخلفات البناء في خطوط صرف التكييف.jpg",
+        alt: "تجمع مخلفات البناء في خطوط صرف التكييف",
+      },
+      {
+        src: "/images/sections/problems-gallery/mechanic/تلف في عزل انابيب التبريد يسبب ارتفاع في استهلاك الطاقة واحتمالية تسربات داخلية.jpg",
+        alt: "تلف في عزل انابيب التبريد يسبب ارتفاع في استهلاك الطاقة واحتمالية تسربات داخلية",
+      },
+      {
+        src: "/images/sections/problems-gallery/mechanic/ثقب في انابيب الصرف.jpg",
+        alt: "ثقب في انابيب الصرف",
+      },
+      {
+        src: "/images/sections/problems-gallery/mechanic/ركود المياه وتشبعها في حلول البلاط نتيجة الترويب السيء.jpg",
+        alt: "ركود المياه وتشبعها في حلول البلاط نتيجة الترويب السيء",
+      },
+      {
+        src: "/images/sections/problems-gallery/mechanic/ركود مخلفات صلبة في انابيب الصرف وعدم تركيب صحيح للوصلات.jpg",
+        alt: "ركود مخلفات صلبة في انابيب الصرف وعدم تركيب صحيح للوصلات",
+      },
+      {
+        src: "/images/sections/problems-gallery/mechanic/صورة حراراية تبين وجود تجمع لرطوبة وتسريب من السقف الخرساني.jpg",
+        alt: "صورة حراراية تبين وجود تجمع لرطوبة وتسريب من السقف الخرساني",
+      },
+      {
+        src: "/images/sections/problems-gallery/mechanic/كسر في خطوط الصرف الرئيسية للوحدات الصحية.jpg",
+        alt: "كسر في خطوط الصرف الرئيسية للوحدات الصحية",
+      },
+      {
+        src: "/images/sections/problems-gallery/mechanic/مستوى الرطبوة في الجدران _متوسط _تحتوي على محتوى مائي.jpg",
+        alt: "مستوى الرطبوة في الجدران - متوسط - تحتوي على محتوى مائي",
+      },
+      {
+        src: "/images/sections/problems-gallery/mechanic/مستوى رطوبة اسفل البلاط _اعلى من المتوسط.jpg",
+        alt: "مستوى رطوبة اسفل البلاط - اعلى من المتوسط",
       },
     ],
   },

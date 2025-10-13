@@ -140,7 +140,7 @@ export default function CalculatorSection() {
 
   return (
     <section
-      id="calculator"
+      id="price-calculator"
       className="min-h-screen py-20 md:py-32 bg-white relative"
     >
       <div className="container space-y-16 px-4 md:px-6">
