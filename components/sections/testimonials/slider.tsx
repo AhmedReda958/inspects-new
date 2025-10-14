@@ -17,7 +17,35 @@ import { cn } from "@/lib/utils";
 export function TestimonialsSlider() {
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
+  const [expandedTestimonials, setExpandedTestimonials] = React.useState<
+    Set<number>
+  >(new Set());
   const testimonials = content.testimonials.items;
+
+  // Function to check if text exceeds 5 lines
+  const isTextLong = (text: string) => {
+    const words = text.split(" ");
+    return words.length > 30; // Approximate 6 words per line, so 30 words = 5 lines
+  };
+
+  // Function to truncate text to approximately 5 lines
+  const truncateText = (text: string) => {
+    const words = text.split(" ");
+    return words.slice(0, 30).join(" ") + (words.length > 30 ? "..." : "");
+  };
+
+  // Function to toggle expanded state
+  const toggleExpanded = (index: number) => {
+    setExpandedTestimonials((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(index)) {
+        newSet.delete(index);
+      } else {
+        newSet.add(index);
+      }
+      return newSet;
+    });
+  };
 
   React.useEffect(() => {
     if (!api) return;
@@ -58,23 +86,44 @@ export function TestimonialsSlider() {
               >
                 {/* Client Image - Circular */}
                 <div className="relative mb-6">
-                  <Image
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    width={90}
-                    height={90}
-                    priority={index < 3}
-                    className="object-cover rounded-full w-[90px] h-[90px]"
-                  />
+                  {testimonial.image ? (
+                    <Image
+                      src={testimonial.image}
+                      alt={testimonial.name}
+                      width={90}
+                      height={90}
+                      priority={index < 3}
+                      className="object-cover rounded-full w-[90px] h-[90px]"
+                    />
+                  ) : (
+                    <div className="w-[90px] h-[90px] rounded-full bg-primary text-white flex items-center justify-center text-2xl font-bold">
+                      {testimonial.name.charAt(0).toUpperCase()}
+                    </div>
+                  )}
                 </div>
 
                 {/* Testimonial Text */}
-                <p className="text-sm md:text-base text-foreground leading-relaxed mb-6 flex-grow">
-                  {testimonial.text}
-                </p>
+                <div className="text-sm md:text-base text-foreground leading-relaxed mb-6 flex-grow">
+                  <p className="whitespace-pre-line">
+                    {isTextLong(testimonial.text) &&
+                    !expandedTestimonials.has(index)
+                      ? truncateText(testimonial.text)
+                      : testimonial.text}
+                  </p>
+                  {isTextLong(testimonial.text) && (
+                    <button
+                      onClick={() => toggleExpanded(index)}
+                      className="text-primary hover:text-primary/80 text-sm font-medium mt-2 transition-colors duration-200"
+                    >
+                      {expandedTestimonials.has(index)
+                        ? "عرض أقل"
+                        : "عرض المزيد"}
+                    </button>
+                  )}
+                </div>
 
                 {/* Client Info */}
-                <div className="mt-auto">
+                <div className="mt-0">
                   <div className="font-bold text-primary text-sm  mb-1">
                     {testimonial.name}
                   </div>
