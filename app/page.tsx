@@ -3,8 +3,6 @@ import ServiceDescriptionSection from "@/components/sections/service-description
 import ProblemsGallerySection from "@/components/sections/problems-gallery";
 import WhyImportantSection from "@/components/sections/why-important";
 import WhyInspectexSection from "@/components/sections/why-inspectex";
-import Sidebar from "@/components/layout/sidebar";
-import MobileNavbar from "@/components/layout/sidebar/mobile-navbar";
 import { Footer } from "@/components/sections/footer";
 import InspectionContentsSection from "@/components/sections/inspection-contents";
 import { WorkflowSection } from "@/components/sections/workflow";
@@ -18,33 +16,30 @@ import { ReportSampleSection } from "@/components/sections/report-sample";
 import CalculatorSection from "@/components/sections/calculator";
 import { Comparison } from "@/components/sections/comparison";
 import { CaseStudies } from "@/components/sections/case-studies";
+import { PageLayout } from "@/components/layout/page-layout";
 
 const Page = () => {
   return (
-    <div className="h-screen overflow-hidden flex">
-      <Sidebar />
-      <main className="w-full overflow-y-auto scroll-smooth">
-        <MobileNavbar />
-        <HeroSection />
-        <ServiceDescriptionSection />
-        <ProblemsGallerySection />
-        <WhyImportantSection />
-        <WhyInspectexSection />
-        <InspectionContentsSection />
-        <WorkflowSection />
-        <TechnologiesSection />
-        <Comparison />
-        <CaseStudies />
-        <FeaturedClients />
-        <TestimonialsSection />
-        <ReportSampleSection />
-        <PackagesSection />
-        <VideoSection />
-        <CalculatorSection />
-        <FaqSection />
-        <Footer />
-      </main>
-    </div>
+    <PageLayout>
+      <HeroSection />
+      <ServiceDescriptionSection />
+      <ProblemsGallerySection />
+      <WhyImportantSection />
+      <WhyInspectexSection />
+      <InspectionContentsSection />
+      <WorkflowSection />
+      <TechnologiesSection />
+      <Comparison />
+      <CaseStudies />
+      <FeaturedClients />
+      <TestimonialsSection />
+      <ReportSampleSection />
+      <PackagesSection />
+      <VideoSection />
+      <CalculatorSection />
+      <FaqSection />
+      <Footer />
+    </PageLayout>
   );
 };
 
