@@ -57,6 +57,9 @@ export function Navigation() {
   const { closeMobileSidebar } = useSidebar();
 
   useEffect(() => {
+    // Add check to ensure we're on the client side
+    if (typeof window === "undefined") return;
+
     const handleScroll = () => {
       const sections = navigationItems
         .filter((item) => item.href.startsWith("#"))
