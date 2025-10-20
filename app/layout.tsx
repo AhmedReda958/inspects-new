@@ -3,7 +3,6 @@ import localFont from "next/font/local";
 import Script from "next/script";
 import content from "@/content";
 import { WhatsAppFloat } from "@/components/ui/whatsapp-float";
-import { SidebarProvider } from "@/components/layout/sidebar/sidebar-context";
 
 import "./globals.css";
 
@@ -96,7 +95,7 @@ export default function RootLayout({
             gtag('config', 'G-WX6M8YY0CY');
           `}
         </Script>
-        <SidebarProvider>{children}</SidebarProvider>
+        {children}
         <WhatsAppFloat phoneNumber="+966920005543" />
       </body>
     </html>
