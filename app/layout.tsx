@@ -29,6 +29,7 @@ const lamaSans = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://inspectex.sa"),
   title: content.metadata.title,
   description: content.metadata.description,
   keywords: content.metadata.keywords,
