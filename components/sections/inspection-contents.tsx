@@ -14,6 +14,7 @@ import { PlusIcon } from "lucide-react";
 
 interface InspectionItem {
   title: string;
+  icon?: string;
   subItems: string[];
 }
 
@@ -48,9 +49,22 @@ function TabContentSection({ items, image }: TabContentProps) {
                     "pointer-events-none cursor-default"
                 )}
               >
-                <span className="flex-1 font-semibold text-base lg:text-xl leading-[1.45] text-right">
-                  {item.title}
-                </span>
+                <div className="flex items-center gap-4 flex-1">
+                  {item.icon && (
+                    <div className="flex-shrink-0 lg:p-1 lg:bg-background">
+                      <Image
+                        src={item.icon}
+                        alt={item.title}
+                        width={40}
+                        height={40}
+                        className="w-10 h-10"
+                      />
+                    </div>
+                  )}
+                  <span className="flex-1 font-semibold text-base lg:text-xl leading-[1.45] text-right">
+                    {item.title}
+                  </span>
+                </div>
                 <div className="icon-wrapper flex items-center justify-center lg:w-10 lg:h-10 transition-colors">
                   <PlusIcon className="icon size-5 transition-transform duration-200" />
                 </div>
@@ -103,8 +117,17 @@ export default function InspectionContentsSection() {
                 <Fragment key={tab.id}>
                   <TabsTrigger
                     value={tab.id}
-                    className="p-4 lg:p-0 text-base font-semibold cursor-pointer"
+                    className="p-4 lg:p-0 text-base font-semibold cursor-pointer flex items-center gap-3"
                   >
+                    <div className="lg:p-1 lg:bg-background flex-shrink-0">
+                      <Image
+                        src={tab.icon}
+                        alt={tab.label}
+                        width={40}
+                        height={40}
+                        className="w-12 h-12"
+                      />
+                    </div>
                     {tab.label}
                   </TabsTrigger>
                   {index < content.inspectionContents.tabs.length - 1 && (
