@@ -36,8 +36,7 @@ export default function HeroSection() {
             dir="rtl"
           >
             التقرير
-            <span className="text-secondary">الاشمل و الادق</span> فى المملكة
-            العربية السعودية
+            <span className="text-secondary">الأشمل و الأدق</span> فى المملكة
           </h1>
 
           {/* Description - Arabic */}
@@ -45,7 +44,7 @@ export default function HeroSection() {
             className="text-xl md:text-2xl lg:text-[28px] font-bold text-foreground leading-relaxed max-w-[658px]"
             dir="rtl"
           >
-            حمينا مئات العملاء من خسائر بمئات الآلالف، كُن التالي ..
+            حمينا مئات العملاء من خسائر بمئات الآلالف، كُن منهم ..
           </p>
         </div>
 

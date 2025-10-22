@@ -61,10 +61,12 @@ export function TestimonialsSlider() {
     <div className="w-full max-w-6xl mx-auto" dir="ltr">
       <Carousel
         setApi={setApi}
-        opts={{ loop: true, align: "center" }}
+        opts={{ loop: true, align: "center", duration: 30 }}
         plugins={[
           Autoplay({
             delay: 2500,
+            stopOnInteraction: false,
+            stopOnMouseEnter: true,
           }),
         ]}
         className="w-full"
@@ -79,13 +81,13 @@ export function TestimonialsSlider() {
               })}
             >
               <div
-                className="p-6 md:p-8 flex flex-col items-center text-center h-full bg-[url('/images/bg/quotation-bg.png')] bg-center bg-no-repeat"
+                className="p-6 md:p-8 flex flex-col items-center text-center h-full bg-[url('/images/bg/quotation-bg.png')] bg-center bg-no-repeat transition-all duration-500 ease-in-out"
                 style={{
                   backgroundSize: "350px 276px",
                 }}
               >
                 {/* Client Image - Circular */}
-                <div className="relative mb-6">
+                <div className="relative mb-6 transition-all duration-500 ease-in-out">
                   {testimonial.image ? (
                     <Image
                       src={testimonial.image}

@@ -33,10 +33,12 @@ export function TechnologiesSlider() {
     <div className="w-full max-w-6xl mx-auto">
       <Carousel
         setApi={setApi}
-        opts={{ loop: true, align: "end" }}
+        opts={{ loop: true, align: "end", duration: 30 }}
         plugins={[
           Autoplay({
             delay: 2500,
+            stopOnInteraction: false,
+            stopOnMouseEnter: true,
           }),
         ]}
         className="w-full"
@@ -48,7 +50,7 @@ export function TechnologiesSlider() {
               key={technology.id}
               className="basis-auto w-[275px] md:basis-1/2 lg:basis-1/4"
             >
-              <div className="p-6 md:p-8 flex flex-col items-center text-center h-full bg-white border ">
+              <div className="p-6 md:p-8 flex flex-col items-center text-center h-full bg-white border transition-all duration-500 ease-in-out">
                 {/* Technology Image Container */}
                 <div className="relative mb-5 w-full h-48 bg-white overflow-hidden">
                   <Image
@@ -63,7 +65,7 @@ export function TechnologiesSlider() {
                 {/* Technology Title */}
                 <div
                   className={cn(
-                    "font-bold text-primary text-lg mb-4 leading-tight",
+                    "font-bold text-primary text-lg mb-4 leading-tight transition-all duration-500 ease-in-out",
                     { "text-secondary": current === index }
                   )}
                 >

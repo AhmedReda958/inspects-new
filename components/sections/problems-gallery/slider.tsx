@@ -58,10 +58,12 @@ export function ProblemsGallerySlider() {
     <>
       <Carousel
         setApi={setApi}
-        opts={{ loop: true, align: "center", duration: 500 }}
+        opts={{ loop: true, align: "center", duration: 30 }}
         plugins={[
           Autoplay({
             delay: 2500,
+            stopOnInteraction: false,
+            stopOnMouseEnter: true,
           }),
         ]}
         className="w-full max-w-7xl mx-auto"
@@ -74,7 +76,7 @@ export function ProblemsGallerySlider() {
                 <div
                   className={`
                   ${getItemSize(index)}
-                  transition-all duration-200 ease-out
+                  transition-all duration-500 ease-in-out
                   relative 
                 `}
                 >
@@ -101,7 +103,9 @@ export function ProblemsGallerySlider() {
           </button>
 
           {/* Problem Name */}
-          <p className="text-xl font-medium ">{problemImages[current].alt}</p>
+          <p className="text-sm lg:text-xl font-medium text-center">
+            {problemImages[current].alt}
+          </p>
 
           <button
             onClick={() => api?.scrollNext()}
