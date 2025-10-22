@@ -14,6 +14,29 @@ export function Footer() {
         />
 
         <SocialLinks />
+
+        {/* PDF Documents Links */}
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 items-center">
+          <a
+            href="/QA-02-01 سياسة الحياد والسرية.pdf#toolbar=0&navpanes=0&scrollbar=1"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white hover:text-secondary transition-colors duration-200 text-sm lg:text-base font-medium underline underline-offset-4 hover:underline-offset-8"
+            type="application/pdf"
+          >
+            سياسة الحياد والسرية
+          </a>
+          <a
+            href="/QA-02-02 سياسة الجودة.pdf#toolbar=0&navpanes=0&scrollbar=1"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white hover:text-secondary transition-colors duration-200 text-sm lg:text-base font-medium underline underline-offset-4 hover:underline-offset-8"
+            type="application/pdf"
+          >
+            سياسة الجودة
+          </a>
+        </div>
+
         <hr className="w-full  border-white/20" />
 
         <p className="text-center text-base lg:text-lg leading-tight font-medium text-white">
