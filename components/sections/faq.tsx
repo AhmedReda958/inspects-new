@@ -103,7 +103,7 @@ export default function FaqSection() {
         <SectionTitle variant="center">{content.faq.title}</SectionTitle>
 
         {/* Tabs */}
-        <Tabs className="w-full" dir="rtl" defaultValue="customers">
+        <Tabs className="w-full" dir="rtl" defaultValue="feasibility">
           <div className="flex justify-center mb-8 lg:mb-12">
             <TabsList className="inline-flex flex-col lg:flex-row h-auto w-full lg:w-fit bg-transparent p-0 gap-5">
               {content.faq.tabs.map((tab, index) => (
@@ -124,16 +124,18 @@ export default function FaqSection() {
             </TabsList>
           </div>
 
-          <TabsContent value="inspectors" className="mt-0">
-            <TabContentSection items={content.faq.content.inspectors.items} />
+          <TabsContent value="feasibility" className="mt-0">
+            <TabContentSection items={content.faq.content.feasibility.items} />
           </TabsContent>
 
-          <TabsContent value="strategies" className="mt-0">
-            <TabContentSection items={content.faq.content.strategies.items} />
+          <TabsContent value="implementation" className="mt-0">
+            <TabContentSection
+              items={content.faq.content.implementation.items}
+            />
           </TabsContent>
 
-          <TabsContent value="customers" className="mt-0">
-            <TabContentSection items={content.faq.content.customers.items} />
+          <TabsContent value="results" className="mt-0">
+            <TabContentSection items={content.faq.content.results.items} />
           </TabsContent>
         </Tabs>
         {/* Background Image - Desktop Only */}
