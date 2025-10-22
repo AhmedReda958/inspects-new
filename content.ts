@@ -1519,7 +1519,7 @@ const content = {
         title: "دراسة حالة 1",
         subtitle:
           "كيف حوَّل فحص بسيط عربونًا على وشك الضياع إلى توفير 100,000 ريال؟",
-        image: "/images/case-studies/case-study-1.png",
+        image: "/images/sections/case-studies/case1.png",
         propertyValue: "1,300,000 ريال سعودي",
         location: "الرياض – شقة سكنية",
         challenge: {
@@ -1555,7 +1555,7 @@ const content = {
         id: 2,
         title: "دراسة حالة 2",
         subtitle: "من تعويض محدود إلى إنقاذ استثمار بقيمة 1.6 مليون ريال",
-        image: "/images/case-studies/case-study-1.png",
+        image: "/images/sections/case-studies/case2.png",
         propertyValue: "1,600,000 ريال سعودي",
         location: "شرق الرياض - فيلا سكنية",
         challenge: {
@@ -1586,7 +1586,7 @@ const content = {
         title: "دراسة حالة 3",
         subtitle:
           'معضلة انقطاع الكهرباء المتكرر... وكيف كان الحل في "برمجة" وليس "استبدال"',
-        image: "/images/case-studies/case-study-1.png",
+        image: "/images/sections/case-studies/case3.png",
         propertyValue: "غير معلومة",
         location: "مركز اتصال - الدمام",
         challenge: {
