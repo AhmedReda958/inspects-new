@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/accordion";
 import content from "@/content";
 import Image from "next/image";
-import { MinusIcon, PlusIcon } from "lucide-react";
+import { CheckIcon, MinusIcon, PlusIcon, X } from "lucide-react";
 
 export function Comparison() {
   return (
@@ -65,7 +65,8 @@ export function Comparison() {
                       key={idx}
                       className="flex items-start gap-2 text-foreground/80 "
                     >
-                      <span className="mt-1 flex-shrink-0 text-[8px]">●</span>
+                      <CheckIcon className="mt-1 flex-shrink-0 size-5 text-primary-light" />
+
                       <span className="text-base leading-relaxed font-medium">
                         {point}
                       </span>
@@ -82,7 +83,7 @@ export function Comparison() {
                       key={idx}
                       className="flex items-start gap-2 text-foreground/80 "
                     >
-                      <span className="mt-1 flex-shrink-0 text-[8px]">●</span>
+                      <X className="mt-1 flex-shrink-0 size-5 text-red-400" />
                       <span className="text-base leading-relaxed font-medium">
                         {point}
                       </span>
@@ -131,8 +132,10 @@ export function Comparison() {
                       {item.inspects.map((point, idx) => (
                         <li
                           key={idx}
-                          className="text-base leading-relaxed text-foreground font-normal"
+                          className="text-base leading-relaxed text-foreground font-normal flex items-start  gap-2"
                         >
+                          <CheckIcon className="mt-1 flex-shrink-0 size-5 text-primary-light" />
+
                           {point}
                         </li>
                       ))}
@@ -144,9 +147,17 @@ export function Comparison() {
                     <h5 className="text-xl font-bold text-primary pb-4">
                       المنافسين
                     </h5>
-                    <p className="text-base leading-relaxed text-foreground font-normal">
-                      {item.competitors}
-                    </p>
+                    <ul className="space-y-3">
+                      {item.competitors.map((point, idx) => (
+                        <li
+                          key={idx}
+                          className="text-base leading-relaxed text-foreground font-normal flex items-start gap-2"
+                        >
+                          <X className="mt-1 flex-shrink-0 size-5 text-red-400" />
+                          {point}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </AccordionContent>
               </AccordionItem>
