@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AnimatedButton } from "../ui/animated-button";
 
 // Define validation schema
@@ -65,33 +65,62 @@ const calculatorSchema = z.object({
 
 type CalculatorFormValues = z.infer<typeof calculatorSchema>;
 
-// Calculation logic based on Excel (simplified)
+// Calculation logic based on the detailed formula from the provided documentation
 function calculateInspectionCost(data: CalculatorFormValues): number {
   const coveredArea = parseFloat(data.coveredArea);
+  const landArea = parseFloat(data.landArea);
 
-  // Base price calculation
-  let basePrice = 2000; // Starting price
+  let basePrice = 0;
 
-  // Area-based pricing
-  if (coveredArea <= 100) {
-    basePrice += 1500;
-  } else if (coveredArea <= 200) {
-    basePrice += 2500;
-  } else if (coveredArea <= 300) {
-    basePrice += 3500;
-  } else if (coveredArea <= 500) {
-    basePrice += 5000;
+  // Case 1: Small properties (≤ 250 m²)
+  if (coveredArea <= 250) {
+    basePrice = 5000;
   } else {
-    basePrice += 7000;
+    // Case 2: Larger properties (> 250 m²)
+    // Calculate number of floors
+    const rawFloors = coveredArea / landArea;
+
+    // Round to standard floor increments as per formula
+    let numberOfFloors = 0;
+    if (rawFloors <= 1.3) {
+      numberOfFloors = rawFloors <= 1.1 ? 1.1 : 1.5;
+    } else if (rawFloors <= 2.35) {
+      numberOfFloors = rawFloors <= 2.2 ? 2.2 : 2.5;
+    } else if (rawFloors <= 3.4) {
+      numberOfFloors = rawFloors <= 3.3 ? 3.3 : 3.5;
+    } else if (rawFloors <= 4.4) {
+      numberOfFloors = 4.4;
+    } else {
+      numberOfFloors = Math.ceil(rawFloors);
+    }
+
+    // Base price calculation for properties > 250 m²
+    basePrice = 5000; // Base for first floor
+
+    // Calculate additional floors cost
+    const additionalFloors = Math.max(0, numberOfFloors - 1);
+
+    if (numberOfFloors <= 2) {
+      // For up to 2 floors: add up to 5000 SAR (capped)
+      const additionalCost = Math.min(additionalFloors * 9000, 5000);
+      basePrice += additionalCost;
+    } else {
+      // For more than 2 floors:
+      // - First additional floor costs up to 5000 SAR (capped at 5000)
+      basePrice += 5000;
+      // - Each additional floor beyond 2nd floor costs 750 SAR
+      const floorsAboveTwo = numberOfFloors - 2;
+      basePrice += floorsAboveTwo * 750;
+    }
   }
 
   // Property type multiplier
   const typeMultipliers: Record<string, number> = {
     فيلا: 1.0,
-    شقة: 0.8,
+    شقة: 0.85,
     دور: 0.9,
-    عمارة: 1.3,
-    قصر: 1.5,
+    عمارة: 1.15,
+    قصر: 1.3,
     استراحة: 0.85,
   };
 
@@ -99,20 +128,26 @@ function calculateInspectionCost(data: CalculatorFormValues): number {
 
   // Property age adjustment
   const ageMultipliers: Record<string, number> = {
-    "أقل من سنة": 0.9,
+    "أقل من سنة": 0.95,
     "من 1 إلى 3 سنوات": 1.0,
-    "من 3 إلى 5 سنوات": 1.1,
-    "من 5 إلى 10 سنوات": 1.2,
-    "أكثر من 10 سنوات": 1.3,
+    "من 3 إلى 5 سنوات": 1.05,
+    "من 5 إلى 10 سنوات": 1.1,
+    "أكثر من 10 سنوات": 1.15,
   };
 
   basePrice *= ageMultipliers[data.propertyAge] || 1.0;
 
-  return Math.round(basePrice);
+  // Add VAT (15%)
+  const priceWithVAT = basePrice * 1.15;
+
+  return Math.round(priceWithVAT);
 }
 
 export default function CalculatorSection() {
   const [calculatedPrice, setCalculatedPrice] = useState<number | null>(null);
+  const [availableNeighborhoods, setAvailableNeighborhoods] = useState<
+    string[]
+  >([]);
 
   const form = useForm<CalculatorFormValues>({
     resolver: zodResolver(calculatorSchema),
@@ -129,6 +164,23 @@ export default function CalculatorSection() {
       coveredArea: "",
     },
   });
+
+  // Watch for city changes and update neighborhoods
+  const selectedCity = form.watch("city");
+
+  useEffect(() => {
+    if (selectedCity) {
+      const neighborhoods =
+        content.calculator.cityNeighborhoods[
+          selectedCity as keyof typeof content.calculator.cityNeighborhoods
+        ] || [];
+      setAvailableNeighborhoods(neighborhoods);
+      // Reset neighborhood when city changes
+      form.setValue("neighborhood", "");
+    } else {
+      setAvailableNeighborhoods([]);
+    }
+  }, [selectedCity, form]);
 
   function onSubmit(data: CalculatorFormValues) {
     const price = calculateInspectionCost(data);
@@ -267,15 +319,35 @@ export default function CalculatorSection() {
                       <FormLabel dir="rtl">
                         {content.calculator.fields.neighborhood.label}
                       </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={
-                            content.calculator.fields.neighborhood.placeholder
-                          }
-                          {...field}
-                          dir="rtl"
-                        />
-                      </FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        disabled={
+                          !selectedCity || availableNeighborhoods.length === 0
+                        }
+                      >
+                        <FormControl>
+                          <SelectTrigger dir="rtl" className="w-full">
+                            <SelectValue
+                              placeholder={
+                                !selectedCity
+                                  ? "اختر المدينة أولاً"
+                                  : availableNeighborhoods.length === 0
+                                  ? "لا توجد أحياء متاحة"
+                                  : content.calculator.fields.neighborhood
+                                      .placeholder
+                              }
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {availableNeighborhoods.map((neighborhood) => (
+                            <SelectItem key={neighborhood} value={neighborhood}>
+                              {neighborhood}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <FormMessage dir="rtl" />
                     </FormItem>
                   )}
@@ -452,7 +524,7 @@ export default function CalculatorSection() {
                     </FormItem>
                   )}
                 />
-                <div>
+                <div className="lg:col-span-2">
                   {/* Display calculated price */}
                   {calculatedPrice !== null && (
                     <div
@@ -465,17 +537,20 @@ export default function CalculatorSection() {
                       <p className="text-4xl font-bold text-primary mb-2">
                         {calculatedPrice.toLocaleString("ar-SA")} ريال
                       </p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-muted-foreground mb-2">
+                        (شامل ضريبة القيمة المضافة 15%)
+                      </p>
+                      <p className="text-xs text-muted-foreground border-t border-primary/20 pt-3 mt-3">
                         * هذا السعر تقديري وقد يختلف حسب الحالة الفعلية للعقار
                       </p>
                     </div>
                   )}
                 </div>
                 {/* Submit Button */}
-                <div className="flex justify-end">
+                <div className="lg:col-span-2 flex justify-center lg:justify-end">
                   <AnimatedButton
                     type="submit"
-                    className="w-[160px] lg:w-[200px] h-fit"
+                    className="w-[200px] lg:w-[250px] h-fit"
                   >
                     {content.calculator.submitButton}
                   </AnimatedButton>
