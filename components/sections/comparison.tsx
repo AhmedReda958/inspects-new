@@ -52,7 +52,7 @@ export function Comparison() {
               key={item.id}
               className={`grid grid-cols-3 border-primary-light/10 border-b-2 last:border-b-0`}
             >
-              {/* Metric Column   */}
+              {/* Metric Column */}
               <div className="p-12 ps-0 bg-background">
                 <h3>{item.title}</h3>
               </div>
