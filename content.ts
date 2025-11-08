@@ -1273,7 +1273,7 @@ const content = {
     ],
   },
   video: {
-    url: "https://youtube.com/shorts/XbJ3ZN8EoiE?si=FPLuSWhLwMu7uLfj",
+    url: "https://youtu.be/BKNlGhCKghs?si=tRznOOhRNa78BoSC",
   },
   packages: {
     title: "الباقات",

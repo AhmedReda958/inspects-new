@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const VideoSection = () => {
   return (
-    <section className="h-[600px] relative bg-[url('/images/bg/video-thumbnail.png')] bg-cover bg-center">
+    <section className="h-[600px] relative bg-[url('/images/bg/video-thumbnail.png')] bg-cover bg-top">
       <Link
         className="absolute inset-0 w-full h-full flex items-center justify-center cursor-pointer"
         href={content.video.url}
@@ -18,6 +18,7 @@ const VideoSection = () => {
           <FaPlay className="w-8 h-8 text-primary" />
         </div>
       </Link>
+      <div className="absolute inset-0 w-full h-full bg-primary/50"></div>
     </section>
   );
 };
