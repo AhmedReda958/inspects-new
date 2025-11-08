@@ -58,7 +58,7 @@ export function TechnologiesSlider() {
                     alt={technology.name}
                     fill
                     priority={index < 4}
-                    className="object-cover"
+                    className="object-contain"
                   />
                 </div>
 

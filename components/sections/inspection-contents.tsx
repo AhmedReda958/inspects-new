@@ -21,9 +21,10 @@ interface InspectionItem {
 interface TabContentProps {
   items: InspectionItem[];
   image: string;
+  imageMobile: string;
 }
 
-function TabContentSection({ items, image }: TabContentProps) {
+function TabContentSection({ items, image, imageMobile }: TabContentProps) {
   return (
     <div className="grid  lg:grid-cols-12 gap-8">
       {/* Accordion List */}
@@ -88,12 +89,20 @@ function TabContentSection({ items, image }: TabContentProps) {
         </Accordion>
       </div>
       {/* Image */}
-      <div className="col-span-12 lg:col-span-5 relative aspect-[4/3] lg:aspect-auto lg:h-[750px] w-full overflow-hidden order-1 lg:order-2">
+      <div className="col-span-12 lg:col-span-5 relative aspect-[4/3] lg:aspect-auto h-[450px] lg:h-[750px] w-full overflow-hidden order-1 lg:order-2">
+        {/* Mobile Image */}
+        <Image
+          src={imageMobile}
+          alt="Inspection illustration"
+          fill
+          className="object-contain lg:hidden"
+        />
+        {/* Desktop Image */}
         <Image
           src={image}
           alt="Inspection illustration"
           fill
-          className="object-cover"
+          className="object-contain hidden lg:block"
         />
       </div>
     </div>
@@ -144,6 +153,7 @@ export default function InspectionContentsSection() {
             <TabContentSection
               items={content.inspectionContents.content.mechanical.items}
               image={content.inspectionContents.content.mechanical.image}
+              imageMobile="/images/sections/inspection-contents/mobile/mechanical.png"
             />
           </TabsContent>
 
@@ -151,6 +161,7 @@ export default function InspectionContentsSection() {
             <TabContentSection
               items={content.inspectionContents.content.electrical.items}
               image={content.inspectionContents.content.electrical.image}
+              imageMobile="/images/sections/inspection-contents/mobile/electrical.png"
             />
           </TabsContent>
 
@@ -158,6 +169,7 @@ export default function InspectionContentsSection() {
             <TabContentSection
               items={content.inspectionContents.content.architectural.items}
               image={content.inspectionContents.content.architectural.image}
+              imageMobile="/images/sections/inspection-contents/mobile/architectural.png"
             />
           </TabsContent>
         </Tabs>
