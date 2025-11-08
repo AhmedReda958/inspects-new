@@ -40,12 +40,23 @@ export function CaseStudyCard({ caseStudy }: CaseStudyCardProps) {
         {/* Grid Layout - Content takes 2/3 on desktop, full width on mobile */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Image Section - 1/3 on desktop, full width on mobile */}
-          <div className="lg:col-span-5 relative aspect-[4/3] lg:aspect-auto lg:h-[calc(100vh-100px)] overflow-hidden lg:order-last">
+          <div className="lg:col-span-5 relative  lg:aspect-auto h-[450px] lg:h-[calc(100vh-100px)] overflow-hidden lg:order-last">
+            {/* Mobile Image */}
+            <Image
+              src={caseStudy.image.replace(
+                "/case-studies/",
+                "/case-studies/mobile/"
+              )}
+              alt="Case Study"
+              fill
+              className="object-contain lg:hidden"
+            />
+            {/* Desktop Image */}
             <Image
               src={caseStudy.image}
               alt="Case Study"
               fill
-              className="object-cover"
+              className="object-contain hidden lg:block"
             />
           </div>
 
