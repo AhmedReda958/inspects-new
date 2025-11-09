@@ -3,15 +3,10 @@
 import * as React from "react";
 import { SectionTitle } from "@/components/ui/section-title";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselApi,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { Button } from "@/components/ui/button";
 import content from "@/content";
 import { cn } from "@/lib/utils";
+import { Check } from "lucide-react";
 import Icon1 from "@/icons/packages/1.svg";
 import Icon2 from "@/icons/packages/2.svg";
 import Icon3 from "@/icons/packages/3.svg";
@@ -27,12 +22,12 @@ interface Package {
 
 const getPackageIcon = (id: string) => {
   switch (id) {
-    case "bronze":
-      return <Icon3 className="w-20 h-20 lg:w-24 lg:h-24" />;
-    case "premium":
-      return <Icon2 className="w-20 h-20 lg:w-24 lg:h-24" />;
-    case "basic":
-      return <Icon1 className="w-20 h-20 lg:w-24 lg:h-24" />;
+    case "visual":
+      return <Icon1 />;
+    case "comprehensive":
+      return <Icon2 />;
+    case "advanced":
+      return <Icon3 />;
     default:
       return null;
   }
@@ -42,6 +37,25 @@ const packages: Package[] = content.packages.items.map((pkg) => ({
   ...pkg,
   icon: getPackageIcon(pkg.id),
 }));
+
+// Helper function to highlight numbers with secondary color
+const highlightNumbers = (text: string) => {
+  // Match numbers (including Arabic-Indic numerals, Western numerals, percentages, and numbers with commas)
+  const numberRegex = /([\d٠-٩]+[،,]?[\d٠-٩]*%?)/g;
+  const parts = text.split(numberRegex);
+
+  return parts.map((part, index) => {
+    // Check if part is a number by testing against the regex pattern
+    if (/^[\d٠-٩]+[،,]?[\d٠-٩]*%?$/.test(part)) {
+      return (
+        <span key={index} className="text-secondary">
+          {part}
+        </span>
+      );
+    }
+    return part;
+  });
+};
 
 const PackageCard = ({
   pkg,
@@ -53,47 +67,84 @@ const PackageCard = ({
   return (
     <Card
       className={cn(
-        "relative  rounded-none h-fit pt-0  lg:first:border-e-0 lg:last:border-s-0 shadow-none bg-background",
+        "relative rounded-xl h-full flex flex-col border shadow-none p-1",
         pkg.isHighlighted && [
-          "lg:drop-shadow-2xl p-1  border-0 z-10  ",
+          "lg:drop-shadow-2xl  border-none z-10",
           "bg-gradient-to-t from-background via-background to-secondary/50",
         ],
+        !pkg.isHighlighted && "border-gray-200 bg-background/80",
         className
       )}
     >
       <div
-        className={cn("h-full w-full bg-background py-[50px]", {
-          "py-[80px] bg-white": pkg.isHighlighted,
-        })}
+        className={cn(
+          "h-full w-full flex flex-col rounded-lg",
+          pkg.isHighlighted ? " bg-white" : "bg-background/80"
+        )}
       >
-        <CardContent className=" !pt-0  flex flex-col items-center text-center h-full ">
-          {/* Icon */}
-          <div className="mb-4">{pkg.icon}</div>
+        <CardContent className="flex flex-col items-center text-center h-full py-10 px-7">
+          {/* Header with Icon and Text */}
+          <div className="flex items-center gap-4 w-full mb-8" dir="rtl">
+            {/* Icon */}
+            <div className="flex-shrink-0 w-20 h-20 bg-primary/3 rounded-lg flex items-center justify-center">
+              {pkg.icon}
+            </div>
 
-          {/* Title */}
-          <h2 className="font-bold text-primary mb-4" dir="rtl">
-            {pkg.title}
-          </h2>
+            {/* Title and Price */}
+            <div className="flex flex-col items-start text-start">
+              {/* Title */}
+              <h2
+                className={cn(
+                  "font-bold mb-2 text-lg",
+                  pkg.isHighlighted && "text-primary-lighter"
+                )}
+              >
+                {pkg.title}
+              </h2>
 
-          {/* Price */}
-          <div className="mb-8" dir="rtl">
-            <div className="text-xl font-bold text-secondary">{pkg.price}</div>
+              {/* Price */}
+              <div
+                className={cn(
+                  "text-base text-primary-lighter",
+                  pkg.isHighlighted && "text-secondary"
+                )}
+              >
+                {pkg.price}
+              </div>
+            </div>
           </div>
 
           {/* Features List */}
           <ul
-            className="h-full flex flex-col gap-5 w-full text-center"
+            className="flex-1 flex flex-col gap-4 w-full text-start mb-8"
             dir="rtl"
           >
             {pkg.features.map((feature, index) => (
               <li
                 key={index}
-                className="text-sm text-foreground leading-relaxed"
+                className="flex items-start gap-3 text-base font-medium text-foreground/90 leading-relaxed"
               >
-                {feature}
+                <div className="flex items-center justify-center bg-primary/3 rounded-full w-8 h-8 flex-shrink-0">
+                  <Check className="size-4 " />
+                </div>
+
+                <span>{highlightNumbers(feature)}</span>
               </li>
             ))}
           </ul>
+
+          {/* CTA Button */}
+          <Button
+            size={"lg"}
+            className={cn(
+              "w-full mt-auto text-base font-medium h-16 cursor-pointer",
+              pkg.isHighlighted
+                ? "bg-secondary text-white hover:bg-secondary/90"
+                : "bg-gray-200 text-primary hover:bg-gray-300"
+            )}
+          >
+            اطلب الباقة الان
+          </Button>
         </CardContent>
       </div>
     </Card>
@@ -101,73 +152,16 @@ const PackageCard = ({
 };
 
 export default function PackagesSection() {
-  const isMobile = useIsMobile();
-  const [api, setApi] = React.useState<CarouselApi>();
-  const [current, setCurrent] = React.useState(0);
-
-  React.useEffect(() => {
-    if (!api) return;
-
-    setCurrent(api.selectedScrollSnap());
-
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap());
-    });
-  }, [api]);
-
   return (
     <section id="packages" className="min-h-screen py-20 md:py-32 bg-white">
-      <div className="container space-y-24 px-0">
-        <SectionTitle>{content.packages.title}</SectionTitle>
+      <div className="container space-y-16 px-4 xl:px-20">
+        <SectionTitle variant="center">{content.packages.title}</SectionTitle>
 
-        {isMobile ? (
-          // Mobile: Carousel
-          <div className="relative px-4">
-            <Carousel
-              setApi={setApi}
-              opts={{
-                align: "center",
-                startIndex: 1,
-              }}
-              className="w-full "
-              dir="ltr"
-            >
-              <CarouselContent>
-                {packages.map((pkg) => (
-                  <CarouselItem
-                    key={pkg.id}
-                    className="basis-3/4 lg:basis-auto flex items-end"
-                  >
-                    <PackageCard pkg={pkg} />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-
-              {/* Dot Indicators */}
-              <div className="flex gap-2 justify-center p-10   ">
-                {Array.from({ length: packages.length }).map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => api?.scrollTo(index)}
-                    className={`w-2.5 h-2.5 rounded-full transition-all duration-200 ${
-                      current === index
-                        ? "bg-secondary"
-                        : "bg-gray-300 hover:bg-gray-400"
-                    }`}
-                    aria-label={`Go to technology ${index + 1}`}
-                  />
-                ))}
-              </div>
-            </Carousel>
-          </div>
-        ) : (
-          // Desktop: Grid
-          <div className="grid grid-cols-1 md:grid-cols-3 max-w-7xl mx-auto items-end">
-            {packages.map((pkg) => (
-              <PackageCard key={pkg.id} pkg={pkg} />
-            ))}
-          </div>
-        )}
+        <div className="grid grid-cols-1 md:grid-cols-3 max-w-7xl mx-auto gap-6 items-stretch">
+          {packages.map((pkg) => (
+            <PackageCard key={pkg.id} pkg={pkg} />
+          ))}
+        </div>
       </div>
     </section>
   );
