@@ -581,7 +581,7 @@ export default function CalculatorSection() {
                             </div>
                           </div>
                           <p className="text-xs text-gray-500">
-                            * السعر تقديري وقد يختلف حسب الحالة الفعلية للعقار
+                            * السعر تقديري وقد يختلف حسب المساحات الفعلية للعقار
                           </p>
                         </div>
                       )}
