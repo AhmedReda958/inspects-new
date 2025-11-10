@@ -226,9 +226,9 @@ export default function CalculatorSection() {
       <div className="container space-y-16 px-4 md:px-6">
         <SectionTitle variant="center">{content.calculator.title}</SectionTitle>
 
-        <div className="grid lg:grid-cols-3 gap-8 lg:gap-8 items-start max-w-6xl mx-auto">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-8 items-start max-w-6xl mx-auto">
           {/* Right side - Form */}
-          <div className="col-span-3 lg:col-span-2 w-full mx-auto lg:mx-0 order-last lg:order-first">
+          <div className="col-span-12 lg:col-span-8 w-full mx-auto lg:mx-0 order-last lg:order-first">
             {/* Step Indicator */}
             <div className="mb-8" dir="rtl">
               {/* Progress bars */}
@@ -673,7 +673,7 @@ export default function CalculatorSection() {
             </Form>
           </div>
           {/* Left side - Image (Hidden on mobile, shown on desktop) */}
-          <div className="col-span-3 lg:col-span-1 relative w-full h-[450px] lg:h-[calc(100%-88px)]">
+          <div className="col-span-12 lg:col-span-4 relative w-full h-[450px] lg:h-[calc(100%-88px)]">
             <Image
               src="/images/sections/calulator.png"
               alt="Calculator illustration"
