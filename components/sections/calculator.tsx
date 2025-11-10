@@ -23,41 +23,44 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState, useEffect } from "react";
-import { AnimatedButton } from "../ui/animated-button";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, ArrowLeft } from "lucide-react";
 
 // Define validation schema
 const calculatorSchema = z.object({
+  firstName: z.string().min(2, {
+    message: "يجب أن يكون الاسم الأول على الأقل حرفين",
+  }),
   familyName: z.string().min(2, {
     message: "يجب أن يكون اسم العائلة على الأقل حرفين",
   }),
-  firstName: z.string().min(2, {
-    message: "يجب أن يكون الاسم الأول على الأقل حرفين",
+  mobileNumber: z
+    .string()
+    .regex(/^((05|5)\d{8}|01[1-7]\d{7}|9200\d{5}|800\d{6})$/, {
+      message: "يرجى إدخال رقم جوال سعودي صحيح",
+    }),
+  package: z.string().min(1, {
+    message: "يرجى اختيار الباقة",
+  }),
+  inspectionPurpose: z.string().min(1, {
+    message: "يرجى اختيار الهدف من الفحص",
   }),
   city: z.string().min(1, {
     message: "يرجى اختيار المدينة",
   }),
-  mobileNumber: z.string().regex(/^(05|5)[0-9]{8}$/, {
-    message: "يرجى إدخال رقم جوال سعودي صحيح",
-  }),
-  propertyType: z.string().min(1, {
-    message: "يرجى اختيار نوع العقار",
-  }),
   neighborhood: z.string().optional(),
+  propertyAge: z.string().min(1, {
+    message: "يرجى اختيار عمر العقار",
+  }),
   landArea: z
     .string()
     .min(1, { message: "يرجى إدخال مساحة الأرض" })
     .regex(/^\d+(\.\d+)?$/, {
       message: "يرجى إدخال رقم صحيح",
     }),
-  propertyAge: z.string().min(1, {
-    message: "يرجى اختيار عمر العقار",
-  }),
-  inspectionPurpose: z.string().min(1, {
-    message: "يرجى اختيار الهدف من الفحص",
-  }),
   coveredArea: z
     .string()
-    .min(1, { message: "يرجى إدخال مساحة البناء المسقوفة" })
+    .min(1, { message: "يرجى إدخال مسطحات البناء" })
     .regex(/^\d+(\.\d+)?$/, {
       message: "يرجى إدخال رقم صحيح",
     }),
@@ -65,102 +68,43 @@ const calculatorSchema = z.object({
 
 type CalculatorFormValues = z.infer<typeof calculatorSchema>;
 
-// Calculation logic based on the detailed formula from the provided documentation
-function calculateInspectionCost(data: CalculatorFormValues): number {
-  const coveredArea = parseFloat(data.coveredArea);
-  const landArea = parseFloat(data.landArea);
-
-  let basePrice = 0;
-
-  // Case 1: Small properties (≤ 250 m²)
-  if (coveredArea <= 250) {
-    basePrice = 5000;
-  } else {
-    // Case 2: Larger properties (> 250 m²)
-    // Calculate number of floors
-    const rawFloors = coveredArea / landArea;
-
-    // Round to standard floor increments as per formula
-    let numberOfFloors = 0;
-    if (rawFloors <= 1.3) {
-      numberOfFloors = rawFloors <= 1.1 ? 1.1 : 1.5;
-    } else if (rawFloors <= 2.35) {
-      numberOfFloors = rawFloors <= 2.2 ? 2.2 : 2.5;
-    } else if (rawFloors <= 3.4) {
-      numberOfFloors = rawFloors <= 3.3 ? 3.3 : 3.5;
-    } else if (rawFloors <= 4.4) {
-      numberOfFloors = 4.4;
-    } else {
-      numberOfFloors = Math.ceil(rawFloors);
-    }
-
-    // Base price calculation for properties > 250 m²
-    basePrice = 5000; // Base for first floor
-
-    // Calculate additional floors cost
-    const additionalFloors = Math.max(0, numberOfFloors - 1);
-
-    if (numberOfFloors <= 2) {
-      // For up to 2 floors: add up to 5000 SAR (capped)
-      const additionalCost = Math.min(additionalFloors * 9000, 5000);
-      basePrice += additionalCost;
-    } else {
-      // For more than 2 floors:
-      // - First additional floor costs up to 5000 SAR (capped at 5000)
-      basePrice += 5000;
-      // - Each additional floor beyond 2nd floor costs 750 SAR
-      const floorsAboveTwo = numberOfFloors - 2;
-      basePrice += floorsAboveTwo * 750;
-    }
-  }
-
-  // Property type multiplier
-  const typeMultipliers: Record<string, number> = {
-    فيلا: 1.0,
-    شقة: 0.85,
-    دور: 0.9,
-    عمارة: 1.15,
-    قصر: 1.3,
-    استراحة: 0.85,
+interface PriceCalculationResponse {
+  price: number;
+  basePrice: number;
+  vatAmount: number;
+  breakdown: {
+    floorsCost: number;
+    ageMultiplier: number;
+    numberOfFloors: number;
   };
-
-  basePrice *= typeMultipliers[data.propertyType] || 1.0;
-
-  // Property age adjustment
-  const ageMultipliers: Record<string, number> = {
-    "أقل من سنة": 0.95,
-    "من 1 إلى 3 سنوات": 1.0,
-    "من 3 إلى 5 سنوات": 1.05,
-    "من 5 إلى 10 سنوات": 1.1,
-    "أكثر من 10 سنوات": 1.15,
-  };
-
-  basePrice *= ageMultipliers[data.propertyAge] || 1.0;
-
-  // Add VAT (15%)
-  const priceWithVAT = basePrice * 1.15;
-
-  return Math.round(priceWithVAT);
 }
 
 export default function CalculatorSection() {
+  const [currentStep, setCurrentStep] = useState(1);
   const [calculatedPrice, setCalculatedPrice] = useState<number | null>(null);
+  const [priceDetails, setPriceDetails] =
+    useState<PriceCalculationResponse | null>(null);
+  const [isCalculating, setIsCalculating] = useState(false);
+  const [calculationError, setCalculationError] = useState<string | null>(null);
   const [availableNeighborhoods, setAvailableNeighborhoods] = useState<
     string[]
   >([]);
 
+  const totalSteps = 4;
+
   const form = useForm<CalculatorFormValues>({
     resolver: zodResolver(calculatorSchema),
+    mode: "onChange",
     defaultValues: {
-      familyName: "",
       firstName: "",
-      city: "",
+      familyName: "",
       mobileNumber: "",
-      propertyType: "",
-      neighborhood: "",
-      landArea: "",
-      propertyAge: "",
+      package: "",
       inspectionPurpose: "",
+      city: "",
+      neighborhood: "",
+      propertyAge: "",
+      landArea: "",
       coveredArea: "",
     },
   });
@@ -182,12 +126,82 @@ export default function CalculatorSection() {
     }
   }, [selectedCity, form]);
 
-  function onSubmit(data: CalculatorFormValues) {
-    const price = calculateInspectionCost(data);
-    setCalculatedPrice(price);
-    console.log("Form data:", data);
-    console.log("Calculated price:", price);
+  async function validateStep(step: number): Promise<boolean> {
+    let fieldsToValidate: (keyof CalculatorFormValues)[] = [];
+
+    switch (step) {
+      case 1:
+        fieldsToValidate = ["firstName", "familyName", "mobileNumber"];
+        break;
+      case 2:
+        fieldsToValidate = ["package", "inspectionPurpose"];
+        break;
+      case 3:
+        fieldsToValidate = ["city", "propertyAge", "landArea", "coveredArea"];
+        break;
+    }
+
+    const result = await form.trigger(fieldsToValidate);
+    return result;
   }
+
+  async function handleNext() {
+    const isValid = await validateStep(currentStep);
+    if (isValid) {
+      if (currentStep === 3) {
+        // Calculate price before moving to final step
+        setIsCalculating(true);
+        setCalculationError(null);
+
+        try {
+          const data = form.getValues();
+          const response = await fetch("/api/calculate-price", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || "فشل حساب السعر");
+          }
+
+          const result: PriceCalculationResponse = await response.json();
+          setCalculatedPrice(result.price);
+          setPriceDetails(result);
+          setCurrentStep((prev) => Math.min(prev + 1, totalSteps));
+        } catch (error) {
+          console.error("Error calculating price:", error);
+          setCalculationError(
+            error instanceof Error ? error.message : "حدث خطأ أثناء حساب السعر"
+          );
+        } finally {
+          setIsCalculating(false);
+        }
+      } else {
+        setCurrentStep((prev) => Math.min(prev + 1, totalSteps));
+      }
+    }
+  }
+
+  function handlePrevious() {
+    setCurrentStep((prev) => Math.max(prev - 1, 1));
+  }
+
+  function onSubmit(data: CalculatorFormValues) {
+    console.log("Form data:", data);
+    console.log("Calculated price:", calculatedPrice);
+    // Handle form submission (e.g., send to API)
+  }
+
+  const stepTitles = [
+    "المعلومات الشخصية",
+    "بيانات الفحص",
+    "بيانات العقار",
+    "النتيجة",
+  ];
 
   return (
     <section
@@ -199,361 +213,437 @@ export default function CalculatorSection() {
 
         <div className="grid lg:grid-cols-3 gap-8 lg:gap-8 items-start max-w-6xl mx-auto">
           {/* Right side - Form */}
-          <div className="col-span-3 lg:col-span-2 w-full  mx-auto lg:mx-0 order-last lg:order-first">
+          <div className="col-span-3 lg:col-span-2 w-full mx-auto lg:mx-0 order-last lg:order-first">
+            {/* Step Indicator */}
+            <div className="mb-8" dir="rtl">
+              {/* Progress bars */}
+              <div className="flex gap-2 ">
+                {[...Array(totalSteps)].map((_, index) => (
+                  <div
+                    key={index}
+                    className={`h-1 flex-1 rounded-full transition-all duration-300 ${
+                      index < currentStep
+                        ? "bg-primary-lighter"
+                        : index === currentStep - 1
+                        ? "bg-secondary"
+                        : "bg-gray-200"
+                    }`}
+                  />
+                ))}
+              </div>
+
+              <div className="text-lg font-bold text-primary my-4">
+                {currentStep} / {totalSteps}
+              </div>
+
+              <h3 className="text-2xl font-bold text-right mb-6">
+                {stepTitles[currentStep - 1]}
+              </h3>
+            </div>
+
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className=" grid lg:grid-cols-2 gap-6 lg:gap-8"
+                className="space-y-6"
               >
-                {/* Family Name */}
-                <FormField
-                  control={form.control}
-                  name="familyName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel dir="rtl">
-                        {content.calculator.fields.familyName.label}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={
-                            content.calculator.fields.familyName.placeholder
-                          }
-                          {...field}
-                          dir="rtl"
-                        />
-                      </FormControl>
-                      <FormMessage dir="rtl" />
-                    </FormItem>
-                  )}
-                />
-
-                {/* First Name */}
-                <FormField
-                  control={form.control}
-                  name="firstName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel dir="rtl">
-                        {content.calculator.fields.firstName.label}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={
-                            content.calculator.fields.firstName.placeholder
-                          }
-                          {...field}
-                          dir="rtl"
-                        />
-                      </FormControl>
-                      <FormMessage dir="rtl" />
-                    </FormItem>
-                  )}
-                />
-                {/* Mobile Number */}
-                <FormField
-                  control={form.control}
-                  name="mobileNumber"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel dir="rtl">
-                        {content.calculator.fields.mobileNumber.label}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={
-                            content.calculator.fields.mobileNumber.placeholder
-                          }
-                          {...field}
-                          dir="rtl"
-                          type="tel"
-                        />
-                      </FormControl>
-                      <FormMessage dir="rtl" />
-                    </FormItem>
-                  )}
-                />
-                {/* City */}
-                <FormField
-                  control={form.control}
-                  name="city"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel dir="rtl">
-                        {content.calculator.fields.city.label}
-                      </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger dir="rtl" className="w-full">
-                            <SelectValue
-                              placeholder={
-                                content.calculator.fields.city.placeholder
-                              }
+                {/* Step 1: Personal Information */}
+                {currentStep === 1 && (
+                  <div className="space-y-6">
+                    {/* First Name */}
+                    <FormField
+                      control={form.control}
+                      name="firstName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel dir="rtl">الاسم الأول</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="هنا يكتب اسمك الاول مثال (محمد)"
+                              {...field}
+                              dir="rtl"
                             />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {content.calculator.fields.city.options.map(
-                            (option) => (
-                              <SelectItem key={option} value={option}>
-                                {option}
+                          </FormControl>
+                          <FormMessage dir="rtl" />
+                        </FormItem>
+                      )}
+                    />
+
+                    {/* Family Name */}
+                    <FormField
+                      control={form.control}
+                      name="familyName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel dir="rtl">اسم العائلة</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="مثال ابراهيم محمد علي"
+                              {...field}
+                              dir="rtl"
+                            />
+                          </FormControl>
+                          <FormMessage dir="rtl" />
+                        </FormItem>
+                      )}
+                    />
+
+                    {/* Mobile Number */}
+                    <FormField
+                      control={form.control}
+                      name="mobileNumber"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel dir="rtl">رقم الجوال</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="رقم الجوال"
+                              {...field}
+                              dir="rtl"
+                              type="tel"
+                            />
+                          </FormControl>
+                          <FormMessage dir="rtl" />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                )}
+
+                {/* Step 2: Inspection Data */}
+                {currentStep === 2 && (
+                  <div className="space-y-6">
+                    {/* Package */}
+                    <FormField
+                      control={form.control}
+                      name="package"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel dir="rtl">الباقة</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger dir="rtl" className="w-full">
+                                <SelectValue placeholder="اختر الباقة" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="basic">
+                                الباقة الأساسية
                               </SelectItem>
-                            )
-                          )}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage dir="rtl" />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Neighborhood */}
-                <FormField
-                  control={form.control}
-                  name="neighborhood"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel dir="rtl">
-                        {content.calculator.fields.neighborhood.label}
-                      </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                        disabled={
-                          !selectedCity || availableNeighborhoods.length === 0
-                        }
-                      >
-                        <FormControl>
-                          <SelectTrigger dir="rtl" className="w-full">
-                            <SelectValue
-                              placeholder={
-                                !selectedCity
-                                  ? "اختر المدينة أولاً"
-                                  : availableNeighborhoods.length === 0
-                                  ? "لا توجد أحياء متاحة"
-                                  : content.calculator.fields.neighborhood
-                                      .placeholder
-                              }
-                            />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {availableNeighborhoods.map((neighborhood) => (
-                            <SelectItem key={neighborhood} value={neighborhood}>
-                              {neighborhood}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage dir="rtl" />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Property Type */}
-                <FormField
-                  control={form.control}
-                  name="propertyType"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel dir="rtl">
-                        {content.calculator.fields.propertyType.label}
-                      </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger dir="rtl" className="w-full">
-                            <SelectValue
-                              placeholder={
-                                content.calculator.fields.propertyType
-                                  .placeholder
-                              }
-                            />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {content.calculator.fields.propertyType.options.map(
-                            (option) => (
-                              <SelectItem key={option} value={option}>
-                                {option}
+                              <SelectItem value="premium">
+                                الباقة المميزة
                               </SelectItem>
-                            )
-                          )}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage dir="rtl" />
-                    </FormItem>
-                  )}
-                />
+                              <SelectItem value="vip">باقة VIP</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage dir="rtl" />
+                        </FormItem>
+                      )}
+                    />
 
-                {/* Property Age */}
-                <FormField
-                  control={form.control}
-                  name="propertyAge"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel dir="rtl">
-                        {content.calculator.fields.propertyAge.label}
-                      </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger dir="rtl" className="w-full">
-                            <SelectValue
-                              placeholder={
-                                content.calculator.fields.propertyAge
-                                  .placeholder
-                              }
-                            />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {content.calculator.fields.propertyAge.options.map(
-                            (option) => (
-                              <SelectItem key={option} value={option}>
-                                {option}
-                              </SelectItem>
-                            )
-                          )}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage dir="rtl" />
-                    </FormItem>
-                  )}
-                />
+                    {/* Inspection Purpose */}
+                    <FormField
+                      control={form.control}
+                      name="inspectionPurpose"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel dir="rtl">الهدف من الفحص</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger dir="rtl" className="w-full">
+                                <SelectValue placeholder="هدف الفحص" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {content.calculator.fields.inspectionPurpose.options.map(
+                                (option) => (
+                                  <SelectItem key={option} value={option}>
+                                    {option}
+                                  </SelectItem>
+                                )
+                              )}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage dir="rtl" />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                )}
 
-                {/* Land Area */}
-                <FormField
-                  control={form.control}
-                  name="landArea"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel dir="rtl">
-                        {content.calculator.fields.landArea.label}
-                      </FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <Input
-                            placeholder={
-                              content.calculator.fields.landArea.placeholder
+                {/* Step 3: Property Data */}
+                {currentStep === 3 && (
+                  <div className="space-y-6">
+                    {/* City */}
+                    <FormField
+                      control={form.control}
+                      name="city"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel dir="rtl">المدينة</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger dir="rtl" className="w-full">
+                                <SelectValue placeholder="اختر المدينة" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {content.calculator.fields.city.options.map(
+                                (option) => (
+                                  <SelectItem key={option} value={option}>
+                                    {option}
+                                  </SelectItem>
+                                )
+                              )}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage dir="rtl" />
+                        </FormItem>
+                      )}
+                    />
+
+                    {/* Neighborhood */}
+                    <FormField
+                      control={form.control}
+                      name="neighborhood"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel dir="rtl">الحي</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            value={field.value}
+                            disabled={
+                              !selectedCity ||
+                              availableNeighborhoods.length === 0
                             }
-                            {...field}
-                            dir="rtl"
-                            type="text"
-                          />
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-primary">
-                            {content.calculator.fields.landArea.suffix}
-                          </span>
-                        </div>
-                      </FormControl>
-                      <FormMessage dir="rtl" />
-                    </FormItem>
-                  )}
-                />
+                          >
+                            <FormControl>
+                              <SelectTrigger dir="rtl" className="w-full">
+                                <SelectValue
+                                  placeholder={
+                                    !selectedCity
+                                      ? "اختر المدينة أولاً"
+                                      : availableNeighborhoods.length === 0
+                                      ? "لا توجد أحياء متاحة"
+                                      : "اختر الحي"
+                                  }
+                                />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {availableNeighborhoods.map((neighborhood) => (
+                                <SelectItem
+                                  key={neighborhood}
+                                  value={neighborhood}
+                                >
+                                  {neighborhood}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage dir="rtl" />
+                        </FormItem>
+                      )}
+                    />
 
-                {/* Covered Area */}
-                <FormField
-                  control={form.control}
-                  name="coveredArea"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel dir="rtl">
-                        {content.calculator.fields.coveredArea.label}
-                      </FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <Input
-                            placeholder={
-                              content.calculator.fields.coveredArea.placeholder
-                            }
-                            {...field}
-                            dir="rtl"
-                            type="text"
-                          />
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-primary">
-                            {content.calculator.fields.coveredArea.suffix}
-                          </span>
-                        </div>
-                      </FormControl>
-                      <FormMessage dir="rtl" />
-                    </FormItem>
-                  )}
-                />
+                    {/* Property Age */}
+                    <FormField
+                      control={form.control}
+                      name="propertyAge"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel dir="rtl">عمر العقار</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger dir="rtl" className="w-full">
+                                <SelectValue placeholder="اختر عمر العقار" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {content.calculator.fields.propertyAge.options.map(
+                                (option) => (
+                                  <SelectItem key={option} value={option}>
+                                    {option}
+                                  </SelectItem>
+                                )
+                              )}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage dir="rtl" />
+                        </FormItem>
+                      )}
+                    />
 
-                {/* Inspection Purpose */}
-                <FormField
-                  control={form.control}
-                  name="inspectionPurpose"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel dir="rtl">
-                        {content.calculator.fields.inspectionPurpose.label}
-                      </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger dir="rtl" className="w-full">
-                            <SelectValue
-                              placeholder={
-                                content.calculator.fields.inspectionPurpose
-                                  .placeholder
-                              }
+                    {/* Land Area */}
+                    <FormField
+                      control={form.control}
+                      name="landArea"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel dir="rtl">مساحة الأرض</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="مثال 300 متر"
+                              {...field}
+                              dir="rtl"
+                              type="text"
                             />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {content.calculator.fields.inspectionPurpose.options.map(
-                            (option) => (
-                              <SelectItem key={option} value={option}>
-                                {option}
-                              </SelectItem>
-                            )
-                          )}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage dir="rtl" />
-                    </FormItem>
-                  )}
-                />
-                <div className="lg:col-span-2">
-                  {/* Display calculated price */}
-                  {calculatedPrice !== null && (
-                    <div
-                      className="p-6 bg-gradient-to-br from-primary/10 to-secondary/10 border-2 border-primary/20 text-center animate-in fade-in slide-in-from-bottom-4 duration-500"
-                      dir="rtl"
-                    >
-                      <p className="text-lg text-foreground mb-3 font-medium">
-                        التكلفة التقديرية للفحص
-                      </p>
-                      <p className="text-4xl font-bold text-primary mb-2">
+                          </FormControl>
+                          <FormMessage dir="rtl" />
+                        </FormItem>
+                      )}
+                    />
+
+                    {/* Covered Area */}
+                    <FormField
+                      control={form.control}
+                      name="coveredArea"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel dir="rtl">مسطحات البناء</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="مثال 200 م"
+                              {...field}
+                              dir="rtl"
+                              type="text"
+                            />
+                          </FormControl>
+                          <FormMessage dir="rtl" />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                )}
+
+                {/* Step 4: Result */}
+                {currentStep === 4 && calculatedPrice !== null && (
+                  <div className="space-y-6" dir="rtl">
+                    <div className="text-center py-12">
+                      <p className="text-5xl lg:text-6xl font-bold text-primary mb-8">
                         {calculatedPrice.toLocaleString("ar-SA")} ريال
                       </p>
-                      <p className="text-sm text-muted-foreground mb-2">
-                        (شامل ضريبة القيمة المضافة 15%)
-                      </p>
-                      <p className="text-xs text-muted-foreground border-t border-primary/20 pt-3 mt-3">
-                        * هذا السعر تقديري وقد يختلف حسب الحالة الفعلية للعقار
-                      </p>
+
+                      {priceDetails && (
+                        <div className="mt-8 space-y-4 max-w-md mx-auto">
+                          <div className="p-4 bg-gray-50 rounded-lg">
+                            <div className="flex justify-between items-center text-sm mb-2">
+                              <span className="text-gray-600">
+                                السعر الأساسي:
+                              </span>
+                              <span className="font-semibold">
+                                {priceDetails.basePrice.toLocaleString("ar-SA")}{" "}
+                                ريال
+                              </span>
+                            </div>
+                            <div className="flex justify-between items-center text-sm mb-2">
+                              <span className="text-gray-600">
+                                ضريبة القيمة المضافة (15%):
+                              </span>
+                              <span className="font-semibold">
+                                {priceDetails.vatAmount.toLocaleString("ar-SA")}{" "}
+                                ريال
+                              </span>
+                            </div>
+                            <div className="border-t border-gray-300 my-2 pt-2">
+                              <div className="flex justify-between items-center">
+                                <span className="font-bold">الإجمالي:</span>
+                                <span className="font-bold text-primary">
+                                  {calculatedPrice.toLocaleString("ar-SA")} ريال
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <p className="text-xs text-gray-500">
+                            * السعر تقديري وقد يختلف حسب الحالة الفعلية للعقار
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Error Message */}
+                {calculationError && currentStep === 3 && (
+                  <div
+                    className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700"
+                    dir="rtl"
+                  >
+                    <p className="text-sm font-medium">{calculationError}</p>
+                  </div>
+                )}
+
+                {/* Navigation Buttons */}
+                <div
+                  className="flex justify-between items-center pt-6 flex-row-reverse"
+                  dir="rtl"
+                >
+                  {currentStep < 4 && (
+                    <Button
+                      type="button"
+                      onClick={handleNext}
+                      disabled={isCalculating}
+                      size="lg"
+                      className="h-14 min-w-40 rounded-none text-lg cursor-pointer"
+                    >
+                      {isCalculating ? (
+                        <>
+                          <span className="animate-spin inline-block h-5 w-5 border-2 border-white border-t-transparent rounded-full ml-2" />
+                          جاري الحساب...
+                        </>
+                      ) : (
+                        <>
+                          {currentStep === 3 ? "اظهر النتيجة" : "التالي"}
+                          {currentStep != 3 && (
+                            <ArrowLeft className="mr-2 h-5 w-5" />
+                          )}
+                        </>
+                      )}
+                    </Button>
+                  )}
+
+                  {currentStep === 4 && (
+                    <div className="flex gap-4 w-full justify-end">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="h-14 min-w-40 rounded-none text-lg cursor-pointer text-primary hover:!bg-background hover:!text-primary"
+                      >
+                        تواصل معنا
+                      </Button>
+                      <Button
+                        type="button"
+                        className="h-14 min-w-40 rounded-none text-lg cursor-pointer"
+                        variant="secondary"
+                      >
+                        دفع
+                      </Button>
                     </div>
                   )}
-                </div>
-                {/* Submit Button */}
-                <div className="lg:col-span-2 flex justify-center lg:justify-end">
-                  <AnimatedButton
-                    type="submit"
-                    className="w-[200px] lg:w-[250px] h-fit"
-                  >
-                    {content.calculator.submitButton}
-                  </AnimatedButton>
+
+                  {currentStep > 1 && (
+                    <Button
+                      type="button"
+                      onClick={handlePrevious}
+                      disabled={isCalculating}
+                      variant="ghost"
+                      className="h-14 min-w-40 rounded-none text-lg cursor-pointer text-primary hover:!bg-background hover:!text-primary"
+                    >
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                      رجوع
+                    </Button>
+                  )}
                 </div>
               </form>
             </Form>

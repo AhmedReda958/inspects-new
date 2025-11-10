@@ -1543,6 +1543,11 @@ const content = {
           "أكثر من 10 سنوات",
         ],
       },
+      package: {
+        label: "الباقة",
+        placeholder: "اختر الباقة",
+        options: ["الباقة الأساسية", "الباقة المميزة", "باقة VIP"],
+      },
       inspectionPurpose: {
         label: "الهدف من الفحص",
         placeholder: "اختر الهدف من الفحص",
