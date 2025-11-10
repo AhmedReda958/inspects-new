@@ -85,7 +85,7 @@ function ComparisonSection({
                     className="w-3.5 h-3.5 mt-1.5 flex-shrink-0 text-chart-2"
                     strokeWidth={2.5}
                   />
-                  <p className="text-muted-foreground/70 text-base font-semibold text-right leading-[1.8125em]">
+                  <p className="text-muted-foreground/70 text-base font-medium text-right leading-[1.8125em]">
                     {item}
                   </p>
                 </div>
@@ -115,7 +115,7 @@ function ComparisonSection({
                     className="w-3.5 h-3.5 mt-1.5 flex-shrink-0 text-chart-2"
                     strokeWidth={2.5}
                   />
-                  <p className="text-muted-foreground/70 text-base font-semibold text-right leading-[1.8125em]">
+                  <p className="text-muted-foreground/70 text-base font-medium text-right leading-[1.8125em]">
                     {item}
                   </p>
                 </div>
@@ -145,7 +145,7 @@ function ComparisonSection({
                     className="w-3.5 h-3.5 mt-1.5 flex-shrink-0 text-chart-2"
                     strokeWidth={2.5}
                   />
-                  <p className="text-muted-foreground/70 text-base font-semibold text-right leading-[1.8125em]">
+                  <p className="text-muted-foreground/70 text-base font-medium text-right leading-[1.8125em]">
                     {item}
                   </p>
                 </div>
