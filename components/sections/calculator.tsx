@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import content from "@/content";
 import { SectionTitle } from "@/components/ui/section-title";
@@ -89,6 +90,7 @@ export default function CalculatorSection() {
   const [availableNeighborhoods, setAvailableNeighborhoods] = useState<
     string[]
   >([]);
+  const searchParams = useSearchParams();
 
   const totalSteps = 4;
 
@@ -108,6 +110,19 @@ export default function CalculatorSection() {
       coveredArea: "",
     },
   });
+
+  // Auto-select package from URL search params
+  useEffect(() => {
+    const packageParam = searchParams.get("package");
+    if (
+      packageParam &&
+      (packageParam === "basic" ||
+        packageParam === "premium" ||
+        packageParam === "vip")
+    ) {
+      form.setValue("package", packageParam);
+    }
+  }, [searchParams, form]);
 
   // Watch for city changes and update neighborhoods
   const selectedCity = form.watch("city");
@@ -205,7 +220,7 @@ export default function CalculatorSection() {
 
   return (
     <section
-      id="price-calculator"
+      id="calculator"
       className="min-h-screen py-20 md:py-32 bg-white relative"
     >
       <div className="container space-y-16 px-4 md:px-6">
@@ -321,7 +336,7 @@ export default function CalculatorSection() {
                           <FormLabel dir="rtl">الباقة</FormLabel>
                           <Select
                             onValueChange={field.onChange}
-                            defaultValue={field.value}
+                            value={field.value}
                           >
                             <FormControl>
                               <SelectTrigger dir="rtl" className="w-full">
@@ -352,7 +367,7 @@ export default function CalculatorSection() {
                           <FormLabel dir="rtl">الهدف من الفحص</FormLabel>
                           <Select
                             onValueChange={field.onChange}
-                            defaultValue={field.value}
+                            value={field.value}
                           >
                             <FormControl>
                               <SelectTrigger dir="rtl" className="w-full">
@@ -388,7 +403,7 @@ export default function CalculatorSection() {
                           <FormLabel dir="rtl">المدينة</FormLabel>
                           <Select
                             onValueChange={field.onChange}
-                            defaultValue={field.value}
+                            value={field.value}
                           >
                             <FormControl>
                               <SelectTrigger dir="rtl" className="w-full">
@@ -463,7 +478,7 @@ export default function CalculatorSection() {
                           <FormLabel dir="rtl">عمر العقار</FormLabel>
                           <Select
                             onValueChange={field.onChange}
-                            defaultValue={field.value}
+                            value={field.value}
                           >
                             <FormControl>
                               <SelectTrigger dir="rtl" className="w-full">
@@ -618,7 +633,7 @@ export default function CalculatorSection() {
                       <Button
                         type="button"
                         variant="outline"
-                        className="h-14 min-w-40 rounded-none text-lg cursor-pointer text-primary hover:!bg-background hover:!text-primary"
+                        className="h-14 min-w-40 rounded-none !border-primary/10 text-lg cursor-pointer text-primary hover:!bg-background hover:!text-primary"
                       >
                         تواصل معنا
                       </Button>

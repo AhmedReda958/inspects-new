@@ -1,4 +1,7 @@
+"use client";
+
 import * as React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -12,6 +15,13 @@ export interface Package {
   features: string[];
   isHighlighted?: boolean;
 }
+
+// Mapping between package IDs and calculator package values
+const packageIdToCalculatorValue: Record<string, string> = {
+  visual: "basic",
+  comprehensive: "premium",
+  advanced: "vip",
+};
 
 // Helper function to highlight numbers with secondary color
 const highlightNumbers = (text: string) => {
@@ -39,6 +49,26 @@ export function PackageCard({
   pkg: Package;
   className?: string;
 }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  function handleButtonClick() {
+    const calculatorValue = packageIdToCalculatorValue[pkg.id];
+    if (calculatorValue) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("package", calculatorValue);
+      router.push(`?${params.toString()}`, { scroll: false });
+      
+      // Scroll to calculator section
+      setTimeout(() => {
+        const calculatorElement = document.getElementById("price-calculator");
+        if (calculatorElement) {
+          calculatorElement.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 100);
+    }
+  }
+
   return (
     <Card
       className={cn(
@@ -111,6 +141,7 @@ export function PackageCard({
           {/* CTA Button */}
           <Button
             size={"lg"}
+            onClick={handleButtonClick}
             className={cn(
               "w-full mt-auto text-base font-medium h-16 cursor-pointer",
               pkg.isHighlighted

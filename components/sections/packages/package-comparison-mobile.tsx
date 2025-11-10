@@ -2,12 +2,21 @@
 
 import * as React from "react";
 import { ChevronDown, Check } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 import content from "@/content";
 import { cn } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import Icon1 from "@/icons/packages/1.svg";
 import Icon2 from "@/icons/packages/2.svg";
 import Icon3 from "@/icons/packages/3.svg";
+
+// Mapping between package IDs and calculator package values
+const packageIdToCalculatorValue: Record<string, string> = {
+  visual: "basic",
+  comprehensive: "premium",
+  advanced: "vip",
+};
 
 const getPackageIcon = (id: string) => {
   switch (id) {
@@ -38,6 +47,25 @@ function PackageComparisonMobile({
   onToggle,
 }: PackageComparisonMobileProps) {
   const icon = getPackageIcon(packageId);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  function handleButtonClick() {
+    const calculatorValue = packageIdToCalculatorValue[packageId];
+    if (calculatorValue) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("package", calculatorValue);
+      router.push(`?${params.toString()}`, { scroll: false });
+      
+      // Scroll to calculator section
+      setTimeout(() => {
+        const calculatorElement = document.getElementById("price-calculator");
+        if (calculatorElement) {
+          calculatorElement.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 100);
+    }
+  }
 
   return (
     <Card
@@ -128,6 +156,22 @@ function PackageComparisonMobile({
                   </div>
                 </div>
               ))}
+
+              {/* CTA Button */}
+              <div className="pt-4">
+                <Button
+                  size="lg"
+                  onClick={handleButtonClick}
+                  className={cn(
+                    "w-full text-base font-medium h-14 cursor-pointer",
+                    packageId === "comprehensive"
+                      ? "bg-secondary text-white hover:bg-secondary/90"
+                      : "bg-gray-200 text-primary hover:bg-gray-300"
+                  )}
+                >
+                  اطلب الباقة الان
+                </Button>
+              </div>
             </div>
           </CardContent>
         )}
