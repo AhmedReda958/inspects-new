@@ -1514,7 +1514,7 @@ const content = {
       },
       firstName: {
         label: "الرسالة الأول",
-        placeholder: "هنا يكتب الرسالة الأول مثال: (محمد)",
+        placeholder: "هنا يكتب الرسالة الأول مثال:)",
       },
       city: {
         label: "المدينة",

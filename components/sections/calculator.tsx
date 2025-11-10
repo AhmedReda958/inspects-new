@@ -509,7 +509,7 @@ export default function CalculatorSection() {
                           <FormLabel dir="rtl">مساحة الأرض</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="مثال 300 متر"
+                              placeholder="مثال 300 م²"
                               {...field}
                               dir="rtl"
                               type="text"
@@ -529,7 +529,7 @@ export default function CalculatorSection() {
                           <FormLabel dir="rtl">مسطحات البناء</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="مثال 200 م"
+                              placeholder="مثال 200 م²"
                               {...field}
                               dir="rtl"
                               type="text"
@@ -551,36 +551,38 @@ export default function CalculatorSection() {
                       </p>
 
                       {priceDetails && (
-                        <div className="mt-8 space-y-4 max-w-md mx-auto">
-                          <div className="p-4 bg-gray-50 rounded-lg">
-                            <div className="flex justify-between items-center text-sm mb-2">
+                        <div className="mt-8 space-y-4 max-w-md mx-auto px-4 md:px-0">
+                          <div className="p-3 md:p-4 bg-gray-50 rounded-lg">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-2 text-sm mb-2">
                               <span className="text-gray-600">
                                 السعر الأساسي:
                               </span>
-                              <span className="font-semibold">
+                              <span className="font-semibold ">
                                 {priceDetails.basePrice.toLocaleString("ar-SA")}{" "}
                                 ريال
                               </span>
                             </div>
-                            <div className="flex justify-between items-center text-sm mb-2">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-2 text-sm mb-2">
                               <span className="text-gray-600">
                                 ضريبة القيمة المضافة (15%):
                               </span>
-                              <span className="font-semibold">
+                              <span className="font-semibold ">
                                 {priceDetails.vatAmount.toLocaleString("ar-SA")}{" "}
                                 ريال
                               </span>
                             </div>
                             <div className="border-t border-gray-300 my-2 pt-2">
-                              <div className="flex justify-between items-center">
-                                <span className="font-bold">الإجمالي:</span>
-                                <span className="font-bold text-primary">
+                              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-2">
+                                <span className="font-bold text-sm">
+                                  الإجمالي:
+                                </span>
+                                <span className="font-bold text-primary text-sm ">
                                   {calculatedPrice.toLocaleString("ar-SA")} ريال
                                 </span>
                               </div>
                             </div>
                           </div>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-[10px] sm:text-xs text-gray-500 px-2 sm:px-0">
                             * السعر تقديري وقد يختلف حسب المساحات الفعلية للعقار
                           </p>
                         </div>
@@ -601,7 +603,7 @@ export default function CalculatorSection() {
 
                 {/* Navigation Buttons */}
                 <div
-                  className="flex justify-between items-center pt-6 flex-row-reverse"
+                  className="flex justify-between items-center pt-6 flex-col lg:flex-row-reverse"
                   dir="rtl"
                 >
                   {currentStep < 4 && (
@@ -610,7 +612,7 @@ export default function CalculatorSection() {
                       onClick={handleNext}
                       disabled={isCalculating}
                       size="lg"
-                      className="h-14 min-w-40 rounded-none text-lg font-medium cursor-pointer"
+                      className="h-14 w-full lg:min-w-40 rounded-none text-lg font-medium cursor-pointer"
                     >
                       {isCalculating ? (
                         <>
@@ -629,7 +631,7 @@ export default function CalculatorSection() {
                   )}
 
                   {currentStep === 4 && (
-                    <div className="flex gap-4 w-full justify-end">
+                    <div className="flex gap-4 w-full justify-center lg:justify-end">
                       <Button
                         type="button"
                         variant="outline"
@@ -662,7 +664,7 @@ export default function CalculatorSection() {
                       onClick={handlePrevious}
                       disabled={isCalculating}
                       variant="ghost"
-                      className="h-14 min-w-40 rounded-none text-lg font-medium cursor-pointer text-primary hover:!bg-background hover:!text-primary"
+                      className="mt-4 lg:mt-0 h-14 min-w-40 rounded-none text-lg font-medium cursor-pointer text-primary hover:!bg-background hover:!text-primary"
                     >
                       <ArrowRight className="ml-2 h-5 w-5" />
                       رجوع
