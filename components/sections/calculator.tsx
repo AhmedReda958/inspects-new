@@ -610,7 +610,7 @@ export default function CalculatorSection() {
                       onClick={handleNext}
                       disabled={isCalculating}
                       size="lg"
-                      className="h-14 min-w-40 rounded-none text-lg cursor-pointer"
+                      className="h-14 min-w-40 rounded-none text-lg font-medium cursor-pointer"
                     >
                       {isCalculating ? (
                         <>
@@ -642,13 +642,13 @@ export default function CalculatorSection() {
                             "_blank"
                           );
                         }}
-                        className="h-14 min-w-40 rounded-none !border-primary/10 text-lg cursor-pointer text-primary hover:!bg-background hover:!text-primary"
+                        className="h-14 min-w-40 rounded-none !border-primary/10 text-lg font-medium cursor-pointer text-primary hover:!bg-background hover:!text-primary"
                       >
                         تواصل معنا
                       </Button>
                       <Button
                         type="button"
-                        className="h-14 min-w-40 rounded-none text-lg cursor-pointer"
+                        className="h-14 min-w-40 rounded-none text-lg font-medium cursor-pointer"
                         variant="secondary"
                       >
                         دفع
@@ -662,7 +662,7 @@ export default function CalculatorSection() {
                       onClick={handlePrevious}
                       disabled={isCalculating}
                       variant="ghost"
-                      className="h-14 min-w-40 rounded-none text-lg cursor-pointer text-primary hover:!bg-background hover:!text-primary"
+                      className="h-14 min-w-40 rounded-none text-lg font-medium cursor-pointer text-primary hover:!bg-background hover:!text-primary"
                     >
                       <ArrowRight className="ml-2 h-5 w-5" />
                       رجوع
