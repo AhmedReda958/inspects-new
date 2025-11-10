@@ -61,7 +61,7 @@ export function PackageCard({
       
       // Scroll to calculator section
       setTimeout(() => {
-        const calculatorElement = document.getElementById("price-calculator");
+        const calculatorElement = document.getElementById("calculator");
         if (calculatorElement) {
           calculatorElement.scrollIntoView({ behavior: "smooth", block: "start" });
         }
