@@ -42,7 +42,7 @@ export default function PackagesSection() {
               <PackageCard key={pkg.id} pkg={pkg} />
             ))}
           </div>
-          <h4 className="mx-auto text-center font-medium">
+          <h4 className="mx-auto my-18 text-center font-medium">
             المزيد من التفاصيل
           </h4>
           <PackageComparison />
