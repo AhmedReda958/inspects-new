@@ -5,6 +5,7 @@ import { SectionTitle } from "@/components/ui/section-title";
 import content from "@/content";
 import { PackageCard, type Package } from "./package-card";
 import { PackageComparison } from "./package-comparison";
+import { PackageComparisonMobileList } from "./package-comparison-mobile";
 import { PackageNote } from "./package-note";
 import Icon1 from "@/icons/packages/1.svg";
 import Icon2 from "@/icons/packages/2.svg";
@@ -34,13 +35,24 @@ export default function PackagesSection() {
       <div className="container space-y-16 px-4 xl:px-20">
         <SectionTitle variant="center">{content.packages.title}</SectionTitle>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 max-w-7xl mx-auto gap-6 items-stretch">
-          {packages.map((pkg) => (
-            <PackageCard key={pkg.id} pkg={pkg} />
-          ))}
+        {/* Desktop Version */}
+        <div className="hidden md:block">
+          <div className="grid grid-cols-1 md:grid-cols-3 max-w-7xl mx-auto gap-6 items-stretch">
+            {packages.map((pkg) => (
+              <PackageCard key={pkg.id} pkg={pkg} />
+            ))}
+          </div>
+          <h4 className="mx-auto text-center font-medium">
+            المزيد من التفاصيل
+          </h4>
+          <PackageComparison />
         </div>
-        <h4 className="mx-auto text-center font-medium">المزيد من التفاصيل</h4>
-        <PackageComparison />
+
+        {/* Mobile Version */}
+        <div className="block md:hidden">
+          <PackageComparisonMobileList />
+        </div>
+
         <PackageNote />
       </div>
     </section>
