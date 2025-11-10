@@ -633,6 +633,15 @@ export default function CalculatorSection() {
                       <Button
                         type="button"
                         variant="outline"
+                        onClick={() => {
+                          const message = encodeURIComponent(
+                            "مرحباً، أحتاج للاستفسار عن خدماتكم"
+                          );
+                          window.open(
+                            `https://wa.me/966920005543?text=${message}`,
+                            "_blank"
+                          );
+                        }}
                         className="h-14 min-w-40 rounded-none !border-primary/10 text-lg cursor-pointer text-primary hover:!bg-background hover:!text-primary"
                       >
                         تواصل معنا
