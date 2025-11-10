@@ -4,6 +4,7 @@ import * as React from "react";
 import { SectionTitle } from "@/components/ui/section-title";
 import content from "@/content";
 import { PackageCard, type Package } from "./package-card";
+import { PackageComparison } from "./package-comparison";
 import Icon1 from "@/icons/packages/1.svg";
 import Icon2 from "@/icons/packages/2.svg";
 import Icon3 from "@/icons/packages/3.svg";
@@ -37,6 +38,8 @@ export default function PackagesSection() {
             <PackageCard key={pkg.id} pkg={pkg} />
           ))}
         </div>
+
+        <PackageComparison />
       </div>
     </section>
   );
