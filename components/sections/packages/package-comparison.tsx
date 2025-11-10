@@ -26,7 +26,7 @@ interface ComparisonSectionProps {
 
 function ComparisonSection({
   section,
-  isOpen,
+  isOpen = true,
   onToggle,
 }: ComparisonSectionProps) {
   return (
@@ -64,7 +64,7 @@ function ComparisonSection({
       {isOpen && (
         <div className="grid grid-cols-3">
           {/* Visual Package Column */}
-          <div className="p-5 border-b border-r border-border flex flex-col gap-2.5">
+          <div className="p-5 border-b border-border flex flex-col gap-2.5">
             {section.visual.map((item, idx) => {
               const isFirstItemHeader =
                 idx === 0 && ["components", "devices"].includes(section.id);
@@ -94,7 +94,7 @@ function ComparisonSection({
           </div>
 
           {/* Comprehensive Package Column */}
-          <div className="p-5 border-b border-border flex flex-col gap-2.5">
+          <div className="p-5 border-b border-x border-border flex flex-col gap-2.5">
             {section.comprehensive.map((item, idx) => {
               const isFirstItemHeader =
                 idx === 0 && ["components", "devices"].includes(section.id);
@@ -124,7 +124,7 @@ function ComparisonSection({
           </div>
 
           {/* Advanced Package Column */}
-          <div className="p-5 border-b border-l border-border flex flex-col gap-2.5">
+          <div className="p-5 border-b border-border flex flex-col gap-2.5">
             {section.advanced.map((item, idx) => {
               const isFirstItemHeader =
                 idx === 0 && ["components", "devices"].includes(section.id);
@@ -202,7 +202,7 @@ export function PackageComparison() {
         <ComparisonSection
           key={section.id}
           section={section}
-          isOpen={openSections[section.id] || true}
+          isOpen={openSections[section.id]}
           onToggle={() => toggleSection(section.id)}
         />
       ))}
