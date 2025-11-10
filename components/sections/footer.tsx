@@ -4,7 +4,7 @@ import { SocialLinks } from "@/components/layout/sidebar/social-links";
 export function Footer() {
   return (
     <footer className="bg-primary text-white">
-      <div className="container mx-auto lg:px-22 py-16 flex flex-col items-center gap-8">
+      <div className="container mx-auto lg:px-22 py-16 flex flex-col items-center gap-8 mb-6">
         <Image
           src="/logo-full-dark.svg"
           alt="انسبكتكس"
