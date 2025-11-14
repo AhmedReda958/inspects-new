@@ -230,7 +230,7 @@ export default function CalculatorSection() {
           {/* Right side - Form */}
           <div className="col-span-12 lg:col-span-8 w-full mx-auto lg:mx-0 order-last lg:order-first">
             {/* Step Indicator */}
-            <div className="mb-8" dir="rtl">
+            <div className="mb-8">
               {/* Progress bars */}
               <div className="flex gap-2 ">
                 {[...Array(totalSteps)].map((_, index) => (
@@ -270,15 +270,11 @@ export default function CalculatorSection() {
                       name="firstName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel dir="rtl">الاسم الأول</FormLabel>
+                          <FormLabel>الاسم الأول</FormLabel>
                           <FormControl>
-                            <Input
-                              placeholder="هنا يكتب اسمك الاول مثال (محمد)"
-                              {...field}
-                              dir="rtl"
-                            />
+                            <Input {...field} />
                           </FormControl>
-                          <FormMessage dir="rtl" />
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -289,15 +285,11 @@ export default function CalculatorSection() {
                       name="familyName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel dir="rtl">اسم العائلة</FormLabel>
+                          <FormLabel>اسم العائلة</FormLabel>
                           <FormControl>
-                            <Input
-                              placeholder="مثال ابراهيم محمد علي"
-                              {...field}
-                              dir="rtl"
-                            />
+                            <Input {...field} />
                           </FormControl>
-                          <FormMessage dir="rtl" />
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -308,16 +300,16 @@ export default function CalculatorSection() {
                       name="mobileNumber"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel dir="rtl">رقم الجوال</FormLabel>
+                          <FormLabel>رقم الجوال</FormLabel>
                           <FormControl>
                             <Input
                               placeholder="رقم الجوال"
                               {...field}
-                              dir="rtl"
                               type="tel"
+                              dir="rtl"
                             />
                           </FormControl>
-                          <FormMessage dir="rtl" />
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -333,13 +325,13 @@ export default function CalculatorSection() {
                       name="package"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel dir="rtl">الباقة</FormLabel>
+                          <FormLabel>الباقة</FormLabel>
                           <Select
                             onValueChange={field.onChange}
                             value={field.value}
                           >
                             <FormControl>
-                              <SelectTrigger dir="rtl" className="w-full">
+                              <SelectTrigger className="w-full">
                                 <SelectValue placeholder="اختر الباقة" />
                               </SelectTrigger>
                             </FormControl>
@@ -353,7 +345,7 @@ export default function CalculatorSection() {
                               <SelectItem value="vip">باقة VIP</SelectItem>
                             </SelectContent>
                           </Select>
-                          <FormMessage dir="rtl" />
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -364,13 +356,13 @@ export default function CalculatorSection() {
                       name="inspectionPurpose"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel dir="rtl">الهدف من الفحص</FormLabel>
+                          <FormLabel>الهدف من الفحص</FormLabel>
                           <Select
                             onValueChange={field.onChange}
                             value={field.value}
                           >
                             <FormControl>
-                              <SelectTrigger dir="rtl" className="w-full">
+                              <SelectTrigger className="w-full">
                                 <SelectValue placeholder="هدف الفحص" />
                               </SelectTrigger>
                             </FormControl>
@@ -384,7 +376,7 @@ export default function CalculatorSection() {
                               )}
                             </SelectContent>
                           </Select>
-                          <FormMessage dir="rtl" />
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -400,13 +392,13 @@ export default function CalculatorSection() {
                       name="city"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel dir="rtl">المدينة</FormLabel>
+                          <FormLabel>المدينة</FormLabel>
                           <Select
                             onValueChange={field.onChange}
                             value={field.value}
                           >
                             <FormControl>
-                              <SelectTrigger dir="rtl" className="w-full">
+                              <SelectTrigger className="w-full">
                                 <SelectValue placeholder="اختر المدينة" />
                               </SelectTrigger>
                             </FormControl>
@@ -420,7 +412,7 @@ export default function CalculatorSection() {
                               )}
                             </SelectContent>
                           </Select>
-                          <FormMessage dir="rtl" />
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -431,7 +423,7 @@ export default function CalculatorSection() {
                       name="neighborhood"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel dir="rtl">الحي</FormLabel>
+                          <FormLabel>الحي</FormLabel>
                           <Select
                             onValueChange={field.onChange}
                             value={field.value}
@@ -441,7 +433,7 @@ export default function CalculatorSection() {
                             }
                           >
                             <FormControl>
-                              <SelectTrigger dir="rtl" className="w-full">
+                              <SelectTrigger className="w-full">
                                 <SelectValue
                                   placeholder={
                                     !selectedCity
@@ -464,7 +456,7 @@ export default function CalculatorSection() {
                               ))}
                             </SelectContent>
                           </Select>
-                          <FormMessage dir="rtl" />
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -475,13 +467,13 @@ export default function CalculatorSection() {
                       name="propertyAge"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel dir="rtl">عمر العقار</FormLabel>
+                          <FormLabel>عمر العقار</FormLabel>
                           <Select
                             onValueChange={field.onChange}
                             value={field.value}
                           >
                             <FormControl>
-                              <SelectTrigger dir="rtl" className="w-full">
+                              <SelectTrigger className="w-full">
                                 <SelectValue placeholder="اختر عمر العقار" />
                               </SelectTrigger>
                             </FormControl>
@@ -495,7 +487,7 @@ export default function CalculatorSection() {
                               )}
                             </SelectContent>
                           </Select>
-                          <FormMessage dir="rtl" />
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -506,16 +498,15 @@ export default function CalculatorSection() {
                       name="landArea"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel dir="rtl">مساحة الأرض</FormLabel>
+                          <FormLabel>مساحة الأرض</FormLabel>
                           <FormControl>
                             <Input
                               placeholder="مثال 300 م²"
                               {...field}
-                              dir="rtl"
                               type="text"
                             />
                           </FormControl>
-                          <FormMessage dir="rtl" />
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -526,16 +517,15 @@ export default function CalculatorSection() {
                       name="coveredArea"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel dir="rtl">مسطحات البناء</FormLabel>
+                          <FormLabel>مسطحات البناء</FormLabel>
                           <FormControl>
                             <Input
                               placeholder="مثال 200 م²"
                               {...field}
-                              dir="rtl"
                               type="text"
                             />
                           </FormControl>
-                          <FormMessage dir="rtl" />
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -544,7 +534,7 @@ export default function CalculatorSection() {
 
                 {/* Step 4: Result */}
                 {currentStep === 4 && calculatedPrice !== null && (
-                  <div className="space-y-6" dir="rtl">
+                  <div className="space-y-6">
                     <div className="text-center py-12">
                       <p className="text-5xl lg:text-6xl font-bold text-primary mb-8">
                         {calculatedPrice.toLocaleString("ar-SA")} ريال
@@ -593,19 +583,13 @@ export default function CalculatorSection() {
 
                 {/* Error Message */}
                 {calculationError && currentStep === 3 && (
-                  <div
-                    className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700"
-                    dir="rtl"
-                  >
+                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
                     <p className="text-sm font-medium">{calculationError}</p>
                   </div>
                 )}
 
                 {/* Navigation Buttons */}
-                <div
-                  className="flex justify-between items-center pt-6 flex-col lg:flex-row-reverse"
-                  dir="rtl"
-                >
+                <div className="flex justify-between items-center pt-6 flex-col lg:flex-row-reverse">
                   {currentStep < 4 && (
                     <Button
                       type="button"
