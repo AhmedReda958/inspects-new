@@ -1,0 +1,24 @@
+module.exports = {
+  apps: [
+    {
+      name: "inspects",
+      script: "npm",
+      args: "start",
+      cwd: __dirname,
+      instances: 2,
+      exec_mode: "cluster",
+      env: {
+        NODE_ENV: "production",
+        PORT: 3008,
+      },
+      error_file: "./logs/err.log",
+      out_file: "./logs/out.log",
+      log_file: "./logs/combined.log",
+      time: true,
+      max_memory_restart: "500M",
+      watch: false,
+      ignore_watch: ["node_modules", "logs", ".git"],
+    },
+  ],
+};
+

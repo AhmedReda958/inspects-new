@@ -80,6 +80,14 @@ interface PriceCalculationResponse {
   };
 }
 
+interface CalcConfig {
+  packages: Array<{ value: string; label: string }>;
+  cities: Array<{ value: string; label: string }>;
+  cityNeighborhoods: Record<string, string[]>;
+  propertyAges: Array<{ value: string; label: string }>;
+  inspectionPurposes: Array<{ value: string; label: string }>;
+}
+
 export default function CalculatorSection() {
   const [currentStep, setCurrentStep] = useState(1);
   const [calculatedPrice, setCalculatedPrice] = useState<number | null>(null);
@@ -90,9 +98,53 @@ export default function CalculatorSection() {
   const [availableNeighborhoods, setAvailableNeighborhoods] = useState<
     string[]
   >([]);
+  const [config, setConfig] = useState<CalcConfig | null>(null);
+  const [isLoadingConfig, setIsLoadingConfig] = useState(true);
   const searchParams = useSearchParams();
 
   const totalSteps = 4;
+
+  // Fetch calculator configuration on mount
+  useEffect(() => {
+    async function fetchConfig() {
+      try {
+        const response = await fetch("/api/calculator/config");
+        const data = await response.json();
+        if (data.success) {
+          setConfig(data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching calculator config:", error);
+        // Fallback to content.ts if API fails
+        setConfig({
+          packages: [
+            { value: "basic", label: "الباقة الأساسية" },
+            { value: "premium", label: "الباقة المميزة" },
+            { value: "vip", label: "باقة VIP" },
+          ],
+          cities: content.calculator.fields.city.options.map((c) => ({
+            value: c,
+            label: c,
+          })),
+          cityNeighborhoods: content.calculator.cityNeighborhoods,
+          propertyAges: content.calculator.fields.propertyAge.options.map(
+            (a) => ({
+              value: a,
+              label: a,
+            })
+          ),
+          inspectionPurposes:
+            content.calculator.fields.inspectionPurpose.options.map((p) => ({
+              value: p,
+              label: p,
+            })),
+        });
+      } finally {
+        setIsLoadingConfig(false);
+      }
+    }
+    fetchConfig();
+  }, []);
 
   const form = useForm<CalculatorFormValues>({
     resolver: zodResolver(calculatorSchema),
@@ -128,18 +180,15 @@ export default function CalculatorSection() {
   const selectedCity = form.watch("city");
 
   useEffect(() => {
-    if (selectedCity) {
-      const neighborhoods =
-        content.calculator.cityNeighborhoods[
-          selectedCity as keyof typeof content.calculator.cityNeighborhoods
-        ] || [];
+    if (selectedCity && config) {
+      const neighborhoods = config.cityNeighborhoods[selectedCity] || [];
       setAvailableNeighborhoods(neighborhoods);
       // Reset neighborhood when city changes
       form.setValue("neighborhood", "");
     } else {
       setAvailableNeighborhoods([]);
     }
-  }, [selectedCity, form]);
+  }, [selectedCity, config, form]);
 
   async function validateStep(step: number): Promise<boolean> {
     let fieldsToValidate: (keyof CalculatorFormValues)[] = [];
@@ -217,6 +266,36 @@ export default function CalculatorSection() {
     "بيانات العقار",
     "النتيجة",
   ];
+
+  // Show loading state while fetching config
+  if (isLoadingConfig) {
+    return (
+      <section
+        id="calculator"
+        className="min-h-screen py-20 md:py-32 bg-white relative flex items-center justify-center"
+      >
+        <div className="text-center">
+          <div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4" />
+          <p className="text-gray-600">جاري تحميل النموذج...</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (!config) {
+    return (
+      <section
+        id="calculator"
+        className="min-h-screen py-20 md:py-32 bg-white relative flex items-center justify-center"
+      >
+        <div className="text-center">
+          <p className="text-red-600">
+            حدث خطأ في تحميل النموذج. يرجى المحاولة لاحقاً.
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section
@@ -336,13 +415,11 @@ export default function CalculatorSection() {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="basic">
-                                الباقة الأساسية
-                              </SelectItem>
-                              <SelectItem value="premium">
-                                الباقة المميزة
-                              </SelectItem>
-                              <SelectItem value="vip">باقة VIP</SelectItem>
+                              {config.packages.map((pkg) => (
+                                <SelectItem key={pkg.value} value={pkg.value}>
+                                  {pkg.label}
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -367,13 +444,14 @@ export default function CalculatorSection() {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              {content.calculator.fields.inspectionPurpose.options.map(
-                                (option) => (
-                                  <SelectItem key={option} value={option}>
-                                    {option}
-                                  </SelectItem>
-                                )
-                              )}
+                              {config.inspectionPurposes.map((purpose) => (
+                                <SelectItem
+                                  key={purpose.value}
+                                  value={purpose.value}
+                                >
+                                  {purpose.label}
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -403,13 +481,11 @@ export default function CalculatorSection() {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              {content.calculator.fields.city.options.map(
-                                (option) => (
-                                  <SelectItem key={option} value={option}>
-                                    {option}
-                                  </SelectItem>
-                                )
-                              )}
+                              {config.cities.map((city) => (
+                                <SelectItem key={city.value} value={city.value}>
+                                  {city.label}
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -478,13 +554,11 @@ export default function CalculatorSection() {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              {content.calculator.fields.propertyAge.options.map(
-                                (option) => (
-                                  <SelectItem key={option} value={option}>
-                                    {option}
-                                  </SelectItem>
-                                )
-                              )}
+                              {config.propertyAges.map((age) => (
+                                <SelectItem key={age.value} value={age.value}>
+                                  {age.label}
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                           <FormMessage />

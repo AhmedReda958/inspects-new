@@ -1,0 +1,260 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== ADMIN SYSTEM ====================
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  password     String
+  name         String
+  role         String   @default("admin") // admin, superadmin
+  isActive     Boolean  @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  auditLogs    AuditLog[]
+  
+  @@map("admin_users")
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  userId      String
+  user        AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action      String   // CREATE, UPDATE, DELETE
+  tableName   String
+  recordId    String?
+  oldValues   Json?
+  newValues   Json?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+  
+  @@map("audit_logs")
+  @@index([userId])
+  @@index([tableName])
+  @@index([createdAt])
+}
+
+// ==================== PACKAGE CONFIGURATION ====================
+
+model Package {
+  id                String   @id @default(cuid())
+  name              String   @unique // "basic", "premium", "vip"
+  nameAr            String   // Arabic name
+  description       String?
+  basePrice         Decimal  @db.Decimal(10, 2) // Base price for properties <= 250m²
+  isActive          Boolean  @default(true)
+  displayOrder      Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  areaPriceTiers    AreaPriceTier[]
+  submissions       CalculatorSubmission[]
+  
+  @@map("packages")
+}
+
+// ==================== LOCATION CONFIGURATION ====================
+
+model City {
+  id            String   @id @default(cuid())
+  name          String   @unique
+  nameEn        String?
+  isActive      Boolean  @default(true)
+  displayOrder  Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  neighborhoods Neighborhood[]
+  submissions   CalculatorSubmission[]
+  
+  @@map("cities")
+}
+
+model Neighborhood {
+  id                String   @id @default(cuid())
+  cityId            String
+  city              City     @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  name              String
+  nameEn            String?
+  level             String   // "A", "B", "C", "D" - categorization level
+  multiplier        Decimal  @db.Decimal(5, 4) // Neighborhood multiplier factor
+  isActive          Boolean  @default(true)
+  applyAboveArea    Int      @default(500) // Apply multiplier only above this area (default 500m²)
+  displayOrder      Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  submissions       CalculatorSubmission[]
+  
+  @@unique([cityId, name])
+  @@map("neighborhoods")
+  @@index([cityId])
+  @@index([level])
+}
+
+// ==================== PRICING CONFIGURATION ====================
+
+model AreaPriceTier {
+  id            String   @id @default(cuid())
+  packageId     String
+  package       Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  minArea       Decimal  @db.Decimal(10, 2) // Minimum area (inclusive)
+  maxArea       Decimal? @db.Decimal(10, 2) // Maximum area (inclusive), null means unlimited
+  pricePerSqm   Decimal  @db.Decimal(10, 2) // Price per square meter
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@map("area_price_tiers")
+  @@index([packageId])
+}
+
+// ==================== MULTIPLIERS CONFIGURATION ====================
+
+model PropertyAgeMultiplier {
+  id            String   @id @default(cuid())
+  ageRange      String   @unique // e.g., "أقل من سنة", "من 1 إلى 3 سنوات"
+  ageRangeEn    String?
+  multiplier    Decimal  @db.Decimal(5, 4) // Multiplier factor
+  displayOrder  Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  submissions   CalculatorSubmission[]
+  
+  @@map("property_age_multipliers")
+}
+
+model InspectionPurposeMultiplier {
+  id            String   @id @default(cuid())
+  purpose       String   @unique // e.g., "قبل الشراء", "قبل البيع"
+  purposeEn     String?
+  multiplier    Decimal  @db.Decimal(5, 4) // Multiplier factor
+  displayOrder  Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  submissions   CalculatorSubmission[]
+  
+  @@map("inspection_purpose_multipliers")
+}
+
+// ==================== GLOBAL SETTINGS ====================
+
+model CalculationRule {
+  id                    String   @id @default(cuid())
+  key                   String   @unique // e.g., "base_area_threshold", "neighborhood_threshold"
+  value                 String   // Stored as string, parsed as needed
+  valueType             String   // "number", "boolean", "string"
+  description           String
+  category              String   @default("general") // "general", "pricing", "thresholds"
+  isActive              Boolean  @default(true)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  @@map("calculation_rules")
+}
+
+model VatSetting {
+  id            String   @id @default(cuid())
+  percentage    Decimal  @db.Decimal(5, 2) // e.g., 15.00 for 15%
+  isActive      Boolean  @default(true)
+  effectiveFrom DateTime @default(now())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@map("vat_settings")
+}
+
+// ==================== LEAD MANAGEMENT ====================
+
+model CalculatorSubmission {
+  id                    String   @id @default(cuid())
+  
+  // Personal Information
+  firstName             String
+  familyName            String
+  mobileNumber          String
+  email                 String?
+  
+  // Property Information
+  cityId                String?
+  city                  City?    @relation(fields: [cityId], references: [id], onDelete: SetNull)
+  neighborhoodId        String?
+  neighborhood          Neighborhood? @relation(fields: [neighborhoodId], references: [id], onDelete: SetNull)
+  landArea              Decimal  @db.Decimal(10, 2)
+  coveredArea           Decimal  @db.Decimal(10, 2)
+  numberOfLevels        Int?
+  
+  // Inspection Details
+  packageId             String?
+  package               Package? @relation(fields: [packageId], references: [id], onDelete: SetNull)
+  propertyAgeId         String?
+  propertyAge           PropertyAgeMultiplier? @relation(fields: [propertyAgeId], references: [id], onDelete: SetNull)
+  inspectionPurposeId   String?
+  inspectionPurpose     InspectionPurposeMultiplier? @relation(fields: [inspectionPurposeId], references: [id], onDelete: SetNull)
+  
+  // Calculation Results
+  basePrice             Decimal  @db.Decimal(10, 2)
+  priceBeforeVat        Decimal  @db.Decimal(10, 2)
+  vatAmount             Decimal  @db.Decimal(10, 2)
+  finalPrice            Decimal  @db.Decimal(10, 2)
+  calculationBreakdown  Json     // Detailed breakdown of calculation steps
+  
+  // Lead Management
+  status                String   @default("new") // new, contacted, qualified, converted, rejected
+  notes                 String?
+  assignedTo            String?
+  followUpDate          DateTime?
+  
+  // Metadata
+  ipAddress             String?
+  userAgent             String?
+  referrer              String?
+  utmSource             String?
+  utmMedium             String?
+  utmCampaign           String?
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  notifications         LeadNotification[]
+  
+  @@map("calculator_submissions")
+  @@index([status])
+  @@index([createdAt])
+  @@index([cityId])
+  @@index([packageId])
+}
+
+model LeadNotification {
+  id              String   @id @default(cuid())
+  submissionId    String
+  submission      CalculatorSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  type            String   // "email", "whatsapp", "sms"
+  recipient       String
+  status          String   @default("pending") // pending, sent, failed
+  sentAt          DateTime?
+  failureReason   String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@map("lead_notifications")
+  @@index([submissionId])
+  @@index([status])
+}
