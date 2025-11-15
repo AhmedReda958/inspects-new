@@ -42,7 +42,12 @@ export function TierList({
         />
       )}
       {!showTierForm && (
-        <Button variant="outline" size="sm" onClick={onAddTier} className="w-full">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onAddTier}
+          className="w-full"
+        >
           <Plus className="h-3 w-3 mr-1" />
           Add Tier
         </Button>
@@ -94,4 +99,3 @@ export function TierList({
     </div>
   );
 }
-

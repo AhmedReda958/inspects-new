@@ -74,7 +74,7 @@ export function PackagesPage() {
               key={pkg.id}
               pkg={pkg}
               expanded={expandedPackages.has(pkg.id)}
-              showTierForm={showTierForm === pkg.id}
+              showTierForm={showTierForm}
               editingTier={editingTier}
               tierFormData={tierFormData}
               setTierFormData={setTierFormData}
@@ -93,4 +93,3 @@ export function PackagesPage() {
     </>
   );
 }
-

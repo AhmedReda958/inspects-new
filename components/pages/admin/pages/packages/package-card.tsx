@@ -56,7 +56,11 @@ export function PackageCard({
             <Button variant="outline" size="sm" onClick={() => onEdit(pkg)}>
               <Edit className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="sm" onClick={() => onDelete(pkg.id)}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onDelete(pkg.id)}
+            >
               <Trash2 className="h-4 w-4" />
             </Button>
           </div>
@@ -72,9 +76,7 @@ export function PackageCard({
           </div>
           <div>
             <span className="text-sm text-gray-600">Status: </span>
-            <span
-              className={pkg.isActive ? "text-green-600" : "text-red-600"}
-            >
+            <span className={pkg.isActive ? "text-green-600" : "text-red-600"}>
               {pkg.isActive ? "Active" : "Inactive"}
             </span>
           </div>
@@ -95,7 +97,9 @@ export function PackageCard({
               <TierList
                 tiers={pkg.areaPriceTiers || []}
                 showTierForm={showTierForm === pkg.id}
-                editingTier={editingTier?.packageId === pkg.id ? editingTier.tier : null}
+                editingTier={
+                  editingTier?.packageId === pkg.id ? editingTier.tier : null
+                }
                 tierFormData={tierFormData}
                 setTierFormData={setTierFormData}
                 onAddTier={() => onAddTier(pkg.id)}
@@ -111,4 +115,3 @@ export function PackageCard({
     </Card>
   );
 }
-
