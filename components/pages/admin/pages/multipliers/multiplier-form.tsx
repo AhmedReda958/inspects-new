@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import type { AgeFormData, PurposeFormData } from "@/types/admin/multipliers";
 
 interface MultiplierFormProps {
@@ -121,18 +122,16 @@ export function MultiplierForm({
             </div>
 
             <div className="space-y-2 md:col-span-2">
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
+              <div className="flex items-center gap-2">
+                <Checkbox
                   id={`${type}-isActive`}
                   checked={formData.isActive}
-                  onChange={(e) =>
+                  onCheckedChange={(checked) =>
                     setFormData({
                       ...formData,
-                      isActive: e.target.checked,
+                      isActive: checked as boolean,
                     } as AgeFormData | PurposeFormData)
                   }
-                  className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                 />
                 <Label htmlFor={`${type}-isActive`} className="cursor-pointer">
                   Active

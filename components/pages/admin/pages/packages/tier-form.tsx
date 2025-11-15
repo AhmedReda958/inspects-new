@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import type { Tier, TierFormData } from "@/types/admin/packages";
 
 interface TierFormProps {
@@ -76,15 +77,13 @@ export function TierForm({
             />
           </div>
           <div className="space-y-1 flex items-end">
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
+            <div className="flex items-center gap-2">
+              <Checkbox
                 id="tier-isActive"
                 checked={formData.isActive}
-                onChange={(e) =>
-                  setFormData({ ...formData, isActive: e.target.checked })
+                onCheckedChange={(checked) =>
+                  setFormData({ ...formData, isActive: checked as boolean })
                 }
-                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
               />
               <Label htmlFor="tier-isActive" className="text-xs cursor-pointer">
                 Active
@@ -110,4 +109,3 @@ export function TierForm({
     </Card>
   );
 }
-
