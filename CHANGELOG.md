@@ -110,7 +110,7 @@ All notable changes to the Inspectex Calculator Backend project.
 ## Future Enhancements
 
 ### Planned Features
-- Email notifications for new leads
+- ✅ Email notifications for new leads (Implemented)
 - WhatsApp API integration for notifications
 - Export leads to CSV/Excel
 - Advanced reporting and analytics

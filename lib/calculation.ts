@@ -1,5 +1,6 @@
 import prisma from "./db";
 import { Decimal } from "@prisma/client/runtime/library";
+import { sendNewLeadNotification } from "./notifications";
 
 export interface CalculationInput {
   firstName: string;
@@ -382,6 +383,17 @@ export async function saveCalculatorSubmission(
       utmCampaign: metadata?.utmCampaign,
       status: "new",
     },
+    include: {
+      city: true,
+      neighborhood: true,
+      package: true,
+    },
+  });
+
+  // Send email notification asynchronously (don't block the response)
+  // Errors are logged in the notification function
+  sendNewLeadNotification(submission).catch((error) => {
+    console.error("Failed to send notification:", error);
   });
 
   return submission;

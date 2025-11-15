@@ -81,12 +81,19 @@ ADMIN_EMAIL="admin@inspectex.com"
 NEXT_PUBLIC_APP_URL="https://yourdomain.com"
 NODE_ENV="production"
 
-# Optional: Email Configuration
-SMTP_HOST="smtp.gmail.com"
+# Email Configuration (Required for new lead notifications)
+# For Plesk servers, use your domain email account:
+SMTP_HOST="mail.yourdomain.com"
 SMTP_PORT="587"
-SMTP_USER="your-email@gmail.com"
-SMTP_PASSWORD="your-app-password"
-SMTP_FROM="noreply@inspectex.com"
+SMTP_USER="noreply@yourdomain.com"
+SMTP_PASSWORD="your-email-account-password"
+SMTP_FROM="noreply@yourdomain.com"
+
+# Note: For Plesk email servers:
+# - SMTP_HOST is usually "mail.yourdomain.com" or your server hostname
+# - SMTP_PORT: 587 (TLS/STARTTLS) or 465 (SSL) or 25 (plain)
+# - Create a dedicated email account in Plesk for system notifications
+# - Use the full email address as SMTP_USER
 ```
 
 ### Setup Database
