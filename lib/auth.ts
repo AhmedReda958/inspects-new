@@ -211,3 +211,117 @@ export async function createAuditLog(params: {
     },
   });
 }
+
+/**
+ * Generate secure random token for password reset
+ * Uses Web Crypto API for Edge runtime compatibility
+ */
+export function generateResetToken(): string {
+  // Use Web Crypto API which is available in both Node.js 18+ and Edge runtime
+  // globalThis.crypto is the standard way to access Web Crypto API
+  const webCrypto = globalThis.crypto;
+
+  if (webCrypto && webCrypto.getRandomValues) {
+    // Web Crypto API (Edge runtime compatible)
+    const array = new Uint8Array(32);
+    webCrypto.getRandomValues(array);
+    return Array.from(array, (byte) => byte.toString(16).padStart(2, "0")).join(
+      ""
+    );
+  }
+
+  throw new Error("Web Crypto API is not available");
+}
+
+/**
+ * Request password reset - generates token and stores it in database
+ * Returns true if email exists (for security, always return true)
+ */
+export async function requestPasswordReset(email: string): Promise<boolean> {
+  const user = await prisma.adminUser.findUnique({
+    where: { email, isActive: true },
+  });
+
+  // Always return true for security (don't reveal if email exists)
+  if (!user) {
+    return true;
+  }
+
+  // Generate reset token
+  const resetToken = generateResetToken();
+  const resetTokenExpiresAt = new Date();
+  resetTokenExpiresAt.setHours(resetTokenExpiresAt.getHours() + 1); // 1 hour expiration
+
+  // Store token in database
+  await prisma.adminUser.update({
+    where: { id: user.id },
+    data: {
+      resetToken,
+      resetTokenExpiresAt,
+    },
+  });
+
+  // Send password reset email (dynamic import to avoid Edge runtime issues)
+  try {
+    // Dynamic import to avoid loading nodemailer in Edge runtime
+    const { sendPasswordResetEmail } = await import("./notifications");
+    await sendPasswordResetEmail(user.email, resetToken);
+  } catch (error) {
+    console.error("Failed to send password reset email:", error);
+    // Still return true to not reveal if email exists
+  }
+
+  return true;
+}
+
+/**
+ * Validate reset token - checks if token exists and hasn't expired
+ */
+export async function validateResetToken(
+  token: string
+): Promise<{ valid: boolean; userId?: string }> {
+  const user = await prisma.adminUser.findUnique({
+    where: { resetToken: token },
+    select: { id: true, resetTokenExpiresAt: true },
+  });
+
+  if (!user || !user.resetTokenExpiresAt) {
+    return { valid: false };
+  }
+
+  // Check if token has expired
+  if (new Date() > user.resetTokenExpiresAt) {
+    return { valid: false };
+  }
+
+  return { valid: true, userId: user.id };
+}
+
+/**
+ * Reset password using token
+ */
+export async function resetPassword(
+  token: string,
+  newPassword: string
+): Promise<{ success: boolean; error?: string }> {
+  // Validate token
+  const validation = await validateResetToken(token);
+  if (!validation.valid || !validation.userId) {
+    return { success: false, error: "Invalid or expired reset token" };
+  }
+
+  // Hash new password
+  const hashedPassword = await hashPassword(newPassword);
+
+  // Update password and clear reset token
+  await prisma.adminUser.update({
+    where: { id: validation.userId },
+    data: {
+      password: hashedPassword,
+      resetToken: null,
+      resetTokenExpiresAt: null,
+    },
+  });
+
+  return { success: true };
+}

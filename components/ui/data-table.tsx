@@ -24,7 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export interface DataTableFilter<TData> {
+export interface DataTableFilter {
   columnId: string;
   label: string;
   options: Array<{ label: string; value: string }>;
@@ -39,7 +39,7 @@ interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];
   searchPlaceholder?: string;
   enableSearch?: boolean;
-  filters?: DataTableFilter<TData>[];
+  filters?: DataTableFilter[];
   emptyMessage?: string;
   pageSize?: number;
   className?: string;
@@ -128,8 +128,8 @@ export function DataTable<TData>({
         pageIndex: useServerPagination ? serverPagination.page - 1 : 0,
       },
     },
-    manualPagination: useServerPagination,
-    manualFiltering: useServerPagination,
+    manualPagination: !!useServerPagination,
+    manualFiltering: !!useServerPagination,
   });
 
   const hasFilters = filters.length > 0;

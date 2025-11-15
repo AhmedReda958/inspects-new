@@ -16,7 +16,7 @@ const neighborhoodSchema = z.object({
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getAuthUser(request);
@@ -24,8 +24,9 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const neighborhood = await prisma.neighborhood.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: { city: true },
     });
 
@@ -42,7 +43,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getAuthUser(request);
@@ -50,18 +51,19 @@ export async function PUT(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const body = await request.json();
     const validation = neighborhoodSchema.safeParse(body);
 
     if (!validation.success) {
       return NextResponse.json(
-        { error: "Validation failed", details: validation.error.errors },
+        { error: "Validation failed", details: validation.error.issues },
         { status: 400 }
       );
     }
 
     const oldNeighborhood = await prisma.neighborhood.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!oldNeighborhood) {
@@ -69,7 +71,7 @@ export async function PUT(
     }
 
     const updatedNeighborhood = await prisma.neighborhood.update({
-      where: { id: params.id },
+      where: { id },
       data: validation.data,
     });
 
@@ -93,7 +95,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getAuthUser(request);
@@ -101,8 +103,9 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const neighborhood = await prisma.neighborhood.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!neighborhood) {
@@ -110,7 +113,7 @@ export async function DELETE(
     }
 
     const deletedNeighborhood = await prisma.neighborhood.update({
-      where: { id: params.id },
+      where: { id },
       data: { isActive: false },
     });
 
@@ -118,7 +121,7 @@ export async function DELETE(
       userId: user.id,
       action: "DELETE",
       tableName: "neighborhoods",
-      recordId: params.id,
+      recordId: id,
       oldValues: neighborhood,
       ipAddress: request.headers.get("x-forwarded-for")?.split(",")[0] || undefined,
       userAgent: request.headers.get("user-agent") || undefined,

@@ -12,7 +12,7 @@ const updateLeadSchema = z.object({
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getAuthUser(request);
@@ -20,8 +20,9 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const submission = await prisma.calculatorSubmission.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         city: true,
         neighborhood: true,
@@ -45,7 +46,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getAuthUser(request);
@@ -53,12 +54,13 @@ export async function PUT(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const body = await request.json();
     const validation = updateLeadSchema.safeParse(body);
 
     if (!validation.success) {
       return NextResponse.json(
-        { error: "Validation failed", details: validation.error.errors },
+        { error: "Validation failed", details: validation.error.issues },
         { status: 400 }
       );
     }
@@ -72,7 +74,7 @@ export async function PUT(
     if (data.followUpDate) updateData.followUpDate = new Date(data.followUpDate);
 
     const updatedLead = await prisma.calculatorSubmission.update({
-      where: { id: params.id },
+      where: { id },
       data: updateData,
     });
 

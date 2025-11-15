@@ -7,11 +7,16 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { AgeFormData, PurposeFormData } from "@/types/admin/multipliers";
 
+type SetFormDataFunction = 
+  | ((data: AgeFormData) => void)
+  | ((data: PurposeFormData) => void)
+  | ((data: AgeFormData | PurposeFormData) => void);
+
 interface MultiplierFormProps {
   type: "age" | "purpose";
   editing: boolean;
   formData: AgeFormData | PurposeFormData;
-  setFormData: (data: AgeFormData | PurposeFormData) => void;
+  setFormData: SetFormDataFunction;
   onSubmit: (e: React.FormEvent) => void;
   onCancel: () => void;
 }
@@ -52,12 +57,19 @@ export function MultiplierForm({
                     ? (formData as AgeFormData).ageRange
                     : (formData as PurposeFormData).purpose
                 }
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    [isAge ? "ageRange" : "purpose"]: e.target.value,
-                  } as AgeFormData | PurposeFormData)
-                }
+                onChange={(e) => {
+                  if (isAge) {
+                    (setFormData as (data: AgeFormData) => void)({
+                      ...(formData as AgeFormData),
+                      ageRange: e.target.value,
+                    });
+                  } else {
+                    (setFormData as (data: PurposeFormData) => void)({
+                      ...(formData as PurposeFormData),
+                      purpose: e.target.value,
+                    });
+                  }
+                }}
                 placeholder={isAge ? "أقل من سنة" : "قبل الشراء"}
                 required
               />
@@ -74,12 +86,19 @@ export function MultiplierForm({
                     ? (formData as AgeFormData).ageRangeEn
                     : (formData as PurposeFormData).purposeEn
                 }
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    [isAge ? "ageRangeEn" : "purposeEn"]: e.target.value,
-                  } as AgeFormData | PurposeFormData)
-                }
+                onChange={(e) => {
+                  if (isAge) {
+                    (setFormData as (data: AgeFormData) => void)({
+                      ...(formData as AgeFormData),
+                      ageRangeEn: e.target.value,
+                    });
+                  } else {
+                    (setFormData as (data: PurposeFormData) => void)({
+                      ...(formData as PurposeFormData),
+                      purposeEn: e.target.value,
+                    });
+                  }
+                }}
                 placeholder={isAge ? "Less than 1 year" : "Before Purchase"}
               />
             </div>
@@ -91,11 +110,19 @@ export function MultiplierForm({
                 type="number"
                 step="0.01"
                 value={formData.multiplier}
-                onChange={(e) =>
-                  setFormData({ ...formData, multiplier: e.target.value } as
-                    | AgeFormData
-                    | PurposeFormData)
-                }
+                onChange={(e) => {
+                  if (isAge) {
+                    (setFormData as (data: AgeFormData) => void)({
+                      ...(formData as AgeFormData),
+                      multiplier: e.target.value,
+                    });
+                  } else {
+                    (setFormData as (data: PurposeFormData) => void)({
+                      ...(formData as PurposeFormData),
+                      multiplier: e.target.value,
+                    });
+                  }
+                }}
                 placeholder="1.00"
                 required
               />
@@ -111,12 +138,19 @@ export function MultiplierForm({
                 id={`${type}-displayOrder`}
                 type="number"
                 value={formData.displayOrder}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    displayOrder: parseInt(e.target.value),
-                  } as AgeFormData | PurposeFormData)
-                }
+                onChange={(e) => {
+                  if (isAge) {
+                    (setFormData as (data: AgeFormData) => void)({
+                      ...(formData as AgeFormData),
+                      displayOrder: parseInt(e.target.value),
+                    });
+                  } else {
+                    (setFormData as (data: PurposeFormData) => void)({
+                      ...(formData as PurposeFormData),
+                      displayOrder: parseInt(e.target.value),
+                    });
+                  }
+                }}
                 required
               />
             </div>
@@ -126,12 +160,19 @@ export function MultiplierForm({
                 <Checkbox
                   id={`${type}-isActive`}
                   checked={formData.isActive}
-                  onCheckedChange={(checked) =>
-                    setFormData({
-                      ...formData,
-                      isActive: checked as boolean,
-                    } as AgeFormData | PurposeFormData)
-                  }
+                  onCheckedChange={(checked) => {
+                    if (isAge) {
+                      (setFormData as (data: AgeFormData) => void)({
+                        ...(formData as AgeFormData),
+                        isActive: checked as boolean,
+                      });
+                    } else {
+                      (setFormData as (data: PurposeFormData) => void)({
+                        ...(formData as PurposeFormData),
+                        isActive: checked as boolean,
+                      });
+                    }
+                  }}
                 />
                 <Label htmlFor={`${type}-isActive`} className="cursor-pointer">
                   Active

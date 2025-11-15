@@ -12,7 +12,7 @@ const citySchema = z.object({
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getAuthUser(request);
@@ -20,8 +20,9 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const city = await prisma.city.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: { neighborhoods: true },
     });
 
@@ -38,7 +39,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getAuthUser(request);
@@ -46,18 +47,19 @@ export async function PUT(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const body = await request.json();
     const validation = citySchema.safeParse(body);
 
     if (!validation.success) {
       return NextResponse.json(
-        { error: "Validation failed", details: validation.error.errors },
+        { error: "Validation failed", details: validation.error.issues },
         { status: 400 }
       );
     }
 
     const oldCity = await prisma.city.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!oldCity) {
@@ -65,7 +67,7 @@ export async function PUT(
     }
 
     const updatedCity = await prisma.city.update({
-      where: { id: params.id },
+      where: { id },
       data: validation.data,
     });
 
@@ -89,7 +91,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getAuthUser(request);
@@ -97,8 +99,9 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const city = await prisma.city.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!city) {
@@ -106,7 +109,7 @@ export async function DELETE(
     }
 
     const deletedCity = await prisma.city.update({
-      where: { id: params.id },
+      where: { id },
       data: { isActive: false },
     });
 
@@ -114,7 +117,7 @@ export async function DELETE(
       userId: user.id,
       action: "DELETE",
       tableName: "cities",
-      recordId: params.id,
+      recordId: id,
       oldValues: city,
       ipAddress: request.headers.get("x-forwarded-for")?.split(",")[0] || undefined,
       userAgent: request.headers.get("user-agent") || undefined,

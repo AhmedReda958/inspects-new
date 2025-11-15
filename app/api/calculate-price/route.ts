@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error: "خطأ في البيانات المدخلة",
-          details: validation.error.errors,
+          details: validation.error.issues,
         },
         { status: 400 }
       );

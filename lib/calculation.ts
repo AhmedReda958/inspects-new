@@ -1,5 +1,4 @@
 import prisma from "./db";
-import { Decimal } from "@prisma/client/runtime/library";
 import { sendNewLeadNotification } from "./notifications";
 
 export interface CalculationInput {
@@ -82,10 +81,6 @@ export async function calculateInspectionCost(
   const neighborhoodThreshold = await getCalculationRule(
     "neighborhood_multiplier_threshold",
     500
-  );
-  const basicPackageExcessAreaPrice = await getCalculationRule(
-    "basic_package_excess_area_price",
-    4
   );
 
   // 3. Fetch property age multiplier
@@ -392,7 +387,11 @@ export async function saveCalculatorSubmission(
 
   // Send email notification asynchronously (don't block the response)
   // Errors are logged in the notification function
-  sendNewLeadNotification(submission).catch((error) => {
+  // Convert Decimal to number for notification
+  sendNewLeadNotification({
+    ...submission,
+    finalPrice: Number(submission.finalPrice),
+  }).catch((error) => {
     console.error("Failed to send notification:", error);
   });
 

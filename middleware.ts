@@ -8,7 +8,11 @@ const protectedPaths = ["/admin", "/api/admin"];
 // Paths that should skip auth (login page, public API)
 const publicPaths = [
   "/admin/login",
+  "/admin/forgot-password",
+  "/admin/reset-password",
   "/api/admin/auth/login",
+  "/api/admin/auth/forgot-password",
+  "/api/admin/auth/reset-password",
   "/api/calculate-price",
   "/api/calculator/config",
 ];

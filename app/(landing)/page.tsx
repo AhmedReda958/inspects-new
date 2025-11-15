@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import HeroSection from "@/components/pages/landing/sections/hero";
 import ServiceDescriptionSection from "@/components/pages/landing/sections/service-description";
 import ProblemsGallerySection from "@/components/pages/landing/sections/problems-gallery";
@@ -33,9 +34,13 @@ const Page = () => {
       <FeaturedClients />
       <TestimonialsSection />
       <ReportSampleSection />
-      <PackagesSection />
+      <Suspense fallback={<div>Loading packages...</div>}>
+        <PackagesSection />
+      </Suspense>
       <VideoSection />
-      <CalculatorSection />
+      <Suspense fallback={<div>Loading calculator...</div>}>
+        <CalculatorSection />
+      </Suspense>
       <FaqSection />
       <Footer />
     </div>

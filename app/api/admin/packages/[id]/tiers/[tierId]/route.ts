@@ -20,7 +20,7 @@ const tierSchema = z.object({
 // GET - Get single tier
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string; tierId: string } }
+  { params }: { params: Promise<{ id: string; tierId: string }> }
 ) {
   try {
     const user = await getAuthUser(request);
@@ -28,8 +28,9 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id, tierId } = await params;
     const tier = await prisma.areaPriceTier.findUnique({
-      where: { id: params.tierId },
+      where: { id: tierId },
       include: { package: true },
     });
 
@@ -37,7 +38,7 @@ export async function GET(
       return NextResponse.json({ error: "Tier not found" }, { status: 404 });
     }
 
-    if (tier.packageId !== params.id) {
+    if (tier.packageId !== id) {
       return NextResponse.json(
         { error: "Tier does not belong to this package" },
         { status: 400 }
@@ -57,7 +58,7 @@ export async function GET(
 // PUT - Update tier
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string; tierId: string } }
+  { params }: { params: Promise<{ id: string; tierId: string }> }
 ) {
   try {
     const user = await getAuthUser(request);
@@ -65,15 +66,16 @@ export async function PUT(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id, tierId } = await params;
     const oldTier = await prisma.areaPriceTier.findUnique({
-      where: { id: params.tierId },
+      where: { id: tierId },
     });
 
     if (!oldTier) {
       return NextResponse.json({ error: "Tier not found" }, { status: 404 });
     }
 
-    if (oldTier.packageId !== params.id) {
+    if (oldTier.packageId !== id) {
       return NextResponse.json(
         { error: "Tier does not belong to this package" },
         { status: 400 }
@@ -85,7 +87,7 @@ export async function PUT(
 
     if (!validation.success) {
       return NextResponse.json(
-        { error: "Validation failed", details: validation.error.errors },
+        { error: "Validation failed", details: validation.error.issues },
         { status: 400 }
       );
     }
@@ -97,9 +99,9 @@ export async function PUT(
     ) {
       const existingTiers = await prisma.areaPriceTier.findMany({
         where: {
-          packageId: params.id,
+          packageId: id,
           isActive: true,
-          id: { not: params.tierId },
+          id: { not: tierId },
         },
       });
 
@@ -135,7 +137,7 @@ export async function PUT(
     }
 
     const updatedTier = await prisma.areaPriceTier.update({
-      where: { id: params.tierId },
+      where: { id: tierId },
       data: validation.data,
     });
 
@@ -164,7 +166,7 @@ export async function PUT(
 // DELETE - Delete tier
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string; tierId: string } }
+  { params }: { params: Promise<{ id: string; tierId: string }> }
 ) {
   try {
     const user = await getAuthUser(request);
@@ -172,15 +174,16 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id, tierId } = await params;
     const tier = await prisma.areaPriceTier.findUnique({
-      where: { id: params.tierId },
+      where: { id: tierId },
     });
 
     if (!tier) {
       return NextResponse.json({ error: "Tier not found" }, { status: 404 });
     }
 
-    if (tier.packageId !== params.id) {
+    if (tier.packageId !== id) {
       return NextResponse.json(
         { error: "Tier does not belong to this package" },
         { status: 400 }
@@ -188,14 +191,14 @@ export async function DELETE(
     }
 
     await prisma.areaPriceTier.delete({
-      where: { id: params.tierId },
+      where: { id: tierId },
     });
 
     await createAuditLog({
       userId: user.id,
       action: "DELETE",
       tableName: "area_price_tiers",
-      recordId: params.tierId,
+      recordId: tierId,
       oldValues: tier,
       ipAddress:
         request.headers.get("x-forwarded-for")?.split(",")[0] || undefined,

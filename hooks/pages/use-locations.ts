@@ -98,7 +98,7 @@ export function useLocations() {
       name: neighborhood.name,
       nameEn: neighborhood.nameEn || "",
       level: neighborhood.level,
-      multiplier: hasCustomMultiplier
+      multiplier: hasCustomMultiplier && neighborhood.multiplier
         ? neighborhood.multiplier.toString()
         : null,
       useCustomMultiplier: hasCustomMultiplier,

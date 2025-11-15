@@ -226,7 +226,7 @@ export function LeadsTable({ leads, pagination }: LeadsTableProps) {
     [router]
   );
 
-  const statusFilter: DataTableFilter<Lead> = {
+  const statusFilter: DataTableFilter = {
     columnId: "status",
     label: "Status",
     options: [
@@ -238,7 +238,7 @@ export function LeadsTable({ leads, pagination }: LeadsTableProps) {
     ],
     defaultValue: "all",
     initialValue: statusFilterFromUrl,
-    onFilterChange: (value) => {
+    onFilterChange: (value: string | null) => {
       updateSearchParams({ status: value });
     },
   };

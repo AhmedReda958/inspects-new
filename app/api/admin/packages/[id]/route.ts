@@ -15,7 +15,7 @@ const packageSchema = z.object({
 // GET - Get single package
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getAuthUser(request);
@@ -23,8 +23,9 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const pkg = await prisma.package.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         areaPriceTiers: {
           orderBy: { minArea: "asc" },
@@ -46,7 +47,7 @@ export async function GET(
 // PUT - Update package
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getAuthUser(request);
@@ -54,19 +55,20 @@ export async function PUT(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const body = await request.json();
     const validation = packageSchema.safeParse(body);
 
     if (!validation.success) {
       return NextResponse.json(
-        { error: "Validation failed", details: validation.error.errors },
+        { error: "Validation failed", details: validation.error.issues },
         { status: 400 }
       );
     }
 
     // Get old values for audit
     const oldPackage = await prisma.package.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!oldPackage) {
@@ -74,7 +76,7 @@ export async function PUT(
     }
 
     const updatedPackage = await prisma.package.update({
-      where: { id: params.id },
+      where: { id },
       data: validation.data,
     });
 
@@ -100,7 +102,7 @@ export async function PUT(
 // DELETE - Delete package
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getAuthUser(request);
@@ -108,9 +110,10 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     // Get package before deletion for audit
     const pkg = await prisma.package.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!pkg) {
@@ -119,7 +122,7 @@ export async function DELETE(
 
     // Soft delete by setting isActive to false instead of hard delete
     const deletedPackage = await prisma.package.update({
-      where: { id: params.id },
+      where: { id },
       data: { isActive: false },
     });
 
@@ -128,7 +131,7 @@ export async function DELETE(
       userId: user.id,
       action: "DELETE",
       tableName: "packages",
-      recordId: params.id,
+      recordId: id,
       oldValues: pkg,
       ipAddress: request.headers.get("x-forwarded-for")?.split(",")[0] || undefined,
       userAgent: request.headers.get("user-agent") || undefined,

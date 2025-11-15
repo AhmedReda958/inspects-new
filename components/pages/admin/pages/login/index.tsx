@@ -32,13 +32,6 @@ export function LoginPage() {
           loading={loading}
           onSubmit={handleSubmit}
         />
-
-        <div className="mt-6 text-center text-sm ">
-          <p>Default credentials:</p>
-          <p className="font-mono text-xs mt-1">
-            admin@inspectex.com / admin123
-          </p>
-        </div>
       </Card>
     </div>
   );

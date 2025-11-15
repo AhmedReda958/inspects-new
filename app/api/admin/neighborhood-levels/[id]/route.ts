@@ -14,7 +14,7 @@ const levelSchema = z.object({
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getAuthUser(request);
@@ -22,8 +22,9 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const level = await prisma.neighborhoodLevel.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!level) {
@@ -39,7 +40,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getAuthUser(request);
@@ -47,18 +48,19 @@ export async function PUT(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const body = await request.json();
     const validation = levelSchema.safeParse(body);
 
     if (!validation.success) {
       return NextResponse.json(
-        { error: "Validation failed", details: validation.error.errors },
+        { error: "Validation failed", details: validation.error.issues },
         { status: 400 }
       );
     }
 
     const oldLevel = await prisma.neighborhoodLevel.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!oldLevel) {
@@ -66,7 +68,7 @@ export async function PUT(
     }
 
     const updatedLevel = await prisma.neighborhoodLevel.update({
-      where: { id: params.id },
+      where: { id },
       data: validation.data,
     });
 
@@ -90,7 +92,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getAuthUser(request);
@@ -98,8 +100,9 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const level = await prisma.neighborhoodLevel.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!level) {
@@ -107,7 +110,7 @@ export async function DELETE(
     }
 
     const deletedLevel = await prisma.neighborhoodLevel.update({
-      where: { id: params.id },
+      where: { id },
       data: { isActive: false },
     });
 
@@ -115,7 +118,7 @@ export async function DELETE(
       userId: user.id,
       action: "DELETE",
       tableName: "neighborhood_levels",
-      recordId: params.id,
+      recordId: id,
       oldValues: level,
       ipAddress: request.headers.get("x-forwarded-for")?.split(",")[0] || undefined,
       userAgent: request.headers.get("user-agent") || undefined,

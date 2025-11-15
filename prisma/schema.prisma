@@ -13,19 +13,22 @@ datasource db {
 // ==================== ADMIN SYSTEM ====================
 
 model AdminUser {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  password     String
-  name         String
-  role         String   @default("admin") // admin, superadmin
-  isActive     Boolean  @default(true)
-  lastLoginAt  DateTime?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id                 String    @id @default(cuid())
+  email              String    @unique
+  password           String
+  name               String
+  role               String    @default("admin") // admin, superadmin
+  isActive           Boolean   @default(true)
+  lastLoginAt        DateTime?
+  resetToken         String?   @unique
+  resetTokenExpiresAt DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
   
   auditLogs    AuditLog[]
   
   @@map("admin_users")
+  @@index([resetToken])
 }
 
 model AuditLog {

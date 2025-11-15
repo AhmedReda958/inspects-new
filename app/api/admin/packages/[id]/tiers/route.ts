@@ -13,7 +13,7 @@ const tierSchema = z.object({
 // GET - List all tiers for a package
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getAuthUser(request);
@@ -21,8 +21,9 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const packageData = await prisma.package.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!packageData) {
@@ -30,7 +31,7 @@ export async function GET(
     }
 
     const tiers = await prisma.areaPriceTier.findMany({
-      where: { packageId: params.id },
+      where: { packageId: id },
       orderBy: { minArea: "asc" },
     });
 
@@ -47,7 +48,7 @@ export async function GET(
 // POST - Create new tier for a package
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getAuthUser(request);
@@ -55,8 +56,9 @@ export async function POST(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params;
     const packageData = await prisma.package.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!packageData) {
@@ -68,14 +70,14 @@ export async function POST(
 
     if (!validation.success) {
       return NextResponse.json(
-        { error: "Validation failed", details: validation.error.errors },
+        { error: "Validation failed", details: validation.error.issues },
         { status: 400 }
       );
     }
 
     // Check for overlapping tiers
     const existingTiers = await prisma.areaPriceTier.findMany({
-      where: { packageId: params.id, isActive: true },
+      where: { packageId: id, isActive: true },
     });
 
     const newTier = validation.data;
@@ -101,7 +103,7 @@ export async function POST(
 
     const createdTier = await prisma.areaPriceTier.create({
       data: {
-        packageId: params.id,
+        packageId: id,
         minArea: newTier.minArea,
         maxArea: newTier.maxArea,
         pricePerSqm: newTier.pricePerSqm,

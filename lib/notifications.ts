@@ -158,12 +158,16 @@ export async function sendNewLeadNotification(
           <span class="label">رقم الجوال:</span>
           <span class="value">${submission.mobileNumber}</span>
         </div>
-        ${submission.email ? `
+        ${
+          submission.email
+            ? `
         <div class="info-row">
           <span class="label">البريد الإلكتروني:</span>
           <span class="value">${submission.email}</span>
         </div>
-        ` : ""}
+        `
+            : ""
+        }
         <div class="info-row">
           <span class="label">الباقة:</span>
           <span class="value">${packageName}</span>
@@ -172,12 +176,16 @@ export async function sendNewLeadNotification(
           <span class="label">المدينة:</span>
           <span class="value">${cityName}</span>
         </div>
-        ${neighborhoodName !== "غير محدد" ? `
+        ${
+          neighborhoodName !== "غير محدد"
+            ? `
         <div class="info-row">
           <span class="label">الحي:</span>
           <span class="value">${neighborhoodName}</span>
         </div>
-        ` : ""}
+        `
+            : ""
+        }
         <div class="price">
           السعر النهائي: ${submission.finalPrice.toFixed(2)} ريال
         </div>
@@ -197,7 +205,9 @@ export async function sendNewLeadNotification(
   const mailOptions = {
     from: smtpFrom,
     to: adminEmail,
-    subject: `عميل جديد: ${customerName} - ${submission.finalPrice.toFixed(2)} ريال`,
+    subject: `عميل جديد: ${customerName} - ${submission.finalPrice.toFixed(
+      2
+    )} ريال`,
     html: emailHtml,
     // Plain text fallback
     text: `
@@ -230,7 +240,9 @@ ${neighborhoodName !== "غير محدد" ? `الحي: ${neighborhoodName}` : ""}
       },
     });
 
-    console.log(`✅ Email notification sent successfully for lead ${submission.id}`);
+    console.log(
+      `✅ Email notification sent successfully for lead ${submission.id}`
+    );
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error occurred";
@@ -250,3 +262,154 @@ ${neighborhoodName !== "غير محدد" ? `الحي: ${neighborhoodName}` : ""}
   }
 }
 
+/**
+ * Send password reset email to admin user
+ */
+export async function sendPasswordResetEmail(
+  email: string,
+  token: string
+): Promise<void> {
+  const smtpFrom = process.env.SMTP_FROM || process.env.SMTP_USER;
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3008";
+  const resetLink = `${appUrl}/admin/reset-password?token=${token}`;
+
+  const transporter = createTransporter();
+  if (!transporter) {
+    console.warn(
+      "SMTP configuration is missing. Password reset email cannot be sent."
+    );
+    return;
+  }
+
+  const emailHtml = `
+    <!DOCTYPE html>
+    <html dir="rtl" lang="ar">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>إعادة تعيين كلمة المرور</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          line-height: 1.6;
+          color: #333;
+          max-width: 600px;
+          margin: 0 auto;
+          padding: 20px;
+        }
+        .header {
+          background-color: #021a60;
+          color: white;
+          padding: 20px;
+          text-align: center;
+          border-radius: 5px 5px 0 0;
+        }
+        .content {
+          background-color: #f9f9f9;
+          padding: 20px;
+          border: 1px solid #ddd;
+        }
+        .button {
+          display: inline-block;
+          background-color: #f25b06;
+          color: white;
+          padding: 12px 30px;
+          text-decoration: none;
+          border-radius: 5px;
+          margin: 20px 0;
+          font-weight: bold;
+        }
+        .button:hover {
+          background-color: #d14a05;
+        }
+        .info {
+          background-color: white;
+          padding: 15px;
+          border-right: 3px solid #f25b06;
+          margin: 15px 0;
+        }
+        .footer {
+          text-align: center;
+          padding: 20px;
+          color: #666;
+          font-size: 12px;
+        }
+        .warning {
+          background-color: #fff3cd;
+          border: 1px solid #ffc107;
+          padding: 10px;
+          border-radius: 5px;
+          margin: 15px 0;
+          color: #856404;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <h1>إعادة تعيين كلمة المرور</h1>
+      </div>
+      <div class="content">
+        <p>مرحباً،</p>
+        <p>لقد تلقينا طلباً لإعادة تعيين كلمة المرور لحسابك في نظام إدارة Inspectex.</p>
+        
+        <div class="info">
+          <p><strong>لإعادة تعيين كلمة المرور، يرجى النقر على الزر أدناه:</strong></p>
+          <div style="text-align: center;">
+            <a href="${resetLink}" class="button">إعادة تعيين كلمة المرور</a>
+          </div>
+        </div>
+
+        <div class="warning">
+          <p><strong>ملاحظة مهمة:</strong></p>
+          <ul>
+            <li>ينتهي صلاحية رابط إعادة التعيين خلال ساعة واحدة</li>
+            <li>إذا لم تطلب إعادة تعيين كلمة المرور، يمكنك تجاهل هذا البريد الإلكتروني</li>
+            <li>لأسباب أمنية، لا تشارك هذا الرابط مع أي شخص آخر</li>
+          </ul>
+        </div>
+
+        <p>إذا لم يعمل الزر أعلاه، يمكنك نسخ الرابط التالي ولصقه في متصفحك:</p>
+        <p style="word-break: break-all; color: #021a60; font-size: 12px;">${resetLink}</p>
+      </div>
+      <div class="footer">
+        <p>تم إرسال هذا البريد الإلكتروني تلقائياً من نظام إدارة Inspectex</p>
+        <p>إذا كان لديك أي استفسارات، يرجى الاتصال بالدعم الفني</p>
+      </div>
+    </body>
+    </html>
+  `;
+
+  const mailOptions = {
+    from: smtpFrom,
+    to: email,
+    subject: "إعادة تعيين كلمة المرور - Inspectex Admin",
+    html: emailHtml,
+    text: `
+إعادة تعيين كلمة المرور
+
+مرحباً،
+
+لقد تلقينا طلباً لإعادة تعيين كلمة المرور لحسابك في نظام إدارة Inspectex.
+
+لإعادة تعيين كلمة المرور، يرجى زيارة الرابط التالي:
+${resetLink}
+
+ملاحظة مهمة:
+- ينتهي صلاحية رابط إعادة التعيين خلال ساعة واحدة
+- إذا لم تطلب إعادة تعيين كلمة المرور، يمكنك تجاهل هذا البريد الإلكتروني
+- لأسباب أمنية، لا تشارك هذا الرابط مع أي شخص آخر
+
+تم إرسال هذا البريد الإلكتروني تلقائياً من نظام إدارة Inspectex
+    `.trim(),
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`✅ Password reset email sent successfully to ${email}`);
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error occurred";
+    console.error("❌ Failed to send password reset email:", errorMessage);
+    throw error;
+  }
+}
