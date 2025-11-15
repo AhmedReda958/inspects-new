@@ -2,13 +2,19 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import type { Lead } from "@/types/admin/leads";
+import { MessageCircle, Phone } from "lucide-react";
 
 interface CustomerInfoProps {
   lead: Lead;
 }
 
 export function CustomerInfo({ lead }: CustomerInfoProps) {
+  const phoneNumber = lead.mobileNumber.replace(/\s+/g, "");
+  const whatsappUrl = `https://wa.me/${phoneNumber}}`;
+  const telUrl = `tel:${phoneNumber}`;
+
   return (
     <Card>
       <CardHeader>
@@ -44,6 +50,24 @@ export function CustomerInfo({ lead }: CustomerInfoProps) {
               })}
             </p>
           </div>
+        </div>
+        <div className="mt-6 flex gap-3">
+          <Button
+            variant="outline"
+            onClick={() => window.open(whatsappUrl, "_blank")}
+            className="border-[#25D366] hover:bg-[#25D366]/10"
+          >
+            <MessageCircle className="h-4 w-4 mr-2 text-[#25D366]" />
+            WhatsApp
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => window.open(telUrl, "_self")}
+            className="border-primary hover:bg-primary/10"
+          >
+            <Phone className="h-4 w-4 mr-2 text-primary" />
+            Phone Call
+          </Button>
         </div>
       </CardContent>
     </Card>

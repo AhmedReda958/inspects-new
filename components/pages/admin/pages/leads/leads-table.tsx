@@ -8,6 +8,7 @@ import { DataTable, type DataTableFilter } from "@/components/ui/data-table";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import type { Lead } from "@/types/admin/leads";
 import { cn } from "@/lib/utils";
+import { MessageCircle, Phone } from "lucide-react";
 
 interface LeadsTableProps {
   leads: Lead[];
@@ -154,7 +155,7 @@ export function LeadsTable({ leads, pagination }: LeadsTableProps) {
           return (
             <span
               className={cn(
-                "px-2 py-1 text-xs font-medium rounded-full",
+                "px-5 py-1 text-xs font-medium rounded-full ",
                 getStatusColor(status)
               )}
             >
@@ -186,14 +187,38 @@ export function LeadsTable({ leads, pagination }: LeadsTableProps) {
         id: "actions",
         cell: ({ row }) => {
           const lead = row.original;
+          const phoneNumber = lead.mobileNumber.replace(/\s+/g, "");
+          const whatsappUrl = `https://wa.me/${phoneNumber}`;
+          const telUrl = `tel:${phoneNumber}`;
+
           return (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => router.push(`/admin/leads/${lead.id}`)}
-            >
-              View
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => router.push(`/admin/leads/${lead.id}`)}
+              >
+                View
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => window.open(whatsappUrl, "_blank")}
+                className="border-[#25D366] hover:bg-[#25D366]/10"
+                title="WhatsApp"
+              >
+                <MessageCircle className="h-4 w-4 text-[#25D366]" />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => window.open(telUrl, "_self")}
+                className="border-primary hover:bg-primary/10"
+                title="Phone Call"
+              >
+                <Phone className="h-4 w-4 text-primary" />
+              </Button>
+            </div>
           );
         },
       },
