@@ -1,5 +1,5 @@
 import { SectionTitle } from "@/components/ui/section-title";
-import { WorkflowStepCard } from "@/components/sections/workflow/workflow-step-card";
+import { WorkflowStepCard } from "@/components/pages/landing/sections/workflow/workflow-step-card";
 import content from "@/content";
 
 export function WorkflowSection() {

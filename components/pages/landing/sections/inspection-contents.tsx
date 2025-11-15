@@ -9,7 +9,7 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 import { Fragment } from "react";
-import { SectionTitle } from "../ui/section-title";
+import { SectionTitle } from "@/components/ui/section-title";
 import { PlusIcon } from "lucide-react";
 
 interface InspectionItem {

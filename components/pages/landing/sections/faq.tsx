@@ -8,7 +8,7 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 
-import { SectionTitle } from "../ui/section-title";
+import { SectionTitle } from "@/components/ui/section-title";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import Image from "next/image";
 import { Fragment } from "react";

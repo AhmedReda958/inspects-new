@@ -1,13 +1,13 @@
 import content from "@/content";
-import { SectionTitle } from "../ui/section-title";
+import { SectionTitle } from "@/components/ui/section-title";
 import Image from "next/image";
 
 // Import icons using SVGR
-import Icon1 from "../../icons/why-us/icon-1.svg";
-import Icon2 from "../../icons/why-us/icon-2.svg";
-import Icon3 from "../../icons/why-us/icon-3.svg";
-import Icon4 from "../../icons/why-us/icon-4.svg";
-import Icon5 from "../../icons/why-us/icon-5.svg";
+import Icon1 from "@/icons/why-us/icon-1.svg";
+import Icon2 from "@/icons/why-us/icon-2.svg";
+import Icon3 from "@/icons/why-us/icon-3.svg";
+import Icon4 from "@/icons/why-us/icon-4.svg";
+import Icon5 from "@/icons/why-us/icon-5.svg";
 
 interface Feature {
   title: string;

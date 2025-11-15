@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { SocialLinks } from "@/components/layout/sidebar/social-links";
+import { SocialLinks } from "@/components/pages/landing/layout/sidebar/social-links";
 
 export function Footer() {
   return (
