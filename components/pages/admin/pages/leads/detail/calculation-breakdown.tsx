@@ -16,19 +16,19 @@ export function CalculationBreakdown({ lead }: CalculationBreakdownProps) {
       <CardContent>
         <div className="space-y-3">
           <div className="flex justify-between">
-            <span className="text-gray-600">Base Price:</span>
+            <span className="">Base Price:</span>
             <span className="font-semibold">
               {lead.basePrice.toLocaleString("ar-SA")} SAR
             </span>
           </div>
           <div className="flex justify-between">
-            <span className="text-gray-600">Price Before VAT:</span>
+            <span className="">Price Before VAT:</span>
             <span className="font-semibold">
               {lead.priceBeforeVat.toLocaleString("ar-SA")} SAR
             </span>
           </div>
           <div className="flex justify-between">
-            <span className="text-gray-600">VAT (15%):</span>
+            <span className="">VAT (15%):</span>
             <span className="font-semibold">
               {lead.vatAmount.toLocaleString("ar-SA")} SAR
             </span>

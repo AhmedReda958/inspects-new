@@ -17,23 +17,23 @@ export function CustomerInfo({ lead }: CustomerInfoProps) {
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <Label className="text-gray-600">Name</Label>
+            <Label className="">Name</Label>
             <p className="font-semibold">
               {lead.firstName} {lead.familyName}
             </p>
           </div>
           <div>
-            <Label className="text-gray-600">Phone</Label>
+            <Label className="">Phone</Label>
             <p className="font-semibold">{lead.mobileNumber}</p>
           </div>
           {lead.email && (
             <div>
-              <Label className="text-gray-600">Email</Label>
+              <Label className="">Email</Label>
               <p className="font-semibold">{lead.email}</p>
             </div>
           )}
           <div>
-            <Label className="text-gray-600">Submission Date</Label>
+            <Label className="">Submission Date</Label>
             <p className="font-semibold">
               {new Date(lead.createdAt).toLocaleDateString("en-GB", {
                 year: "numeric",

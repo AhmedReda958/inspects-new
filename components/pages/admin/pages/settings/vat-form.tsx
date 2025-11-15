@@ -1,6 +1,12 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -43,8 +49,9 @@ export function VatForm({ form, vatData, saving, onSubmit }: VatFormProps) {
           </div>
 
           {vatData && (
-            <p className="text-sm text-gray-600">
-              Current VAT: <span className="font-semibold">{vatData.percentage}%</span>
+            <p className="text-sm ">
+              Current VAT:{" "}
+              <span className="font-semibold">{vatData.percentage}%</span>
             </p>
           )}
 
@@ -56,4 +63,3 @@ export function VatForm({ form, vatData, saving, onSubmit }: VatFormProps) {
     </Card>
   );
 }
-

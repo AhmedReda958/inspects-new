@@ -73,7 +73,7 @@ export function TechnologiesSlider() {
                 </div>
 
                 {/* Technology Description */}
-                <p className="text-sm text-gray-600 leading-relaxed text-center">
+                <p className="text-sm  leading-relaxed text-center">
                   {technology.description}
                 </p>
               </div>

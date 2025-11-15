@@ -56,11 +56,11 @@ export function MultiplierCard({
       <CardContent>
         <div className="space-y-2">
           <div>
-            <span className="text-sm text-gray-600">Multiplier: </span>
+            <span className="text-sm ">Multiplier: </span>
             <span className="font-semibold">{multiplier.multiplier}x</span>
           </div>
           <div>
-            <span className="text-sm text-gray-600">Status: </span>
+            <span className="text-sm ">Status: </span>
             <span
               className={
                 multiplier.isActive ? "text-green-600" : "text-red-600"

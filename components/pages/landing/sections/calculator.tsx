@@ -340,7 +340,7 @@ export default function CalculatorSection() {
       >
         <div className="text-center">
           <div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4" />
-          <p className="text-gray-600">جاري تحميل النموذج...</p>
+          <p className="">جاري تحميل النموذج...</p>
         </div>
       </section>
     );
@@ -702,16 +702,14 @@ export default function CalculatorSection() {
                         <div className="mt-8 space-y-4 max-w-md mx-auto px-4 md:px-0">
                           <div className="p-3 md:p-4 bg-gray-50 rounded-lg">
                             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-2 text-sm mb-2">
-                              <span className="text-gray-600">
-                                السعر الأساسي:
-                              </span>
+                              <span className="">السعر الأساسي:</span>
                               <span className="font-semibold ">
                                 {priceDetails.basePrice.toLocaleString("ar-SA")}{" "}
                                 ريال
                               </span>
                             </div>
                             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-2 text-sm mb-2">
-                              <span className="text-gray-600">
+                              <span className="">
                                 ضريبة القيمة المضافة (15%):
                               </span>
                               <span className="font-semibold ">

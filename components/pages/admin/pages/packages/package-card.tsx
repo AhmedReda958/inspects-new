@@ -69,13 +69,13 @@ export function PackageCard({
       <CardContent>
         <div className="space-y-2">
           <div>
-            <span className="text-sm text-gray-600">Base Price: </span>
+            <span className="text-sm ">Base Price: </span>
             <span className="font-semibold">
               {pkg.basePrice.toLocaleString()} SAR
             </span>
           </div>
           <div>
-            <span className="text-sm text-gray-600">Status: </span>
+            <span className="text-sm ">Status: </span>
             <span className={pkg.isActive ? "text-green-600" : "text-red-600"}>
               {pkg.isActive ? "Active" : "Inactive"}
             </span>

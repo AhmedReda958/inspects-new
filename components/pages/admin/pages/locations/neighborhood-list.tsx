@@ -42,7 +42,7 @@ export function NeighborhoodList({
                   >
                     <div>
                       <p className="font-medium">{neighborhood.name}</p>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm ">
                         Level {neighborhood.level} • {neighborhood.multiplier}x
                         • Above {neighborhood.applyAboveArea}m²
                       </p>

@@ -42,13 +42,13 @@ export function CityCard({ city, onEdit, onDelete }: CityCardProps) {
       <CardContent>
         <div className="space-y-2">
           <div>
-            <span className="text-sm text-gray-600">Neighborhoods: </span>
+            <span className="text-sm ">Neighborhoods: </span>
             <span className="font-semibold">
               {city.neighborhoods?.length || 0}
             </span>
           </div>
           <div>
-            <span className="text-sm text-gray-600">Status: </span>
+            <span className="text-sm ">Status: </span>
             <span className={city.isActive ? "text-green-600" : "text-red-600"}>
               {city.isActive ? "Active" : "Inactive"}
             </span>

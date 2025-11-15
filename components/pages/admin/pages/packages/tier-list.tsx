@@ -63,9 +63,7 @@ export function TierList({
                 <span className="font-medium">
                   {tier.minArea}-{tier.maxArea || "∞"}m²
                 </span>
-                <span className="text-gray-600 ml-2">
-                  {tier.pricePerSqm} SAR/m²
-                </span>
+                <span className=" ml-2">{tier.pricePerSqm} SAR/m²</span>
                 {!tier.isActive && (
                   <span className="text-red-600 text-xs ml-2">(Inactive)</span>
                 )}

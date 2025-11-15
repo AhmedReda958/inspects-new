@@ -17,11 +17,11 @@ export function PropertyInfo({ lead }: PropertyInfoProps) {
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <Label className="text-gray-600">City</Label>
+            <Label className="">City</Label>
             <p className="font-semibold">{lead.city?.name || "-"}</p>
           </div>
           <div>
-            <Label className="text-gray-600">Neighborhood</Label>
+            <Label className="">Neighborhood</Label>
             <p className="font-semibold">
               {lead.neighborhood?.name || "-"}
               {lead.neighborhood?.level &&
@@ -29,23 +29,23 @@ export function PropertyInfo({ lead }: PropertyInfoProps) {
             </p>
           </div>
           <div>
-            <Label className="text-gray-600">Land Area</Label>
+            <Label className="">Land Area</Label>
             <p className="font-semibold">{lead.landArea} m²</p>
           </div>
           <div>
-            <Label className="text-gray-600">Covered Area</Label>
+            <Label className="">Covered Area</Label>
             <p className="font-semibold">{lead.coveredArea} m²</p>
           </div>
           <div>
-            <Label className="text-gray-600">Package</Label>
+            <Label className="">Package</Label>
             <p className="font-semibold">{lead.package?.nameAr || "-"}</p>
           </div>
           <div>
-            <Label className="text-gray-600">Property Age</Label>
+            <Label className="">Property Age</Label>
             <p className="font-semibold">{lead.propertyAge?.ageRange || "-"}</p>
           </div>
           <div>
-            <Label className="text-gray-600">Inspection Purpose</Label>
+            <Label className="">Inspection Purpose</Label>
             <p className="font-semibold">
               {lead.inspectionPurpose?.purpose || "-"}
             </p>

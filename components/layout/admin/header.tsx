@@ -30,9 +30,7 @@ export function AdminHeader({ title, subtitle, action }: AdminHeaderProps) {
           </Link>
           <div>
             <h1 className="text-2xl font-bold text-primary">{title}</h1>
-            {subtitle && (
-              <p className="text-sm text-gray-600 mt-1">{subtitle}</p>
-            )}
+            {subtitle && <p className="text-sm  mt-1">{subtitle}</p>}
           </div>
         </div>
         {action && (

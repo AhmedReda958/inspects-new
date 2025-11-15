@@ -99,7 +99,7 @@ export function LeadManagementForm({
           </div>
 
           <div className="pt-2">
-            <span className="text-sm text-gray-600">Current Status: </span>
+            <span className="text-sm ">Current Status: </span>
             <span
               className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
                 lead.status
