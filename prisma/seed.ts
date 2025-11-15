@@ -9,7 +9,7 @@ async function main() {
   // Create default admin user
   console.log("Creating default admin user...");
   const hashedPassword = await bcrypt.hash("admin123", 10);
-  
+
   const adminUser = await prisma.adminUser.upsert({
     where: { email: "admin@inspectex.com" },
     update: {},
@@ -27,10 +27,10 @@ async function main() {
   console.log("Creating VAT setting...");
   await prisma.vatSetting.upsert({
     where: { id: "default" },
-    update: { percentage: 15.00 },
+    update: { percentage: 15.0 },
     create: {
       id: "default",
-      percentage: 15.00,
+      percentage: 15.0,
       isActive: true,
     },
   });
@@ -57,7 +57,8 @@ async function main() {
       key: "roofed_area_calculation_factor",
       value: "0.6",
       valueType: "number",
-      description: "Factor for calculating roofed area from land area and levels (0.6 * area * levels)",
+      description:
+        "Factor for calculating roofed area from land area and levels (0.6 * area * levels)",
       category: "general",
     },
   ];
@@ -78,7 +79,7 @@ async function main() {
       name: "basic",
       nameAr: "الفحص التأسيسي",
       description: "فحص بصري عام",
-      basePrice: 1970,
+      basePrice: 7000,
       displayOrder: 1,
     },
     {
@@ -108,28 +109,40 @@ async function main() {
 
   // Create Area Price Tiers
   console.log("Creating area price tiers...");
-  const basicPackage = await prisma.package.findUnique({ where: { name: "basic" } });
-  const premiumPackage = await prisma.package.findUnique({ where: { name: "premium" } });
-  const vipPackage = await prisma.package.findUnique({ where: { name: "vip" } });
+  const basicPackage = await prisma.package.findUnique({
+    where: { name: "basic" },
+  });
+  const premiumPackage = await prisma.package.findUnique({
+    where: { name: "premium" },
+  });
+  const vipPackage = await prisma.package.findUnique({
+    where: { name: "vip" },
+  });
 
   if (basicPackage && premiumPackage && vipPackage) {
-    // Basic package - fixed 4 SAR per sqm above 250
-    await prisma.areaPriceTier.upsert({
-      where: { id: "basic-tier-1" },
-      update: {
-        packageId: basicPackage.id,
-        minArea: 251,
-        maxArea: null,
-        pricePerSqm: 4,
-      },
-      create: {
-        id: "basic-tier-1",
-        packageId: basicPackage.id,
-        minArea: 251,
-        maxArea: null,
-        pricePerSqm: 4,
-      },
-    });
+    // Basic package - area tiers based on seed data
+    const basicTiers = [
+      { id: "basic-tier-1", minArea: 251, maxArea: 500, pricePerSqm: 9 },
+      { id: "basic-tier-2", minArea: 501, maxArea: 750, pricePerSqm: 10 },
+      { id: "basic-tier-3", minArea: 751, maxArea: 1000, pricePerSqm: 11 },
+      { id: "basic-tier-4", minArea: 1001, maxArea: null, pricePerSqm: 12 },
+    ];
+
+    for (const tier of basicTiers) {
+      await prisma.areaPriceTier.upsert({
+        where: { id: tier.id },
+        update: {
+          packageId: basicPackage.id,
+          minArea: tier.minArea,
+          maxArea: tier.maxArea,
+          pricePerSqm: tier.pricePerSqm,
+        },
+        create: {
+          ...tier,
+          packageId: basicPackage.id,
+        },
+      });
+    }
 
     // Premium package tiers
     const premiumTiers = [
@@ -183,11 +196,30 @@ async function main() {
   // Create Property Age Multipliers
   console.log("Creating property age multipliers...");
   const ageMultipliers = [
-    { ageRange: "أقل من سنة", ageRangeEn: "Less than 1 year", multiplier: 0.95, displayOrder: 1 },
-    { ageRange: "من 1 إلى 3 سنوات", ageRangeEn: "1 to 3 years", multiplier: 1.0, displayOrder: 2 },
-    { ageRange: "من 3 إلى 5 سنوات", ageRangeEn: "3 to 5 years", multiplier: 1.05, displayOrder: 3 },
-    { ageRange: "من 5 إلى 10 سنوات", ageRangeEn: "5 to 10 years", multiplier: 1.1, displayOrder: 4 },
-    { ageRange: "أكثر من 10 سنوات", ageRangeEn: "More than 10 years", multiplier: 1.15, displayOrder: 5 },
+    {
+      ageRange: "من 5-0 سنوات",
+      ageRangeEn: "0 to 5 years",
+      multiplier: 1.0,
+      displayOrder: 1,
+    },
+    {
+      ageRange: "أكثر من 5 وأقل أو يساوي 10",
+      ageRangeEn: "More than 5 and less than or equal to 10",
+      multiplier: 1.05,
+      displayOrder: 2,
+    },
+    {
+      ageRange: "أكثر من 10 وأقل أو يساوي 15",
+      ageRangeEn: "More than 10 and less than or equal to 15",
+      multiplier: 1.1,
+      displayOrder: 3,
+    },
+    {
+      ageRange: "أكثر من 15 سنه",
+      ageRangeEn: "More than 15 years",
+      multiplier: 1.25,
+      displayOrder: 4,
+    },
   ];
 
   for (const age of ageMultipliers) {
@@ -202,11 +234,36 @@ async function main() {
   // Create Inspection Purpose Multipliers
   console.log("Creating inspection purpose multipliers...");
   const purposeMultipliers = [
-    { purpose: "قبل الشراء", purposeEn: "Before Purchase", multiplier: 1.0, displayOrder: 1 },
-    { purpose: "قبل البيع", purposeEn: "Before Sale", multiplier: 0.95, displayOrder: 2 },
-    { purpose: "صيانة دورية", purposeEn: "Periodic Maintenance", multiplier: 0.9, displayOrder: 3 },
-    { purpose: "تقييم عقاري", purposeEn: "Property Evaluation", multiplier: 1.05, displayOrder: 4 },
-    { purpose: "فحص ما بعد البناء", purposeEn: "Post-Construction Inspection", multiplier: 1.1, displayOrder: 5 },
+    {
+      purpose: "قبل الشراء",
+      purposeEn: "Before Purchase",
+      multiplier: 1.0,
+      displayOrder: 1,
+    },
+    {
+      purpose: "قبل البيع",
+      purposeEn: "Before Sale",
+      multiplier: 0.95,
+      displayOrder: 2,
+    },
+    {
+      purpose: "صيانة دورية",
+      purposeEn: "Periodic Maintenance",
+      multiplier: 0.9,
+      displayOrder: 3,
+    },
+    {
+      purpose: "تقييم عقاري",
+      purposeEn: "Property Evaluation",
+      multiplier: 1.05,
+      displayOrder: 4,
+    },
+    {
+      purpose: "فحص ما بعد البناء",
+      purposeEn: "Post-Construction Inspection",
+      multiplier: 1.1,
+      displayOrder: 5,
+    },
   ];
 
   for (const purpose of purposeMultipliers) {
@@ -216,7 +273,9 @@ async function main() {
       create: purpose,
     });
   }
-  console.log(`✓ ${purposeMultipliers.length} inspection purpose multipliers created`);
+  console.log(
+    `✓ ${purposeMultipliers.length} inspection purpose multipliers created`
+  );
 
   // Create Cities
   console.log("Creating cities...");
@@ -239,76 +298,404 @@ async function main() {
   }
   console.log(`✓ ${cities.length} cities created`);
 
-  // Create Sample Neighborhoods for Riyadh
-  console.log("Creating neighborhoods for Riyadh...");
-  const riyadh = await prisma.city.findUnique({ where: { name: "الرياض" } });
-  
-  if (riyadh) {
-    const neighborhoods = [
-      // Level A - Premium neighborhoods (1.15 multiplier)
-      { name: "الملقا", level: "A", multiplier: 1.15 },
-      { name: "الملك عبدالله", level: "A", multiplier: 1.15 },
-      { name: "النرجس", level: "A", multiplier: 1.15 },
-      { name: "الياسمين", level: "A", multiplier: 1.15 },
-      
-      // Level B - Above average (1.10 multiplier)
-      { name: "الروضة", level: "B", multiplier: 1.10 },
-      { name: "العليا", level: "B", multiplier: 1.10 },
-      { name: "الورود", level: "B", multiplier: 1.10 },
-      { name: "غرناطة", level: "B", multiplier: 1.10 },
-      
-      // Level C - Average (1.00 multiplier)
-      { name: "النسيم", level: "C", multiplier: 1.00 },
-      { name: "الخالدية", level: "C", multiplier: 1.00 },
-      { name: "المروج", level: "C", multiplier: 1.00 },
-      { name: "اليرموك", level: "C", multiplier: 1.00 },
-      
-      // Level D - Below average (0.95 multiplier)
-      { name: "الشفا", level: "D", multiplier: 0.95 },
-      { name: "البديعة", level: "D", multiplier: 0.95 },
-      { name: "الديرة", level: "D", multiplier: 0.95 },
-    ];
+  // Create Neighborhoods
+  console.log("Creating neighborhoods...");
 
-    for (const neighborhood of neighborhoods) {
-      await prisma.neighborhood.create({
-        data: {
-          cityId: riyadh.id,
-          name: neighborhood.name,
-          level: neighborhood.level,
-          multiplier: neighborhood.multiplier,
-          applyAboveArea: 500,
-          displayOrder: 0,
-        },
-      });
+  // Get all cities
+  const riyadh = await prisma.city.findUnique({ where: { name: "الرياض" } });
+  const jeddah = await prisma.city.findUnique({ where: { name: "جدة" } });
+  const makkah = await prisma.city.findUnique({
+    where: { name: "مكة المكرمة" },
+  });
+  const taif = await prisma.city.findUnique({ where: { name: "الطائف" } });
+  const dammam = await prisma.city.findUnique({ where: { name: "الدمام" } });
+  const ahsa = await prisma.city.findUnique({ where: { name: "الأحساء" } });
+  const jubail = await prisma.city.findUnique({ where: { name: "الجبيل" } });
+
+  // Riyadh neighborhoods - Level 1 (multiplier 1.15)
+  if (riyadh) {
+    // Remove duplicates using Set
+    const riyadhLevel1 = Array.from(
+      new Set([
+        "العليا",
+        "الإزدهار",
+        "الندى",
+        "السلامة",
+        "المعذر",
+        "الصحافة",
+        "المحمدية",
+        "المروج",
+        "جسر",
+        "الرحمانية",
+        "قرطبة",
+        "العارض",
+        "السفارات",
+        "النفل",
+        "عرقة",
+        "العقيق",
+        "النخيل",
+        "الوادي",
+        "الرائد",
+        "الغدير",
+        "الملقا",
+        "الياسمين",
+        "الورود",
+        "الفلاح",
+        "بريدة",
+        "القصوان",
+        "حطين",
+        "الروضة",
+        "الرمال",
+        "المواسم",
+        "الجنان",
+        "القادسية",
+        "الأموك",
+        "غرناطة",
+        "أشبلية",
+        "الحمراء",
+        "المعالي",
+        "الخليج",
+        "الملك",
+        "القدس",
+        "الأندلس",
+        "النهضة",
+        "العزيز",
+        "الملك عبدالله",
+        "الملك عيد الله",
+        "الملك عيد العزيز",
+      ])
+    );
+
+    const riyadhLevel2 = Array.from(
+      new Set([
+        "الورود",
+        "الملك فهد",
+        "المرسلات",
+        "الظهرة",
+        "المغرزات",
+        "المصيف",
+        "التعاون",
+        "الإزدهار",
+        "المعذر",
+        "المحمدية",
+        "الرحمانية",
+        "الرائد",
+        "النخيل",
+      ])
+    );
+
+    const riyadhLevel3 = Array.from(
+      new Set([
+        "ثلاثم",
+        "العمل",
+        "الفاروق",
+        "الوزارات",
+        "الملز",
+        "الضباط",
+        "الصفا",
+        "الزهراء",
+        "القيوة",
+        "الندوة",
+        "المنار",
+        "النظم",
+        "الروابي",
+        "الضبان",
+        "السلام",
+        "النسيم الغربي",
+        "النسيم الشرقي",
+        "الخزامى",
+        "المهدية",
+        "أم الحمام الغربي",
+        "أم الحمام الشرقي",
+        "صلاح الدين",
+        "الملك عيد الله",
+        "الملك عيد العزيز",
+        "الأندلس",
+        "النهضة",
+        "المجمع",
+        "الفوطة",
+        "الرفيعة",
+        "الهدا",
+        "الحقيقة",
+        "الحصا",
+        "الوشام",
+        "النموذجية",
+        "المؤتمرات",
+        "الحديدة",
+        "أم الشم",
+        "الجرادية",
+        "الفاخرة",
+        "علوشة",
+        "الهجرة",
+        "العليجا",
+        "الوسا",
+        "الغربية",
+        "الدرهمية",
+        "شمال",
+        "السويد",
+        "الغربي",
+        "سلطانة",
+        "الزهرة",
+        "المروة",
+        "الشفاء",
+        "عواظ",
+        "أحد",
+        "الحزم",
+        "نمار",
+        "ديراب",
+        "ظهرة نمار",
+        "المصا",
+        "المنصورية",
+        "عوض",
+        "العما",
+        "النور",
+        "الإسعا",
+        "الجوهرة",
+        "السعا",
+        "هيت",
+        "الكويتة",
+        "المشا",
+        "الود",
+        "القرى",
+        "الصنا",
+        "الوسطا",
+        "المعا",
+        "الفصلية",
+        "منفوحة",
+        "المنصورة",
+        "اللما",
+        "السلا",
+        "عتيقة",
+        "اللطاحا",
+        "العود",
+        "المرقب",
+        "العليلة",
+        "طبية",
+        "المصفا",
+        "البضا",
+        "الغنا",
+      ])
+    );
+
+    // Create Level 1 neighborhoods (multiplier 1.15)
+    for (const name of riyadhLevel1) {
+      if (name && name.trim().length > 0) {
+        await prisma.neighborhood.upsert({
+          where: { cityId_name: { cityId: riyadh.id, name: name.trim() } },
+          update: { level: "A", multiplier: 1.15, applyAboveArea: 500 },
+          create: {
+            cityId: riyadh.id,
+            name: name.trim(),
+            level: "A",
+            multiplier: 1.15,
+            applyAboveArea: 500,
+            displayOrder: 0,
+          },
+        });
+      }
     }
-    console.log(`✓ ${neighborhoods.length} neighborhoods created for Riyadh`);
+
+    // Create Level 2 neighborhoods (multiplier 1.12)
+    for (const name of riyadhLevel2) {
+      if (name && name.trim().length > 0) {
+        await prisma.neighborhood.upsert({
+          where: { cityId_name: { cityId: riyadh.id, name: name.trim() } },
+          update: { level: "B", multiplier: 1.12, applyAboveArea: 500 },
+          create: {
+            cityId: riyadh.id,
+            name: name.trim(),
+            level: "B",
+            multiplier: 1.12,
+            applyAboveArea: 500,
+            displayOrder: 0,
+          },
+        });
+      }
+    }
+
+    // Create Level 3 neighborhoods (multiplier 1.0)
+    for (const name of riyadhLevel3) {
+      if (name && name.trim().length > 0) {
+        await prisma.neighborhood.upsert({
+          where: { cityId_name: { cityId: riyadh.id, name: name.trim() } },
+          update: { level: "C", multiplier: 1.0, applyAboveArea: 500 },
+          create: {
+            cityId: riyadh.id,
+            name: name.trim(),
+            level: "C",
+            multiplier: 1.0,
+            applyAboveArea: 500,
+            displayOrder: 0,
+          },
+        });
+      }
+    }
+
+    console.log(`✓ Neighborhoods created for Riyadh`);
   }
 
-  // Create sample neighborhoods for other cities
-  console.log("Creating neighborhoods for other cities...");
-  const jeddah = await prisma.city.findUnique({ where: { name: "جدة" } });
+  // Jeddah neighborhoods
   if (jeddah) {
-    const jeddahNeighborhoods = [
-      { name: "الروضة", level: "A", multiplier: 1.15 },
-      { name: "الزهراء", level: "A", multiplier: 1.15 },
-      { name: "الحمراء", level: "B", multiplier: 1.10 },
-      { name: "النعيم", level: "C", multiplier: 1.00 },
-      { name: "البلد", level: "D", multiplier: 0.95 },
-    ];
+    const jeddahLevel1 = ["الروضة", "الزهراء", "الصحافة", "الرمال"];
+    const jeddahLevel2 = ["الحمراء", "النعيم"];
+    const jeddahLevel3 = ["البلد", "الشفاء", "المروة"];
 
-    for (const neighborhood of jeddahNeighborhoods) {
-      await prisma.neighborhood.create({
-        data: {
+    for (const name of jeddahLevel1) {
+      await prisma.neighborhood.upsert({
+        where: { cityId_name: { cityId: jeddah.id, name } },
+        update: { level: "A", multiplier: 1.15, applyAboveArea: 500 },
+        create: {
           cityId: jeddah.id,
-          name: neighborhood.name,
-          level: neighborhood.level,
-          multiplier: neighborhood.multiplier,
+          name,
+          level: "A",
+          multiplier: 1.15,
           applyAboveArea: 500,
           displayOrder: 0,
         },
       });
     }
-    console.log(`✓ ${jeddahNeighborhoods.length} neighborhoods created for Jeddah`);
+
+    for (const name of jeddahLevel2) {
+      await prisma.neighborhood.upsert({
+        where: { cityId_name: { cityId: jeddah.id, name } },
+        update: { level: "B", multiplier: 1.12, applyAboveArea: 500 },
+        create: {
+          cityId: jeddah.id,
+          name,
+          level: "B",
+          multiplier: 1.12,
+          applyAboveArea: 500,
+          displayOrder: 0,
+        },
+      });
+    }
+
+    for (const name of jeddahLevel3) {
+      await prisma.neighborhood.upsert({
+        where: { cityId_name: { cityId: jeddah.id, name } },
+        update: { level: "C", multiplier: 1.0, applyAboveArea: 500 },
+        create: {
+          cityId: jeddah.id,
+          name,
+          level: "C",
+          multiplier: 1.0,
+          applyAboveArea: 500,
+          displayOrder: 0,
+        },
+      });
+    }
+
+    console.log(`✓ Neighborhoods created for Jeddah`);
+  }
+
+  // Dammam neighborhoods
+  if (dammam) {
+    const dammamLevel1 = ["الفلاح", "الخليج", "الغدير", "النفل"];
+
+    for (const name of dammamLevel1) {
+      await prisma.neighborhood.upsert({
+        where: { cityId_name: { cityId: dammam.id, name } },
+        update: { level: "A", multiplier: 1.15, applyAboveArea: 500 },
+        create: {
+          cityId: dammam.id,
+          name,
+          level: "A",
+          multiplier: 1.15,
+          applyAboveArea: 500,
+          displayOrder: 0,
+        },
+      });
+    }
+
+    console.log(`✓ Neighborhoods created for Dammam`);
+  }
+
+  // Taif neighborhoods
+  if (taif) {
+    const taifLevel1 = ["العقيق", "الندى"];
+
+    for (const name of taifLevel1) {
+      await prisma.neighborhood.upsert({
+        where: { cityId_name: { cityId: taif.id, name } },
+        update: { level: "A", multiplier: 1.15, applyAboveArea: 500 },
+        create: {
+          cityId: taif.id,
+          name,
+          level: "A",
+          multiplier: 1.15,
+          applyAboveArea: 500,
+          displayOrder: 0,
+        },
+      });
+    }
+
+    console.log(`✓ Neighborhoods created for Taif`);
+  }
+
+  // Makkah neighborhoods
+  if (makkah) {
+    const makkahLevel1 = ["جسر", "القيعة"];
+
+    for (const name of makkahLevel1) {
+      await prisma.neighborhood.upsert({
+        where: { cityId_name: { cityId: makkah.id, name } },
+        update: { level: "A", multiplier: 1.15, applyAboveArea: 500 },
+        create: {
+          cityId: makkah.id,
+          name,
+          level: "A",
+          multiplier: 1.15,
+          applyAboveArea: 500,
+          displayOrder: 0,
+        },
+      });
+    }
+
+    console.log(`✓ Neighborhoods created for Makkah`);
+  }
+
+  // Ahsa neighborhoods
+  if (ahsa) {
+    const ahsaLevel1 = ["القصوان", "غرناطة", "الياسمين"];
+
+    for (const name of ahsaLevel1) {
+      await prisma.neighborhood.upsert({
+        where: { cityId_name: { cityId: ahsa.id, name } },
+        update: { level: "A", multiplier: 1.15, applyAboveArea: 500 },
+        create: {
+          cityId: ahsa.id,
+          name,
+          level: "A",
+          multiplier: 1.15,
+          applyAboveArea: 500,
+          displayOrder: 0,
+        },
+      });
+    }
+
+    console.log(`✓ Neighborhoods created for Ahsa`);
+  }
+
+  // Jubail neighborhoods
+  if (jubail) {
+    const jubailLevel1 = ["المصيف"];
+
+    for (const name of jubailLevel1) {
+      await prisma.neighborhood.upsert({
+        where: { cityId_name: { cityId: jubail.id, name } },
+        update: { level: "A", multiplier: 1.15, applyAboveArea: 500 },
+        create: {
+          cityId: jubail.id,
+          name,
+          level: "A",
+          multiplier: 1.15,
+          applyAboveArea: 500,
+          displayOrder: 0,
+        },
+      });
+    }
+
+    console.log(`✓ Neighborhoods created for Jubail`);
   }
 
   console.log("✅ Database seeding completed successfully!");
@@ -322,4 +709,3 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
-

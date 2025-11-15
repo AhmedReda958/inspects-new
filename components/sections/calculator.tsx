@@ -70,13 +70,43 @@ const calculatorSchema = z.object({
 type CalculatorFormValues = z.infer<typeof calculatorSchema>;
 
 interface PriceCalculationResponse {
+  success: boolean;
   price: number;
   basePrice: number;
+  priceBeforeVat: number;
   vatAmount: number;
   breakdown: {
-    floorsCost: number;
-    ageMultiplier: number;
-    numberOfFloors: number;
+    step1_baseCalculation: {
+      coveredArea: number;
+      packageBasePrice: number;
+      exceedsThreshold: boolean;
+      areaAboveThreshold?: number;
+      pricePerSqm?: number;
+      calculatedPrice: number;
+    };
+    step2_ageMultiplier: {
+      ageRange: string;
+      multiplier: number;
+      priceAfterAge: number;
+    };
+    step3_purposeMultiplier: {
+      purpose: string;
+      multiplier: number;
+      priceAfterPurpose: number;
+    };
+    step4_neighborhoodMultiplier?: {
+      neighborhood: string;
+      level: string;
+      multiplier: number;
+      applied: boolean;
+      reason?: string;
+      priceAfterNeighborhood: number;
+    };
+    step5_vat: {
+      percentage: number;
+      vatAmount: number;
+      finalPrice: number;
+    };
   };
 }
 
@@ -109,36 +139,21 @@ export default function CalculatorSection() {
     async function fetchConfig() {
       try {
         const response = await fetch("/api/calculator/config");
+
+        if (!response.ok) {
+          throw new Error("فشل في تحميل البيانات من الخادم");
+        }
+
         const data = await response.json();
-        if (data.success) {
+
+        if (data.success && data.data) {
           setConfig(data.data);
+        } else {
+          throw new Error("فشل في تحميل بيانات النموذج");
         }
       } catch (error) {
         console.error("Error fetching calculator config:", error);
-        // Fallback to content.ts if API fails
-        setConfig({
-          packages: [
-            { value: "basic", label: "الباقة الأساسية" },
-            { value: "premium", label: "الباقة المميزة" },
-            { value: "vip", label: "باقة VIP" },
-          ],
-          cities: content.calculator.fields.city.options.map((c) => ({
-            value: c,
-            label: c,
-          })),
-          cityNeighborhoods: content.calculator.cityNeighborhoods,
-          propertyAges: content.calculator.fields.propertyAge.options.map(
-            (a) => ({
-              value: a,
-              label: a,
-            })
-          ),
-          inspectionPurposes:
-            content.calculator.fields.inspectionPurpose.options.map((p) => ({
-              value: p,
-              label: p,
-            })),
-        });
+        setConfig(null); // Set to null to show error state
       } finally {
         setIsLoadingConfig(false);
       }
@@ -227,12 +242,23 @@ export default function CalculatorSection() {
             body: JSON.stringify(data),
           });
 
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || "فشل حساب السعر");
+          let responseData;
+          try {
+            responseData = await response.json();
+          } catch {
+            throw new Error("فشل في قراءة استجابة الخادم");
           }
 
-          const result: PriceCalculationResponse = await response.json();
+          if (!response.ok) {
+            throw new Error(responseData.error || "فشل حساب السعر");
+          }
+
+          // Check for success field in response
+          if (!responseData.success) {
+            throw new Error(responseData.error || "فشل حساب السعر");
+          }
+
+          const result: PriceCalculationResponse = responseData;
           setCalculatedPrice(result.price);
           setPriceDetails(result);
           setCurrentStep((prev) => Math.min(prev + 1, totalSteps));
