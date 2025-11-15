@@ -371,7 +371,7 @@ export default function CalculatorSection() {
 
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-8 items-start max-w-6xl mx-auto">
           {/* Right side - Form */}
-          <div className="col-span-12 lg:col-span-8 w-full mx-auto lg:mx-0 order-last lg:order-first">
+          <div className="col-span-12 lg:col-span-7 w-full mx-auto lg:mx-0 order-last lg:order-first">
             {/* Step Indicator */}
             <div className="mb-8">
               {/* Progress bars */}
@@ -752,7 +752,7 @@ export default function CalculatorSection() {
                       onClick={handleNext}
                       disabled={isCalculating}
                       size="lg"
-                      className="h-14 w-full lg:min-w-40 rounded-none text-lg font-medium cursor-pointer"
+                      className="h-14 w-full lg:w-40 rounded-none text-lg font-medium cursor-pointer"
                     >
                       {isCalculating ? (
                         <>
@@ -815,7 +815,7 @@ export default function CalculatorSection() {
             </Form>
           </div>
           {/* Left side - Image (Hidden on mobile, shown on desktop) */}
-          <div className="col-span-12 lg:col-span-4 relative w-full h-[450px] lg:h-[calc(100%-88px)]">
+          <div className="col-span-12 lg:col-span-5 relative w-full h-[450px] lg:h-[calc(100%-88px)]">
             <Image
               src="/images/sections/calulator.png"
               alt="Calculator illustration"
