@@ -34,6 +34,7 @@ export function PackagesPage() {
     handleCancelTier,
     handleTierSubmit,
     handleDeleteTier,
+    ConfirmDialog,
   } = usePackages();
 
   if (loading) {
@@ -90,6 +91,7 @@ export function PackagesPage() {
           ))}
         </div>
       </main>
+      <ConfirmDialog />
     </>
   );
 }

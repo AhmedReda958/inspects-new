@@ -36,6 +36,7 @@ export function MultipliersPage() {
     handlePurposeSubmit,
     handleDeleteAge,
     handleDeletePurpose,
+    ConfirmDialog: MultipliersConfirmDialog,
   } = useMultipliers();
 
   const {
@@ -50,6 +51,7 @@ export function MultipliersPage() {
     handleCancelLevel,
     handleLevelSubmit,
     handleDeleteLevel,
+    ConfirmDialog: LevelsConfirmDialog,
   } = useNeighborhoodLevels();
 
   if (loading || levelsLoading) {
@@ -128,6 +130,8 @@ export function MultipliersPage() {
           </TabsContent>
         </Tabs>
       </main>
+      <MultipliersConfirmDialog />
+      <LevelsConfirmDialog />
     </>
   );
 }

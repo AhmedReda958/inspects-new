@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useToast } from "@/hooks/use-toast";
 import type {
   VatFormData,
   RuleFormData,
@@ -23,6 +24,7 @@ const ruleSchema = z.object({
 });
 
 export function useSettings() {
+  const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [vatData, setVatData] = useState<VatData | null>(null);
@@ -110,7 +112,11 @@ export function useSettings() {
       const result = await response.json();
       if (result.success) {
         setVatData({ percentage: data.percentage });
-        alert("VAT setting updated successfully!");
+        toast({
+          title: "تم التحديث بنجاح",
+          description: "تم تحديث إعدادات ضريبة القيمة المضافة بنجاح!",
+          variant: "success",
+        });
       }
     } catch (error) {
       setError(error instanceof Error ? error.message : "Failed to update VAT");
@@ -140,7 +146,11 @@ export function useSettings() {
         throw new Error(result.error || "Failed to update rules");
       }
 
-      alert("Calculation rules updated successfully!");
+      toast({
+        title: "تم التحديث بنجاح",
+        description: "تم تحديث قواعد الحساب بنجاح!",
+        variant: "success",
+      });
       fetchSettings();
     } catch (error) {
       setError(

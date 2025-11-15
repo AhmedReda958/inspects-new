@@ -34,6 +34,7 @@ export function LocationsPage() {
     handleNeighborhoodSubmit,
     handleDeleteCity,
     handleDeleteNeighborhood,
+    ConfirmDialog,
   } = useLocations();
 
   if (loading) {
@@ -93,6 +94,7 @@ export function LocationsPage() {
           </TabsContent>
         </Tabs>
       </main>
+      <ConfirmDialog />
     </>
   );
 }

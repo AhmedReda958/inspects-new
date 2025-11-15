@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useToast } from "@/hooks/use-toast";
 import type { Lead, LeadUpdateFormData } from "@/types/admin/leads";
 
 const leadUpdateSchema = z.object({
@@ -14,6 +15,7 @@ const leadUpdateSchema = z.object({
 });
 
 export function useLeadDetail(leadId: string) {
+  const { toast } = useToast();
   const [lead, setLead] = useState<Lead | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -73,7 +75,11 @@ export function useLeadDetail(leadId: string) {
 
       const result = await response.json();
       if (result.success) {
-        alert("Lead updated successfully!");
+        toast({
+          title: "تم التحديث بنجاح",
+          description: "تم تحديث العميل المحتمل بنجاح!",
+          variant: "success",
+        });
         fetchLead();
       }
     } catch (error) {

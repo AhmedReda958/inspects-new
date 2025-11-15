@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import { useConfirm } from "@/hooks/use-confirm";
 import type {
   Package,
   Tier,
@@ -9,6 +12,9 @@ import type {
 } from "@/types/admin/packages";
 
 export function usePackages() {
+  const router = useRouter();
+  const { toast } = useToast();
+  const { confirm, ConfirmDialog } = useConfirm();
   const [packages, setPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -104,20 +110,29 @@ export function usePackages() {
         throw new Error(result.error || "Failed to save package");
       }
 
-      alert(
-        editingPackage
-          ? "Package updated successfully!"
-          : "Package created successfully!"
-      );
+      toast({
+        title: editingPackage ? "تم التحديث بنجاح" : "تم الإنشاء بنجاح",
+        description: editingPackage
+          ? "تم تحديث الباقة بنجاح!"
+          : "تم إنشاء الباقة بنجاح!",
+        variant: "success",
+      });
       handleCancel();
       fetchPackages();
     } catch (error) {
-      alert(error instanceof Error ? error.message : "Failed to save package");
+      toast({
+        title: "خطأ",
+        description: error instanceof Error ? error.message : "فشل في حفظ الباقة",
+        variant: "destructive",
+      });
     }
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("Are you sure you want to delete this package?")) return;
+    const confirmed = await confirm("هل أنت متأكد من حذف هذه الباقة؟", {
+      variant: "destructive",
+    });
+    if (!confirmed) return;
 
     try {
       const response = await fetch(`/api/admin/packages/${id}`, {
@@ -126,12 +141,19 @@ export function usePackages() {
 
       if (!response.ok) throw new Error("Failed to delete package");
 
-      alert("Package deleted successfully!");
+      toast({
+        title: "تم الحذف بنجاح",
+        description: "تم حذف الباقة بنجاح!",
+        variant: "success",
+      });
       fetchPackages();
+      router.refresh();
     } catch (error) {
-      alert(
-        error instanceof Error ? error.message : "Failed to delete package"
-      );
+      toast({
+        title: "خطأ",
+        description: error instanceof Error ? error.message : "فشل في حذف الباقة",
+        variant: "destructive",
+      });
     }
   }
 
@@ -204,20 +226,29 @@ export function usePackages() {
         throw new Error(result.error || "Failed to save tier");
       }
 
-      alert(
-        editingTier
-          ? "Tier updated successfully!"
-          : "Tier created successfully!"
-      );
+      toast({
+        title: editingTier ? "تم التحديث بنجاح" : "تم الإنشاء بنجاح",
+        description: editingTier
+          ? "تم تحديث المستوى بنجاح!"
+          : "تم إنشاء المستوى بنجاح!",
+        variant: "success",
+      });
       handleCancelTier();
       fetchPackages();
     } catch (error) {
-      alert(error instanceof Error ? error.message : "Failed to save tier");
+      toast({
+        title: "خطأ",
+        description: error instanceof Error ? error.message : "فشل في حفظ المستوى",
+        variant: "destructive",
+      });
     }
   }
 
   async function handleDeleteTier(packageId: string, tierId: string) {
-    if (!confirm("Are you sure you want to delete this tier?")) return;
+    const confirmed = await confirm("هل أنت متأكد من حذف هذا المستوى؟", {
+      variant: "destructive",
+    });
+    if (!confirmed) return;
 
     try {
       const response = await fetch(
@@ -229,10 +260,19 @@ export function usePackages() {
 
       if (!response.ok) throw new Error("Failed to delete tier");
 
-      alert("Tier deleted successfully!");
+      toast({
+        title: "تم الحذف بنجاح",
+        description: "تم حذف المستوى بنجاح!",
+        variant: "success",
+      });
       fetchPackages();
+      router.refresh();
     } catch (error) {
-      alert(error instanceof Error ? error.message : "Failed to delete tier");
+      toast({
+        title: "خطأ",
+        description: error instanceof Error ? error.message : "فشل في حذف المستوى",
+        variant: "destructive",
+      });
     }
   }
 
@@ -259,5 +299,6 @@ export function usePackages() {
     handleCancelTier,
     handleTierSubmit,
     handleDeleteTier,
+    ConfirmDialog,
   };
 }

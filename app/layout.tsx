@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Script from "next/script";
 import content from "@/content";
+import { Toaster } from "@/components/ui/toaster";
 
 import "./globals.css";
 
@@ -96,6 +97,7 @@ export default function RootLayout({
           `}
         </Script>
         {children}
+        <Toaster />
       </body>
     </html>
   );

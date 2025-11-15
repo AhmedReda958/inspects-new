@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import { useConfirm } from "@/hooks/use-confirm";
 import type {
   City,
   Neighborhood,
@@ -10,6 +13,9 @@ import type {
 } from "@/types/admin/locations";
 
 export function useLocations() {
+  const router = useRouter();
+  const { toast } = useToast();
+  const { confirm, ConfirmDialog } = useConfirm();
   const [cities, setCities] = useState<City[]>([]);
   const [levels, setLevels] = useState<NeighborhoodLevel[]>([]);
   const [loading, setLoading] = useState(true);
@@ -49,7 +55,9 @@ export function useLocations() {
 
       const result = await response.json();
       if (result.success) {
-        setLevels(result.data.filter((level: NeighborhoodLevel) => level.isActive));
+        setLevels(
+          result.data.filter((level: NeighborhoodLevel) => level.isActive)
+        );
       }
     } catch (error) {
       console.error("Error fetching neighborhood levels:", error);
@@ -90,7 +98,9 @@ export function useLocations() {
       name: neighborhood.name,
       nameEn: neighborhood.nameEn || "",
       level: neighborhood.level,
-      multiplier: hasCustomMultiplier ? neighborhood.multiplier.toString() : null,
+      multiplier: hasCustomMultiplier
+        ? neighborhood.multiplier.toString()
+        : null,
       useCustomMultiplier: hasCustomMultiplier,
       applyAboveArea: neighborhood.applyAboveArea,
       displayOrder: neighborhood.displayOrder,
@@ -140,15 +150,22 @@ export function useLocations() {
         throw new Error(result.error || "Failed to save city");
       }
 
-      alert(
-        editingCity
-          ? "City updated successfully!"
-          : "City created successfully!"
-      );
+      toast({
+        title: editingCity ? "تم التحديث بنجاح" : "تم الإنشاء بنجاح",
+        description: editingCity
+          ? "تم تحديث المدينة بنجاح!"
+          : "تم إنشاء المدينة بنجاح!",
+        variant: "success",
+      });
       handleCancelCity();
       fetchCities();
     } catch (error) {
-      alert(error instanceof Error ? error.message : "Failed to save city");
+      toast({
+        title: "خطأ",
+        description:
+          error instanceof Error ? error.message : "فشل في حفظ المدينة",
+        variant: "destructive",
+      });
     }
   }
 
@@ -172,7 +189,10 @@ export function useLocations() {
       };
 
       // Only include multiplier if custom multiplier is enabled
-      if (neighborhoodFormData.useCustomMultiplier && neighborhoodFormData.multiplier) {
+      if (
+        neighborhoodFormData.useCustomMultiplier &&
+        neighborhoodFormData.multiplier
+      ) {
         submitData.multiplier = parseFloat(neighborhoodFormData.multiplier);
       } else {
         submitData.multiplier = null;
@@ -189,22 +209,29 @@ export function useLocations() {
         throw new Error(result.error || "Failed to save neighborhood");
       }
 
-      alert(
-        editingNeighborhood
-          ? "Neighborhood updated successfully!"
-          : "Neighborhood created successfully!"
-      );
+      toast({
+        title: editingNeighborhood ? "تم التحديث بنجاح" : "تم الإنشاء بنجاح",
+        description: editingNeighborhood
+          ? "تم تحديث الحي بنجاح!"
+          : "تم إنشاء الحي بنجاح!",
+        variant: "success",
+      });
       handleCancelNeighborhood();
       fetchCities();
     } catch (error) {
-      alert(
-        error instanceof Error ? error.message : "Failed to save neighborhood"
-      );
+      toast({
+        title: "خطأ",
+        description: error instanceof Error ? error.message : "فشل في حفظ الحي",
+        variant: "destructive",
+      });
     }
   }
 
   async function handleDeleteCity(id: string) {
-    if (!confirm("Are you sure you want to delete this city?")) return;
+    const confirmed = await confirm("هل أنت متأكد من حذف هذه المدينة؟", {
+      variant: "destructive",
+    });
+    if (!confirmed) return;
 
     try {
       const response = await fetch(`/api/admin/cities/${id}`, {
@@ -213,15 +240,28 @@ export function useLocations() {
 
       if (!response.ok) throw new Error("Failed to delete city");
 
-      alert("City deleted successfully!");
+      toast({
+        title: "تم الحذف بنجاح",
+        description: "تم حذف المدينة بنجاح!",
+        variant: "success",
+      });
       fetchCities();
+      router.refresh();
     } catch (error) {
-      alert(error instanceof Error ? error.message : "Failed to delete city");
+      toast({
+        title: "خطأ",
+        description:
+          error instanceof Error ? error.message : "فشل في حذف المدينة",
+        variant: "destructive",
+      });
     }
   }
 
   async function handleDeleteNeighborhood(id: string) {
-    if (!confirm("Are you sure you want to delete this neighborhood?")) return;
+    const confirmed = await confirm("هل أنت متأكد من حذف هذا الحي؟", {
+      variant: "destructive",
+    });
+    if (!confirmed) return;
 
     try {
       const response = await fetch(`/api/admin/neighborhoods/${id}`, {
@@ -230,12 +270,19 @@ export function useLocations() {
 
       if (!response.ok) throw new Error("Failed to delete neighborhood");
 
-      alert("Neighborhood deleted successfully!");
+      toast({
+        title: "تم الحذف بنجاح",
+        description: "تم حذف الحي بنجاح!",
+        variant: "success",
+      });
       fetchCities();
+      router.refresh();
     } catch (error) {
-      alert(
-        error instanceof Error ? error.message : "Failed to delete neighborhood"
-      );
+      toast({
+        title: "خطأ",
+        description: error instanceof Error ? error.message : "فشل في حذف الحي",
+        variant: "destructive",
+      });
     }
   }
 
@@ -263,5 +310,6 @@ export function useLocations() {
     handleNeighborhoodSubmit,
     handleDeleteCity,
     handleDeleteNeighborhood,
+    ConfirmDialog,
   };
 }

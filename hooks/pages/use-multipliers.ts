@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import { useConfirm } from "@/hooks/use-confirm";
 import type {
   Multiplier,
   AgeFormData,
@@ -8,6 +11,9 @@ import type {
 } from "@/types/admin/multipliers";
 
 export function useMultipliers() {
+  const router = useRouter();
+  const { toast } = useToast();
+  const { confirm, ConfirmDialog } = useConfirm();
   const [propertyAges, setPropertyAges] = useState<Multiplier[]>([]);
   const [inspectionPurposes, setInspectionPurposes] = useState<Multiplier[]>(
     []
@@ -135,17 +141,21 @@ export function useMultipliers() {
         throw new Error(result.error || "Failed to save multiplier");
       }
 
-      alert(
-        editingAge
-          ? "Multiplier updated successfully!"
-          : "Multiplier created successfully!"
-      );
+      toast({
+        title: editingAge ? "تم التحديث بنجاح" : "تم الإنشاء بنجاح",
+        description: editingAge
+          ? "تم تحديث المضاعف بنجاح!"
+          : "تم إنشاء المضاعف بنجاح!",
+        variant: "success",
+      });
       handleCancelAge();
       fetchMultipliers();
     } catch (error) {
-      alert(
-        error instanceof Error ? error.message : "Failed to save multiplier"
-      );
+      toast({
+        title: "خطأ",
+        description: error instanceof Error ? error.message : "فشل في حفظ المضاعف",
+        variant: "destructive",
+      });
     }
   }
 
@@ -172,22 +182,29 @@ export function useMultipliers() {
         throw new Error(result.error || "Failed to save multiplier");
       }
 
-      alert(
-        editingPurpose
-          ? "Multiplier updated successfully!"
-          : "Multiplier created successfully!"
-      );
+      toast({
+        title: editingPurpose ? "تم التحديث بنجاح" : "تم الإنشاء بنجاح",
+        description: editingPurpose
+          ? "تم تحديث المضاعف بنجاح!"
+          : "تم إنشاء المضاعف بنجاح!",
+        variant: "success",
+      });
       handleCancelPurpose();
       fetchMultipliers();
     } catch (error) {
-      alert(
-        error instanceof Error ? error.message : "Failed to save multiplier"
-      );
+      toast({
+        title: "خطأ",
+        description: error instanceof Error ? error.message : "فشل في حفظ المضاعف",
+        variant: "destructive",
+      });
     }
   }
 
   async function handleDeleteAge(id: string) {
-    if (!confirm("Are you sure you want to delete this multiplier?")) return;
+    const confirmed = await confirm("هل أنت متأكد من حذف هذا المضاعف؟", {
+      variant: "destructive",
+    });
+    if (!confirmed) return;
 
     try {
       const response = await fetch(
@@ -199,17 +216,27 @@ export function useMultipliers() {
 
       if (!response.ok) throw new Error("Failed to delete multiplier");
 
-      alert("Multiplier deleted successfully!");
+      toast({
+        title: "تم الحذف بنجاح",
+        description: "تم حذف المضاعف بنجاح!",
+        variant: "success",
+      });
       fetchMultipliers();
+      router.refresh();
     } catch (error) {
-      alert(
-        error instanceof Error ? error.message : "Failed to delete multiplier"
-      );
+      toast({
+        title: "خطأ",
+        description: error instanceof Error ? error.message : "فشل في حذف المضاعف",
+        variant: "destructive",
+      });
     }
   }
 
   async function handleDeletePurpose(id: string) {
-    if (!confirm("Are you sure you want to delete this multiplier?")) return;
+    const confirmed = await confirm("هل أنت متأكد من حذف هذا المضاعف؟", {
+      variant: "destructive",
+    });
+    if (!confirmed) return;
 
     try {
       const response = await fetch(
@@ -221,12 +248,19 @@ export function useMultipliers() {
 
       if (!response.ok) throw new Error("Failed to delete multiplier");
 
-      alert("Multiplier deleted successfully!");
+      toast({
+        title: "تم الحذف بنجاح",
+        description: "تم حذف المضاعف بنجاح!",
+        variant: "success",
+      });
       fetchMultipliers();
+      router.refresh();
     } catch (error) {
-      alert(
-        error instanceof Error ? error.message : "Failed to delete multiplier"
-      );
+      toast({
+        title: "خطأ",
+        description: error instanceof Error ? error.message : "فشل في حذف المضاعف",
+        variant: "destructive",
+      });
     }
   }
 
@@ -254,5 +288,6 @@ export function useMultipliers() {
     handlePurposeSubmit,
     handleDeleteAge,
     handleDeletePurpose,
+    ConfirmDialog,
   };
 }
