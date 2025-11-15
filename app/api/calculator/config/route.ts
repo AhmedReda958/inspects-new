@@ -1,6 +1,18 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
 
+type CityWithNeighborhoods = {
+  name: string;
+  nameEn: string | null;
+  displayOrder: number;
+  neighborhoods: Array<{
+    name: string;
+    nameEn: string | null;
+    level: string;
+    displayOrder: number;
+  }>;
+};
+
 export async function GET() {
   try {
     // Fetch all active configuration data
@@ -64,7 +76,7 @@ export async function GET() {
     ]);
 
     // Transform cities data to include neighborhoods mapping
-    const citiesData = cities.map((city) => ({
+    const citiesData = cities.map((city: CityWithNeighborhoods) => ({
       name: city.name,
       nameEn: city.nameEn,
       neighborhoods: city.neighborhoods.map((n) => n.name),
@@ -72,7 +84,7 @@ export async function GET() {
 
     // Create city-neighborhood mapping
     const cityNeighborhoods: Record<string, string[]> = {};
-    cities.forEach((city) => {
+    cities.forEach((city: CityWithNeighborhoods) => {
       cityNeighborhoods[city.name] = city.neighborhoods.map((n) => n.name);
     });
 
