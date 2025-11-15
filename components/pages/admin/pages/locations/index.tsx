@@ -12,6 +12,7 @@ export function LocationsPage() {
   const router = useRouter();
   const {
     cities,
+    levels,
     loading,
     activeTab,
     setActiveTab,
@@ -78,6 +79,7 @@ export function LocationsPage() {
           <TabsContent value="neighborhoods">
             <NeighborhoodsTab
               cities={cities}
+              levels={levels}
               showNeighborhoodForm={showNeighborhoodForm}
               editingNeighborhood={editingNeighborhood}
               neighborhoodFormData={neighborhoodFormData}

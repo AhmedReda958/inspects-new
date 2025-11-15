@@ -6,7 +6,9 @@ import { LoadingSpinner } from "@/components/layout/admin/loading-spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PropertyAgeTab } from "./property-age-tab";
 import { InspectionPurposeTab } from "./inspection-purpose-tab";
+import { NeighborhoodLevelsTab } from "./neighborhood-levels-tab";
 import { useMultipliers } from "@/hooks/pages/use-multipliers";
+import { useNeighborhoodLevels } from "@/hooks/pages/use-neighborhood-levels";
 
 export function MultipliersPage() {
   const router = useRouter();
@@ -36,7 +38,21 @@ export function MultipliersPage() {
     handleDeletePurpose,
   } = useMultipliers();
 
-  if (loading) {
+  const {
+    levels,
+    loading: levelsLoading,
+    showLevelForm,
+    setShowLevelForm,
+    editingLevel,
+    levelFormData,
+    setLevelFormData,
+    handleEditLevel,
+    handleCancelLevel,
+    handleLevelSubmit,
+    handleDeleteLevel,
+  } = useNeighborhoodLevels();
+
+  if (loading || levelsLoading) {
     return <LoadingSpinner message="Loading multipliers..." />;
   }
 
@@ -44,7 +60,7 @@ export function MultipliersPage() {
     <>
       <AdminHeader
         title="Multipliers Management"
-        subtitle="Manage property age and inspection purpose multipliers"
+        subtitle="Manage property age, inspection purpose, and neighborhood level multipliers"
         action={{
           label: "Back to Dashboard",
           onClick: () => router.push("/admin/dashboard"),
@@ -60,6 +76,9 @@ export function MultipliersPage() {
             <TabsTrigger value="property-age">Property Age</TabsTrigger>
             <TabsTrigger value="inspection-purpose">
               Inspection Purpose
+            </TabsTrigger>
+            <TabsTrigger value="neighborhood-levels">
+              Neighborhood Levels
             </TabsTrigger>
           </TabsList>
 
@@ -90,6 +109,21 @@ export function MultipliersPage() {
               handleCancelPurpose={handleCancelPurpose}
               handlePurposeSubmit={handlePurposeSubmit}
               handleDeletePurpose={handleDeletePurpose}
+            />
+          </TabsContent>
+
+          <TabsContent value="neighborhood-levels">
+            <NeighborhoodLevelsTab
+              levels={levels}
+              showLevelForm={showLevelForm}
+              editingLevel={editingLevel}
+              levelFormData={levelFormData}
+              setLevelFormData={setLevelFormData}
+              setShowLevelForm={setShowLevelForm}
+              handleEditLevel={handleEditLevel}
+              handleCancelLevel={handleCancelLevel}
+              handleLevelSubmit={handleLevelSubmit}
+              handleDeleteLevel={handleDeleteLevel}
             />
           </TabsContent>
         </Tabs>

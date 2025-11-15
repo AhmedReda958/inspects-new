@@ -90,7 +90,9 @@ model Neighborhood {
   name              String
   nameEn            String?
   level             String   // "A", "B", "C", "D" - categorization level
-  multiplier        Decimal  @db.Decimal(5, 4) // Neighborhood multiplier factor
+  levelCode         String?  // Reference to NeighborhoodLevel code
+  levelRelation     NeighborhoodLevel? @relation(fields: [levelCode], references: [code], onDelete: SetNull)
+  multiplier        Decimal? @db.Decimal(5, 4) // Neighborhood multiplier factor (null = use level default)
   isActive          Boolean  @default(true)
   applyAboveArea    Int      @default(500) // Apply multiplier only above this area (default 500m²)
   displayOrder      Int      @default(0)
@@ -103,6 +105,7 @@ model Neighborhood {
   @@map("neighborhoods")
   @@index([cityId])
   @@index([level])
+  @@index([levelCode])
 }
 
 // ==================== PRICING CONFIGURATION ====================
@@ -123,6 +126,23 @@ model AreaPriceTier {
 }
 
 // ==================== MULTIPLIERS CONFIGURATION ====================
+
+model NeighborhoodLevel {
+  id            String   @id @default(cuid())
+  code          String   @unique // e.g., "A", "B", "C", "D"
+  name          String   // Display name in Arabic
+  nameEn        String?  // Display name in English
+  multiplier    Decimal  @db.Decimal(5, 4) // Default multiplier for this level
+  displayOrder  Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  neighborhoods Neighborhood[]
+  
+  @@map("neighborhood_levels")
+  @@index([code])
+}
 
 model PropertyAgeMultiplier {
   id            String   @id @default(cuid())

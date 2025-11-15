@@ -45,6 +45,7 @@ export interface CalculationResult {
       level: string;
       multiplier: number;
       applied: boolean;
+      multiplierSource?: "custom" | "level";
       reason?: string;
       priceAfterNeighborhood: number;
     };
@@ -203,7 +204,29 @@ export async function calculateInspectionCost(
     const shouldApplyNeighborhood = input.coveredArea > neighborhoodThreshold;
 
     if (shouldApplyNeighborhood) {
-      const neighborhoodMultiplier = Number(neighborhoodData.multiplier);
+      // Use custom multiplier if provided, otherwise fetch level multiplier
+      let neighborhoodMultiplier: number;
+      let multiplierSource: "custom" | "level" = "custom";
+
+      if (neighborhoodData.multiplier !== null) {
+        neighborhoodMultiplier = Number(neighborhoodData.multiplier);
+        multiplierSource = "custom";
+      } else {
+        // Fetch level multiplier
+        const levelData = await prisma.neighborhoodLevel.findUnique({
+          where: { code: neighborhoodData.level, isActive: true },
+        });
+
+        if (!levelData) {
+          throw new Error(
+            `Neighborhood level "${neighborhoodData.level}" not found or inactive`
+          );
+        }
+
+        neighborhoodMultiplier = Number(levelData.multiplier);
+        multiplierSource = "level";
+      }
+
       priceAfterNeighborhood = priceAfterPurpose * neighborhoodMultiplier;
 
       step4Result = {
@@ -211,14 +234,36 @@ export async function calculateInspectionCost(
         level: neighborhoodData.level,
         multiplier: neighborhoodMultiplier,
         applied: true,
+        multiplierSource,
         priceAfterNeighborhood,
       };
     } else {
+      // Determine multiplier for display even if not applied
+      let displayMultiplier: number;
+      let multiplierSource: "custom" | "level" = "custom";
+
+      if (neighborhoodData.multiplier !== null) {
+        displayMultiplier = Number(neighborhoodData.multiplier);
+        multiplierSource = "custom";
+      } else {
+        const levelData = await prisma.neighborhoodLevel.findUnique({
+          where: { code: neighborhoodData.level, isActive: true },
+        });
+
+        if (levelData) {
+          displayMultiplier = Number(levelData.multiplier);
+          multiplierSource = "level";
+        } else {
+          displayMultiplier = 1.0;
+        }
+      }
+
       step4Result = {
         neighborhood: input.neighborhoodName!,
         level: neighborhoodData.level,
-        multiplier: Number(neighborhoodData.multiplier),
+        multiplier: displayMultiplier,
         applied: false,
+        multiplierSource,
         reason: `Neighborhood multiplier only applies to areas above ${neighborhoodThreshold}m²`,
         priceAfterNeighborhood: priceAfterPurpose,
       };

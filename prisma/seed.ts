@@ -277,6 +277,48 @@ async function main() {
     `✓ ${purposeMultipliers.length} inspection purpose multipliers created`
   );
 
+  // Create Neighborhood Levels
+  console.log("Creating neighborhood levels...");
+  const neighborhoodLevels = [
+    {
+      code: "A",
+      name: "ممتاز",
+      nameEn: "Premium",
+      multiplier: 1.15,
+      displayOrder: 1,
+    },
+    {
+      code: "B",
+      name: "جيد جداً",
+      nameEn: "Above Average",
+      multiplier: 1.12,
+      displayOrder: 2,
+    },
+    {
+      code: "C",
+      name: "متوسط",
+      nameEn: "Average",
+      multiplier: 1.0,
+      displayOrder: 3,
+    },
+    {
+      code: "D",
+      name: "أقل من المتوسط",
+      nameEn: "Below Average",
+      multiplier: 0.95,
+      displayOrder: 4,
+    },
+  ];
+
+  for (const level of neighborhoodLevels) {
+    await prisma.neighborhoodLevel.upsert({
+      where: { code: level.code },
+      update: level,
+      create: level,
+    });
+  }
+  console.log(`✓ ${neighborhoodLevels.length} neighborhood levels created`);
+
   // Create Cities
   console.log("Creating cities...");
   const cities = [
@@ -477,17 +519,23 @@ async function main() {
       ])
     );
 
-    // Create Level 1 neighborhoods (multiplier 1.15)
+    // Create Level 1 neighborhoods (use level default multiplier)
     for (const name of riyadhLevel1) {
       if (name && name.trim().length > 0) {
         await prisma.neighborhood.upsert({
           where: { cityId_name: { cityId: riyadh.id, name: name.trim() } },
-          update: { level: "A", multiplier: 1.15, applyAboveArea: 500 },
+          update: {
+            level: "A",
+            levelCode: "A",
+            multiplier: null,
+            applyAboveArea: 500,
+          },
           create: {
             cityId: riyadh.id,
             name: name.trim(),
             level: "A",
-            multiplier: 1.15,
+            levelCode: "A",
+            multiplier: null,
             applyAboveArea: 500,
             displayOrder: 0,
           },
@@ -495,17 +543,23 @@ async function main() {
       }
     }
 
-    // Create Level 2 neighborhoods (multiplier 1.12)
+    // Create Level 2 neighborhoods (use level default multiplier)
     for (const name of riyadhLevel2) {
       if (name && name.trim().length > 0) {
         await prisma.neighborhood.upsert({
           where: { cityId_name: { cityId: riyadh.id, name: name.trim() } },
-          update: { level: "B", multiplier: 1.12, applyAboveArea: 500 },
+          update: {
+            level: "B",
+            levelCode: "B",
+            multiplier: null,
+            applyAboveArea: 500,
+          },
           create: {
             cityId: riyadh.id,
             name: name.trim(),
             level: "B",
-            multiplier: 1.12,
+            levelCode: "B",
+            multiplier: null,
             applyAboveArea: 500,
             displayOrder: 0,
           },
@@ -513,17 +567,23 @@ async function main() {
       }
     }
 
-    // Create Level 3 neighborhoods (multiplier 1.0)
+    // Create Level 3 neighborhoods (use level default multiplier)
     for (const name of riyadhLevel3) {
       if (name && name.trim().length > 0) {
         await prisma.neighborhood.upsert({
           where: { cityId_name: { cityId: riyadh.id, name: name.trim() } },
-          update: { level: "C", multiplier: 1.0, applyAboveArea: 500 },
+          update: {
+            level: "C",
+            levelCode: "C",
+            multiplier: null,
+            applyAboveArea: 500,
+          },
           create: {
             cityId: riyadh.id,
             name: name.trim(),
             level: "C",
-            multiplier: 1.0,
+            levelCode: "C",
+            multiplier: null,
             applyAboveArea: 500,
             displayOrder: 0,
           },
@@ -543,12 +603,18 @@ async function main() {
     for (const name of jeddahLevel1) {
       await prisma.neighborhood.upsert({
         where: { cityId_name: { cityId: jeddah.id, name } },
-        update: { level: "A", multiplier: 1.15, applyAboveArea: 500 },
+        update: {
+          level: "A",
+          levelCode: "A",
+          multiplier: null,
+          applyAboveArea: 500,
+        },
         create: {
           cityId: jeddah.id,
           name,
           level: "A",
-          multiplier: 1.15,
+          levelCode: "A",
+          multiplier: null,
           applyAboveArea: 500,
           displayOrder: 0,
         },
@@ -558,12 +624,18 @@ async function main() {
     for (const name of jeddahLevel2) {
       await prisma.neighborhood.upsert({
         where: { cityId_name: { cityId: jeddah.id, name } },
-        update: { level: "B", multiplier: 1.12, applyAboveArea: 500 },
+        update: {
+          level: "B",
+          levelCode: "B",
+          multiplier: null,
+          applyAboveArea: 500,
+        },
         create: {
           cityId: jeddah.id,
           name,
           level: "B",
-          multiplier: 1.12,
+          levelCode: "B",
+          multiplier: null,
           applyAboveArea: 500,
           displayOrder: 0,
         },
@@ -573,12 +645,18 @@ async function main() {
     for (const name of jeddahLevel3) {
       await prisma.neighborhood.upsert({
         where: { cityId_name: { cityId: jeddah.id, name } },
-        update: { level: "C", multiplier: 1.0, applyAboveArea: 500 },
+        update: {
+          level: "C",
+          levelCode: "C",
+          multiplier: null,
+          applyAboveArea: 500,
+        },
         create: {
           cityId: jeddah.id,
           name,
           level: "C",
-          multiplier: 1.0,
+          levelCode: "C",
+          multiplier: null,
           applyAboveArea: 500,
           displayOrder: 0,
         },
@@ -595,12 +673,18 @@ async function main() {
     for (const name of dammamLevel1) {
       await prisma.neighborhood.upsert({
         where: { cityId_name: { cityId: dammam.id, name } },
-        update: { level: "A", multiplier: 1.15, applyAboveArea: 500 },
+        update: {
+          level: "A",
+          levelCode: "A",
+          multiplier: null,
+          applyAboveArea: 500,
+        },
         create: {
           cityId: dammam.id,
           name,
           level: "A",
-          multiplier: 1.15,
+          levelCode: "A",
+          multiplier: null,
           applyAboveArea: 500,
           displayOrder: 0,
         },
@@ -617,12 +701,18 @@ async function main() {
     for (const name of taifLevel1) {
       await prisma.neighborhood.upsert({
         where: { cityId_name: { cityId: taif.id, name } },
-        update: { level: "A", multiplier: 1.15, applyAboveArea: 500 },
+        update: {
+          level: "A",
+          levelCode: "A",
+          multiplier: null,
+          applyAboveArea: 500,
+        },
         create: {
           cityId: taif.id,
           name,
           level: "A",
-          multiplier: 1.15,
+          levelCode: "A",
+          multiplier: null,
           applyAboveArea: 500,
           displayOrder: 0,
         },
@@ -639,12 +729,18 @@ async function main() {
     for (const name of makkahLevel1) {
       await prisma.neighborhood.upsert({
         where: { cityId_name: { cityId: makkah.id, name } },
-        update: { level: "A", multiplier: 1.15, applyAboveArea: 500 },
+        update: {
+          level: "A",
+          levelCode: "A",
+          multiplier: null,
+          applyAboveArea: 500,
+        },
         create: {
           cityId: makkah.id,
           name,
           level: "A",
-          multiplier: 1.15,
+          levelCode: "A",
+          multiplier: null,
           applyAboveArea: 500,
           displayOrder: 0,
         },
@@ -661,12 +757,18 @@ async function main() {
     for (const name of ahsaLevel1) {
       await prisma.neighborhood.upsert({
         where: { cityId_name: { cityId: ahsa.id, name } },
-        update: { level: "A", multiplier: 1.15, applyAboveArea: 500 },
+        update: {
+          level: "A",
+          levelCode: "A",
+          multiplier: null,
+          applyAboveArea: 500,
+        },
         create: {
           cityId: ahsa.id,
           name,
           level: "A",
-          multiplier: 1.15,
+          levelCode: "A",
+          multiplier: null,
           applyAboveArea: 500,
           displayOrder: 0,
         },
@@ -683,12 +785,18 @@ async function main() {
     for (const name of jubailLevel1) {
       await prisma.neighborhood.upsert({
         where: { cityId_name: { cityId: jubail.id, name } },
-        update: { level: "A", multiplier: 1.15, applyAboveArea: 500 },
+        update: {
+          level: "A",
+          levelCode: "A",
+          multiplier: null,
+          applyAboveArea: 500,
+        },
         create: {
           cityId: jubail.id,
           name,
           level: "A",
-          multiplier: 1.15,
+          levelCode: "A",
+          multiplier: null,
           applyAboveArea: 500,
           displayOrder: 0,
         },

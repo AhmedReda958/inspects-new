@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import type {
   City,
   Neighborhood,
+  NeighborhoodLevel,
   CityFormData,
   NeighborhoodFormData,
 } from "@/types/admin/locations";
 
 export function useLocations() {
   const [cities, setCities] = useState<City[]>([]);
+  const [levels, setLevels] = useState<NeighborhoodLevel[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("cities");
   const [showCityForm, setShowCityForm] = useState(false);
@@ -27,8 +29,9 @@ export function useLocations() {
       cityId: "",
       name: "",
       nameEn: "",
-      level: "C",
-      multiplier: "1.00",
+      level: "",
+      multiplier: null,
+      useCustomMultiplier: false,
       applyAboveArea: 500,
       displayOrder: 0,
       isActive: true,
@@ -36,7 +39,22 @@ export function useLocations() {
 
   useEffect(() => {
     fetchCities();
+    fetchLevels();
   }, []);
+
+  async function fetchLevels() {
+    try {
+      const response = await fetch("/api/admin/neighborhood-levels");
+      if (!response.ok) throw new Error("Failed to fetch levels");
+
+      const result = await response.json();
+      if (result.success) {
+        setLevels(result.data.filter((level: NeighborhoodLevel) => level.isActive));
+      }
+    } catch (error) {
+      console.error("Error fetching neighborhood levels:", error);
+    }
+  }
 
   async function fetchCities() {
     try {
@@ -66,12 +84,14 @@ export function useLocations() {
 
   function handleEditNeighborhood(neighborhood: Neighborhood) {
     setEditingNeighborhood(neighborhood);
+    const hasCustomMultiplier = neighborhood.multiplier !== null;
     setNeighborhoodFormData({
       cityId: neighborhood.cityId,
       name: neighborhood.name,
       nameEn: neighborhood.nameEn || "",
       level: neighborhood.level,
-      multiplier: neighborhood.multiplier.toString(),
+      multiplier: hasCustomMultiplier ? neighborhood.multiplier.toString() : null,
+      useCustomMultiplier: hasCustomMultiplier,
       applyAboveArea: neighborhood.applyAboveArea,
       displayOrder: neighborhood.displayOrder,
       isActive: neighborhood.isActive,
@@ -92,8 +112,9 @@ export function useLocations() {
       cityId: "",
       name: "",
       nameEn: "",
-      level: "C",
-      multiplier: "1.00",
+      level: "",
+      multiplier: null,
+      useCustomMultiplier: false,
       applyAboveArea: 500,
       displayOrder: 0,
       isActive: true,
@@ -139,14 +160,28 @@ export function useLocations() {
         : "/api/admin/neighborhoods";
       const method = editingNeighborhood ? "PUT" : "POST";
 
+      const submitData: any = {
+        cityId: neighborhoodFormData.cityId,
+        name: neighborhoodFormData.name,
+        nameEn: neighborhoodFormData.nameEn,
+        level: neighborhoodFormData.level,
+        levelCode: neighborhoodFormData.level,
+        applyAboveArea: neighborhoodFormData.applyAboveArea,
+        displayOrder: neighborhoodFormData.displayOrder,
+        isActive: neighborhoodFormData.isActive,
+      };
+
+      // Only include multiplier if custom multiplier is enabled
+      if (neighborhoodFormData.useCustomMultiplier && neighborhoodFormData.multiplier) {
+        submitData.multiplier = parseFloat(neighborhoodFormData.multiplier);
+      } else {
+        submitData.multiplier = null;
+      }
+
       const response = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...neighborhoodFormData,
-          multiplier: parseFloat(neighborhoodFormData.multiplier),
-          isActive: neighborhoodFormData.isActive,
-        }),
+        body: JSON.stringify(submitData),
       });
 
       if (!response.ok) {
@@ -206,6 +241,7 @@ export function useLocations() {
 
   return {
     cities,
+    levels,
     loading,
     activeTab,
     setActiveTab,

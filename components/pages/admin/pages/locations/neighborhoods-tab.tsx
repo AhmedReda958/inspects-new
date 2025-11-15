@@ -8,10 +8,12 @@ import type {
   City,
   Neighborhood,
   NeighborhoodFormData,
+  NeighborhoodLevel,
 } from "@/types/admin/locations";
 
 interface NeighborhoodsTabProps {
   cities: City[];
+  levels: NeighborhoodLevel[];
   showNeighborhoodForm: boolean;
   editingNeighborhood: Neighborhood | null;
   neighborhoodFormData: NeighborhoodFormData;
@@ -25,6 +27,7 @@ interface NeighborhoodsTabProps {
 
 export function NeighborhoodsTab({
   cities,
+  levels,
   showNeighborhoodForm,
   editingNeighborhood,
   neighborhoodFormData,
@@ -43,6 +46,7 @@ export function NeighborhoodsTab({
           formData={neighborhoodFormData}
           setFormData={setNeighborhoodFormData}
           cities={cities}
+          levels={levels}
           onSubmit={handleNeighborhoodSubmit}
           onCancel={handleCancelNeighborhood}
         />

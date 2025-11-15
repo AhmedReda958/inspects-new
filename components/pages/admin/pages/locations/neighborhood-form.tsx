@@ -16,6 +16,7 @@ import type {
   Neighborhood,
   NeighborhoodFormData,
   City,
+  NeighborhoodLevel,
 } from "@/types/admin/locations";
 
 interface NeighborhoodFormProps {
@@ -23,6 +24,7 @@ interface NeighborhoodFormProps {
   formData: NeighborhoodFormData;
   setFormData: (data: NeighborhoodFormData) => void;
   cities: City[];
+  levels: NeighborhoodLevel[];
   onSubmit: (e: React.FormEvent) => void;
   onCancel: () => void;
 }
@@ -32,9 +34,33 @@ export function NeighborhoodForm({
   formData,
   setFormData,
   cities,
+  levels,
   onSubmit,
   onCancel,
 }: NeighborhoodFormProps) {
+  const selectedLevel = levels.find((level) => level.code === formData.level);
+  const levelMultiplier = selectedLevel?.multiplier || null;
+
+  function handleLevelChange(value: string) {
+    setFormData({
+      ...formData,
+      level: value,
+      // If not using custom multiplier, clear it when level changes
+      multiplier: formData.useCustomMultiplier ? formData.multiplier : null,
+    });
+  }
+
+  function handleUseCustomMultiplierChange(checked: boolean) {
+    setFormData({
+      ...formData,
+      useCustomMultiplier: checked,
+      // If enabling custom multiplier and no value set, use level multiplier as default
+      multiplier: checked
+        ? formData.multiplier || levelMultiplier?.toString() || null
+        : null,
+    });
+  }
+
   return (
     <Card className="mb-6">
       <CardHeader>
@@ -88,35 +114,67 @@ export function NeighborhoodForm({
               <Label htmlFor="neighborhood-level">Level</Label>
               <Select
                 value={formData.level}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, level: value })
-                }
+                onValueChange={handleLevelChange}
+                required
               >
                 <SelectTrigger>
-                  <SelectValue />
+                  <SelectValue placeholder="Select level" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="A">A - Premium (1.15x)</SelectItem>
-                  <SelectItem value="B">B - Above Average (1.10x)</SelectItem>
-                  <SelectItem value="C">C - Average (1.00x)</SelectItem>
-                  <SelectItem value="D">D - Below Average (0.95x)</SelectItem>
+                  {levels.map((level) => (
+                    <SelectItem key={level.id} value={level.code}>
+                      {level.code} - {level.name} ({level.multiplier}x)
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
+              {selectedLevel && (
+                <p className="text-xs text-gray-500">
+                  Default multiplier for this level: {selectedLevel.multiplier}x
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="neighborhood-multiplier">Multiplier</Label>
+              <div className="flex items-center gap-2 mb-2">
+                <Checkbox
+                  id="use-custom-multiplier"
+                  checked={formData.useCustomMultiplier}
+                  onCheckedChange={handleUseCustomMultiplierChange}
+                />
+                <Label
+                  htmlFor="use-custom-multiplier"
+                  className="cursor-pointer"
+                >
+                  Use Custom Multiplier
+                </Label>
+              </div>
               <Input
                 id="neighborhood-multiplier"
                 type="number"
                 step="0.01"
-                value={formData.multiplier}
+                value={formData.multiplier || ""}
                 onChange={(e) =>
-                  setFormData({ ...formData, multiplier: e.target.value })
+                  setFormData({
+                    ...formData,
+                    multiplier: e.target.value || null,
+                  })
                 }
-                placeholder="1.00"
-                required
+                placeholder={
+                  levelMultiplier
+                    ? `Default: ${levelMultiplier}x`
+                    : "Enter multiplier"
+                }
+                disabled={!formData.useCustomMultiplier}
+                required={formData.useCustomMultiplier}
               />
+              <p className="text-xs text-gray-500">
+                {formData.useCustomMultiplier
+                  ? "Custom multiplier will override the level default"
+                  : levelMultiplier
+                  ? `Using level default: ${levelMultiplier}x`
+                  : "Select a level to see default multiplier"}
+              </p>
             </div>
 
             <div className="space-y-2">

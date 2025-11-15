@@ -3,15 +3,13 @@ import { z } from "zod";
 import prisma from "@/lib/db";
 import { getAuthUser, createAuditLog } from "@/lib/auth";
 
-const neighborhoodSchema = z.object({
+const levelSchema = z.object({
+  code: z.string().min(1).optional(),
   name: z.string().min(1).optional(),
   nameEn: z.string().optional(),
-  level: z.string().min(1).optional(),
-  levelCode: z.string().optional(),
-  multiplier: z.number().positive().nullable().optional(),
-  isActive: z.boolean().optional(),
-  applyAboveArea: z.number().int().optional(),
+  multiplier: z.number().positive().optional(),
   displayOrder: z.number().int().optional(),
+  isActive: z.boolean().optional(),
 });
 
 export async function GET(
@@ -24,18 +22,17 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const neighborhood = await prisma.neighborhood.findUnique({
+    const level = await prisma.neighborhoodLevel.findUnique({
       where: { id: params.id },
-      include: { city: true },
     });
 
-    if (!neighborhood) {
-      return NextResponse.json({ error: "Neighborhood not found" }, { status: 404 });
+    if (!level) {
+      return NextResponse.json({ error: "Level not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true, data: neighborhood });
+    return NextResponse.json({ success: true, data: level });
   } catch (error) {
-    console.error("Error fetching neighborhood:", error);
+    console.error("Error fetching neighborhood level:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
@@ -51,7 +48,7 @@ export async function PUT(
     }
 
     const body = await request.json();
-    const validation = neighborhoodSchema.safeParse(body);
+    const validation = levelSchema.safeParse(body);
 
     if (!validation.success) {
       return NextResponse.json(
@@ -60,15 +57,15 @@ export async function PUT(
       );
     }
 
-    const oldNeighborhood = await prisma.neighborhood.findUnique({
+    const oldLevel = await prisma.neighborhoodLevel.findUnique({
       where: { id: params.id },
     });
 
-    if (!oldNeighborhood) {
-      return NextResponse.json({ error: "Neighborhood not found" }, { status: 404 });
+    if (!oldLevel) {
+      return NextResponse.json({ error: "Level not found" }, { status: 404 });
     }
 
-    const updatedNeighborhood = await prisma.neighborhood.update({
+    const updatedLevel = await prisma.neighborhoodLevel.update({
       where: { id: params.id },
       data: validation.data,
     });
@@ -76,17 +73,17 @@ export async function PUT(
     await createAuditLog({
       userId: user.id,
       action: "UPDATE",
-      tableName: "neighborhoods",
-      recordId: updatedNeighborhood.id,
-      oldValues: oldNeighborhood,
+      tableName: "neighborhood_levels",
+      recordId: updatedLevel.id,
+      oldValues: oldLevel,
       newValues: validation.data,
       ipAddress: request.headers.get("x-forwarded-for")?.split(",")[0] || undefined,
       userAgent: request.headers.get("user-agent") || undefined,
     });
 
-    return NextResponse.json({ success: true, data: updatedNeighborhood });
+    return NextResponse.json({ success: true, data: updatedLevel });
   } catch (error) {
-    console.error("Error updating neighborhood:", error);
+    console.error("Error updating neighborhood level:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
@@ -101,15 +98,15 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const neighborhood = await prisma.neighborhood.findUnique({
+    const level = await prisma.neighborhoodLevel.findUnique({
       where: { id: params.id },
     });
 
-    if (!neighborhood) {
-      return NextResponse.json({ error: "Neighborhood not found" }, { status: 404 });
+    if (!level) {
+      return NextResponse.json({ error: "Level not found" }, { status: 404 });
     }
 
-    const deletedNeighborhood = await prisma.neighborhood.update({
+    const deletedLevel = await prisma.neighborhoodLevel.update({
       where: { id: params.id },
       data: { isActive: false },
     });
@@ -117,17 +114,18 @@ export async function DELETE(
     await createAuditLog({
       userId: user.id,
       action: "DELETE",
-      tableName: "neighborhoods",
+      tableName: "neighborhood_levels",
       recordId: params.id,
-      oldValues: neighborhood,
+      oldValues: level,
       ipAddress: request.headers.get("x-forwarded-for")?.split(",")[0] || undefined,
       userAgent: request.headers.get("user-agent") || undefined,
     });
 
-    return NextResponse.json({ success: true, data: deletedNeighborhood });
+    return NextResponse.json({ success: true, data: deletedLevel });
   } catch (error) {
-    console.error("Error deleting neighborhood:", error);
+    console.error("Error deleting neighborhood level:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
+
 
