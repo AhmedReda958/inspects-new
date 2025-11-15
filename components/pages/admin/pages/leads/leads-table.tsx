@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,12 @@ import { cn } from "@/lib/utils";
 
 interface LeadsTableProps {
   leads: Lead[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
 }
 
 function getStatusColor(status: string) {
@@ -30,10 +36,44 @@ function getStatusColor(status: string) {
   }
 }
 
-export function LeadsTable({ leads }: LeadsTableProps) {
+export function LeadsTable({ leads, pagination }: LeadsTableProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const statusFilterFromUrl = searchParams.get("status");
+  const searchFromUrl = searchParams.get("search") || "";
+
+  const updateSearchParams = useCallback(
+    (updates: Record<string, string | null>) => {
+      const params = new URLSearchParams(searchParams.toString());
+      Object.entries(updates).forEach(([key, value]) => {
+        if (value === null || value === "") {
+          params.delete(key);
+        } else {
+          params.set(key, value);
+        }
+      });
+      // Reset to page 1 when search or filter changes
+      if (updates.search !== undefined || updates.status !== undefined) {
+        params.set("page", "1");
+      }
+      router.push(`/admin/leads?${params.toString()}`);
+    },
+    [router, searchParams]
+  );
+
+  const handleSearchChange = useCallback(
+    (search: string) => {
+      updateSearchParams({ search: search || null });
+    },
+    [updateSearchParams]
+  );
+
+  const handlePageChange = useCallback(
+    (page: number) => {
+      updateSearchParams({ page: page.toString() });
+    },
+    [updateSearchParams]
+  );
 
   const columns = useMemo<ColumnDef<Lead>[]>(
     () => [
@@ -174,8 +214,7 @@ export function LeadsTable({ leads }: LeadsTableProps) {
     defaultValue: "all",
     initialValue: statusFilterFromUrl,
     onFilterChange: (value) => {
-      const url = value ? `/admin/leads?status=${value}` : "/admin/leads";
-      router.push(url);
+      updateSearchParams({ status: value });
     },
   };
 
@@ -186,7 +225,12 @@ export function LeadsTable({ leads }: LeadsTableProps) {
       searchPlaceholder="Search leads..."
       filters={[statusFilter]}
       emptyMessage="No leads found"
-      pageSize={10}
+      pageSize={pagination.limit}
+      serverSide={true}
+      pagination={pagination}
+      onPageChange={handlePageChange}
+      search={searchFromUrl}
+      onSearchChange={handleSearchChange}
     />
   );
 }

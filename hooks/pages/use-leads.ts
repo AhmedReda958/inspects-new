@@ -10,23 +10,30 @@ export function useLeads() {
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState<LeadsPagination>({
     page: 1,
-    limit: 50,
+    limit: 10,
     total: 0,
     totalPages: 0,
   });
 
   const statusFilter = searchParams.get("status");
+  const search = searchParams.get("search") || "";
+  const page = parseInt(searchParams.get("page") || "1");
+  const limit = parseInt(searchParams.get("limit") || "10");
 
   useEffect(() => {
     fetchLeads();
-  }, [statusFilter]);
+  }, [statusFilter, search, page, limit]);
 
   async function fetchLeads() {
     try {
-      const url = statusFilter
-        ? `/api/admin/leads?status=${statusFilter}`
-        : "/api/admin/leads";
+      setLoading(true);
+      const params = new URLSearchParams();
+      if (statusFilter) params.append("status", statusFilter);
+      if (search) params.append("search", search);
+      params.append("page", page.toString());
+      params.append("limit", limit.toString());
 
+      const url = `/api/admin/leads?${params.toString()}`;
       const response = await fetch(url);
 
       if (!response.ok) {
@@ -48,5 +55,8 @@ export function useLeads() {
     loading,
     pagination,
     statusFilter,
+    search,
+    page,
+    limit,
   };
 }

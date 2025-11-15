@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -43,6 +43,19 @@ interface DataTableProps<TData> {
   emptyMessage?: string;
   pageSize?: number;
   className?: string;
+  // Server-side pagination props
+  pagination?: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+  onPageChange?: (page: number) => void;
+  // Server-side search props
+  search?: string;
+  onSearchChange?: (search: string) => void;
+  // Disable client-side filtering/pagination when using server-side
+  serverSide?: boolean;
 }
 
 export function DataTable<TData>({
@@ -54,32 +67,69 @@ export function DataTable<TData>({
   emptyMessage = "No results found",
   pageSize = 10,
   className,
+  pagination: serverPagination,
+  onPageChange,
+  search: serverSearch,
+  onSearchChange,
+  serverSide = false,
 }: DataTableProps<TData>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [globalFilter, setGlobalFilter] = useState("");
+  const [globalFilter, setGlobalFilter] = useState(serverSearch || "");
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Use server-side pagination if provided, otherwise use client-side
+  const useServerPagination = serverSide && serverPagination && onPageChange;
+  const useServerSearch = serverSide && onSearchChange !== undefined;
+
+  // Debounce search for server-side search
+  useEffect(() => {
+    if (useServerSearch && onSearchChange) {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+      searchTimeoutRef.current = setTimeout(() => {
+        onSearchChange(globalFilter);
+      }, 500);
+      return () => {
+        if (searchTimeoutRef.current) {
+          clearTimeout(searchTimeoutRef.current);
+        }
+      };
+    }
+  }, [globalFilter, useServerSearch, onSearchChange]);
+
+  // Sync serverSearch with local state when it changes externally
+  useEffect(() => {
+    if (useServerSearch && serverSearch !== undefined) {
+      setGlobalFilter(serverSearch);
+    }
+  }, [serverSearch, useServerSearch]);
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    getPaginationRowModel: useServerPagination ? undefined : getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
+    getFilteredRowModel: useServerPagination ? undefined : getFilteredRowModel(),
     onGlobalFilterChange: setGlobalFilter,
     globalFilterFn: "includesString",
     state: {
       sorting,
       columnFilters,
-      globalFilter,
+      globalFilter: useServerSearch ? globalFilter : globalFilter,
     },
     initialState: {
       pagination: {
-        pageSize,
+        pageSize: useServerPagination ? serverPagination.limit : pageSize,
+        pageIndex: useServerPagination ? serverPagination.page - 1 : 0,
       },
     },
+    manualPagination: useServerPagination,
+    manualFiltering: useServerPagination,
   });
 
   const hasFilters = filters.length > 0;
@@ -196,32 +246,66 @@ export function DataTable<TData>({
         </div>
         <div className="flex items-center justify-between px-6 py-4 border-t">
           <div className="text-sm text-gray-500">
-            Showing{" "}
-            {table.getState().pagination.pageIndex *
-              table.getState().pagination.pageSize +
-              1}{" "}
-            to{" "}
-            {Math.min(
-              (table.getState().pagination.pageIndex + 1) *
-                table.getState().pagination.pageSize,
-              table.getFilteredRowModel().rows.length
-            )}{" "}
-            of {table.getFilteredRowModel().rows.length} results
+            {useServerPagination && serverPagination ? (
+              <>
+                Showing{" "}
+                {(serverPagination.page - 1) * serverPagination.limit + 1} to{" "}
+                {Math.min(
+                  serverPagination.page * serverPagination.limit,
+                  serverPagination.total
+                )}{" "}
+                of {serverPagination.total} results
+              </>
+            ) : (
+              <>
+                Showing{" "}
+                {table.getState().pagination.pageIndex *
+                  table.getState().pagination.pageSize +
+                  1}{" "}
+                to{" "}
+                {Math.min(
+                  (table.getState().pagination.pageIndex + 1) *
+                    table.getState().pagination.pageSize,
+                  table.getFilteredRowModel().rows.length
+                )}{" "}
+                of {table.getFilteredRowModel().rows.length} results
+              </>
+            )}
           </div>
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
               size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
+              onClick={() => {
+                if (useServerPagination && serverPagination && onPageChange) {
+                  onPageChange(serverPagination.page - 1);
+                } else {
+                  table.previousPage();
+                }
+              }}
+              disabled={
+                useServerPagination
+                  ? serverPagination?.page === 1
+                  : !table.getCanPreviousPage()
+              }
             >
               Previous
             </Button>
             <Button
               variant="outline"
               size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
+              onClick={() => {
+                if (useServerPagination && serverPagination && onPageChange) {
+                  onPageChange(serverPagination.page + 1);
+                } else {
+                  table.nextPage();
+                }
+              }}
+              disabled={
+                useServerPagination
+                  ? serverPagination?.page === serverPagination?.totalPages
+                  : !table.getCanNextPage()
+              }
             >
               Next
             </Button>
