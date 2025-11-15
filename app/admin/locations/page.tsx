@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardAction } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardAction,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -45,7 +52,8 @@ export default function AdminLocations() {
   const [showCityForm, setShowCityForm] = useState(false);
   const [showNeighborhoodForm, setShowNeighborhoodForm] = useState(false);
   const [editingCity, setEditingCity] = useState<City | null>(null);
-  const [editingNeighborhood, setEditingNeighborhood] = useState<Neighborhood | null>(null);
+  const [editingNeighborhood, setEditingNeighborhood] =
+    useState<Neighborhood | null>(null);
   const [cityFormData, setCityFormData] = useState({
     name: "",
     nameEn: "",
@@ -59,6 +67,7 @@ export default function AdminLocations() {
     multiplier: "1.00",
     applyAboveArea: 500,
     displayOrder: 0,
+    isActive: true,
   });
 
   useEffect(() => {
@@ -101,6 +110,7 @@ export default function AdminLocations() {
       multiplier: neighborhood.multiplier.toString(),
       applyAboveArea: neighborhood.applyAboveArea,
       displayOrder: neighborhood.displayOrder,
+      isActive: neighborhood.isActive,
     });
     setShowNeighborhoodForm(true);
   }
@@ -122,6 +132,7 @@ export default function AdminLocations() {
       multiplier: "1.00",
       applyAboveArea: 500,
       displayOrder: 0,
+      isActive: true,
     });
   }
 
@@ -144,7 +155,11 @@ export default function AdminLocations() {
         throw new Error(result.error || "Failed to save city");
       }
 
-      alert(editingCity ? "City updated successfully!" : "City created successfully!");
+      alert(
+        editingCity
+          ? "City updated successfully!"
+          : "City created successfully!"
+      );
       handleCancelCity();
       fetchCities();
     } catch (error) {
@@ -166,6 +181,7 @@ export default function AdminLocations() {
         body: JSON.stringify({
           ...neighborhoodFormData,
           multiplier: parseFloat(neighborhoodFormData.multiplier),
+          isActive: neighborhoodFormData.isActive,
         }),
       });
 
@@ -174,11 +190,17 @@ export default function AdminLocations() {
         throw new Error(result.error || "Failed to save neighborhood");
       }
 
-      alert(editingNeighborhood ? "Neighborhood updated successfully!" : "Neighborhood created successfully!");
+      alert(
+        editingNeighborhood
+          ? "Neighborhood updated successfully!"
+          : "Neighborhood created successfully!"
+      );
       handleCancelNeighborhood();
       fetchCities();
     } catch (error) {
-      alert(error instanceof Error ? error.message : "Failed to save neighborhood");
+      alert(
+        error instanceof Error ? error.message : "Failed to save neighborhood"
+      );
     }
   }
 
@@ -212,7 +234,9 @@ export default function AdminLocations() {
       alert("Neighborhood deleted successfully!");
       fetchCities();
     } catch (error) {
-      alert(error instanceof Error ? error.message : "Failed to delete neighborhood");
+      alert(
+        error instanceof Error ? error.message : "Failed to delete neighborhood"
+      );
     }
   }
 
@@ -232,17 +256,28 @@ export default function AdminLocations() {
       <header className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-primary">Locations Management</h1>
-            <p className="text-sm text-gray-600 mt-1">Manage cities and neighborhoods</p>
+            <h1 className="text-2xl font-bold text-primary">
+              Locations Management
+            </h1>
+            <p className="text-sm text-gray-600 mt-1">
+              Manage cities and neighborhoods
+            </p>
           </div>
-          <Button onClick={() => router.push("/admin/dashboard")} variant="outline">
+          <Button
+            onClick={() => router.push("/admin/dashboard")}
+            variant="outline"
+          >
             Back to Dashboard
           </Button>
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="space-y-6"
+        >
           <TabsList>
             <TabsTrigger value="cities">Cities</TabsTrigger>
             <TabsTrigger value="neighborhoods">Neighborhoods</TabsTrigger>
@@ -253,7 +288,9 @@ export default function AdminLocations() {
             {showCityForm && (
               <Card className="mb-6">
                 <CardHeader>
-                  <CardTitle>{editingCity ? "Edit City" : "Create New City"}</CardTitle>
+                  <CardTitle>
+                    {editingCity ? "Edit City" : "Create New City"}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <form onSubmit={handleCitySubmit} className="space-y-4">
@@ -263,7 +300,12 @@ export default function AdminLocations() {
                         <Input
                           id="city-name"
                           value={cityFormData.name}
-                          onChange={(e) => setCityFormData({ ...cityFormData, name: e.target.value })}
+                          onChange={(e) =>
+                            setCityFormData({
+                              ...cityFormData,
+                              name: e.target.value,
+                            })
+                          }
                           placeholder="الرياض"
                           required
                         />
@@ -274,7 +316,12 @@ export default function AdminLocations() {
                         <Input
                           id="city-nameEn"
                           value={cityFormData.nameEn}
-                          onChange={(e) => setCityFormData({ ...cityFormData, nameEn: e.target.value })}
+                          onChange={(e) =>
+                            setCityFormData({
+                              ...cityFormData,
+                              nameEn: e.target.value,
+                            })
+                          }
                           placeholder="Riyadh"
                         />
                       </div>
@@ -285,7 +332,12 @@ export default function AdminLocations() {
                           id="city-displayOrder"
                           type="number"
                           value={cityFormData.displayOrder}
-                          onChange={(e) => setCityFormData({ ...cityFormData, displayOrder: parseInt(e.target.value) })}
+                          onChange={(e) =>
+                            setCityFormData({
+                              ...cityFormData,
+                              displayOrder: parseInt(e.target.value),
+                            })
+                          }
                           required
                         />
                       </div>
@@ -295,7 +347,11 @@ export default function AdminLocations() {
                       <Button type="submit">
                         {editingCity ? "Update City" : "Create City"}
                       </Button>
-                      <Button type="button" variant="outline" onClick={handleCancelCity}>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={handleCancelCity}
+                      >
                         Cancel
                       </Button>
                     </div>
@@ -316,7 +372,9 @@ export default function AdminLocations() {
                 <Card key={city.id}>
                   <CardHeader>
                     <CardTitle>{city.name}</CardTitle>
-                    {city.nameEn && <CardDescription>{city.nameEn}</CardDescription>}
+                    {city.nameEn && (
+                      <CardDescription>{city.nameEn}</CardDescription>
+                    )}
                     <CardAction>
                       <div className="flex gap-2">
                         <Button
@@ -339,12 +397,20 @@ export default function AdminLocations() {
                   <CardContent>
                     <div className="space-y-2">
                       <div>
-                        <span className="text-sm text-gray-600">Neighborhoods: </span>
-                        <span className="font-semibold">{city.neighborhoods?.length || 0}</span>
+                        <span className="text-sm text-gray-600">
+                          Neighborhoods:{" "}
+                        </span>
+                        <span className="font-semibold">
+                          {city.neighborhoods?.length || 0}
+                        </span>
                       </div>
                       <div>
                         <span className="text-sm text-gray-600">Status: </span>
-                        <span className={city.isActive ? "text-green-600" : "text-red-600"}>
+                        <span
+                          className={
+                            city.isActive ? "text-green-600" : "text-red-600"
+                          }
+                        >
                           {city.isActive ? "Active" : "Inactive"}
                         </span>
                       </div>
@@ -361,17 +427,27 @@ export default function AdminLocations() {
               <Card className="mb-6">
                 <CardHeader>
                   <CardTitle>
-                    {editingNeighborhood ? "Edit Neighborhood" : "Create New Neighborhood"}
+                    {editingNeighborhood
+                      ? "Edit Neighborhood"
+                      : "Create New Neighborhood"}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <form onSubmit={handleNeighborhoodSubmit} className="space-y-4">
+                  <form
+                    onSubmit={handleNeighborhoodSubmit}
+                    className="space-y-4"
+                  >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="neighborhood-city">City</Label>
                         <Select
                           value={neighborhoodFormData.cityId}
-                          onValueChange={(value) => setNeighborhoodFormData({ ...neighborhoodFormData, cityId: value })}
+                          onValueChange={(value) =>
+                            setNeighborhoodFormData({
+                              ...neighborhoodFormData,
+                              cityId: value,
+                            })
+                          }
                           required
                         >
                           <SelectTrigger>
@@ -388,11 +464,18 @@ export default function AdminLocations() {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="neighborhood-name">Neighborhood Name (Arabic)</Label>
+                        <Label htmlFor="neighborhood-name">
+                          Neighborhood Name (Arabic)
+                        </Label>
                         <Input
                           id="neighborhood-name"
                           value={neighborhoodFormData.name}
-                          onChange={(e) => setNeighborhoodFormData({ ...neighborhoodFormData, name: e.target.value })}
+                          onChange={(e) =>
+                            setNeighborhoodFormData({
+                              ...neighborhoodFormData,
+                              name: e.target.value,
+                            })
+                          }
                           placeholder="الملقا"
                           required
                         />
@@ -402,62 +485,131 @@ export default function AdminLocations() {
                         <Label htmlFor="neighborhood-level">Level</Label>
                         <Select
                           value={neighborhoodFormData.level}
-                          onValueChange={(value) => setNeighborhoodFormData({ ...neighborhoodFormData, level: value })}
+                          onValueChange={(value) =>
+                            setNeighborhoodFormData({
+                              ...neighborhoodFormData,
+                              level: value,
+                            })
+                          }
                         >
                           <SelectTrigger>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="A">A - Premium (1.15x)</SelectItem>
-                            <SelectItem value="B">B - Above Average (1.10x)</SelectItem>
-                            <SelectItem value="C">C - Average (1.00x)</SelectItem>
-                            <SelectItem value="D">D - Below Average (0.95x)</SelectItem>
+                            <SelectItem value="A">
+                              A - Premium (1.15x)
+                            </SelectItem>
+                            <SelectItem value="B">
+                              B - Above Average (1.10x)
+                            </SelectItem>
+                            <SelectItem value="C">
+                              C - Average (1.00x)
+                            </SelectItem>
+                            <SelectItem value="D">
+                              D - Below Average (0.95x)
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="neighborhood-multiplier">Multiplier</Label>
+                        <Label htmlFor="neighborhood-multiplier">
+                          Multiplier
+                        </Label>
                         <Input
                           id="neighborhood-multiplier"
                           type="number"
                           step="0.01"
                           value={neighborhoodFormData.multiplier}
-                          onChange={(e) => setNeighborhoodFormData({ ...neighborhoodFormData, multiplier: e.target.value })}
+                          onChange={(e) =>
+                            setNeighborhoodFormData({
+                              ...neighborhoodFormData,
+                              multiplier: e.target.value,
+                            })
+                          }
                           placeholder="1.00"
                           required
                         />
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="neighborhood-threshold">Apply Above Area (m²)</Label>
+                        <Label htmlFor="neighborhood-threshold">
+                          Apply Above Area (m²)
+                        </Label>
                         <Input
                           id="neighborhood-threshold"
                           type="number"
                           value={neighborhoodFormData.applyAboveArea}
-                          onChange={(e) => setNeighborhoodFormData({ ...neighborhoodFormData, applyAboveArea: parseInt(e.target.value) })}
+                          onChange={(e) =>
+                            setNeighborhoodFormData({
+                              ...neighborhoodFormData,
+                              applyAboveArea: parseInt(e.target.value),
+                            })
+                          }
                           required
                         />
-                        <p className="text-xs text-gray-500">Multiplier applies only above this area</p>
+                        <p className="text-xs text-gray-500">
+                          Multiplier applies only above this area
+                        </p>
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="neighborhood-displayOrder">Display Order</Label>
+                        <Label htmlFor="neighborhood-displayOrder">
+                          Display Order
+                        </Label>
                         <Input
                           id="neighborhood-displayOrder"
                           type="number"
                           value={neighborhoodFormData.displayOrder}
-                          onChange={(e) => setNeighborhoodFormData({ ...neighborhoodFormData, displayOrder: parseInt(e.target.value) })}
+                          onChange={(e) =>
+                            setNeighborhoodFormData({
+                              ...neighborhoodFormData,
+                              displayOrder: parseInt(e.target.value),
+                            })
+                          }
                           required
                         />
+                      </div>
+
+                      <div className="space-y-2 md:col-span-2">
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            id="neighborhood-isActive"
+                            checked={neighborhoodFormData.isActive}
+                            onChange={(e) =>
+                              setNeighborhoodFormData({
+                                ...neighborhoodFormData,
+                                isActive: e.target.checked,
+                              })
+                            }
+                            className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                          />
+                          <Label
+                            htmlFor="neighborhood-isActive"
+                            className="cursor-pointer"
+                          >
+                            Active
+                          </Label>
+                        </div>
+                        <p className="text-xs text-gray-500">
+                          Inactive neighborhoods will not appear in the
+                          calculator
+                        </p>
                       </div>
                     </div>
 
                     <div className="flex gap-2">
                       <Button type="submit">
-                        {editingNeighborhood ? "Update Neighborhood" : "Create Neighborhood"}
+                        {editingNeighborhood
+                          ? "Update Neighborhood"
+                          : "Create Neighborhood"}
                       </Button>
-                      <Button type="button" variant="outline" onClick={handleCancelNeighborhood}>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={handleCancelNeighborhood}
+                      >
                         Cancel
                       </Button>
                     </div>
@@ -478,7 +630,9 @@ export default function AdminLocations() {
                 <Card key={city.id}>
                   <CardHeader>
                     <CardTitle>{city.name}</CardTitle>
-                    <CardDescription>{city.neighborhoods?.length || 0} neighborhoods</CardDescription>
+                    <CardDescription>
+                      {city.neighborhoods?.length || 0} neighborhoods
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2">
@@ -491,21 +645,27 @@ export default function AdminLocations() {
                             <div>
                               <p className="font-medium">{neighborhood.name}</p>
                               <p className="text-sm text-gray-600">
-                                Level {neighborhood.level} • {neighborhood.multiplier}x • Above {neighborhood.applyAboveArea}m²
+                                Level {neighborhood.level} •{" "}
+                                {neighborhood.multiplier}x • Above{" "}
+                                {neighborhood.applyAboveArea}m²
                               </p>
                             </div>
                             <div className="flex gap-2">
                               <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => handleEditNeighborhood(neighborhood)}
+                                onClick={() =>
+                                  handleEditNeighborhood(neighborhood)
+                                }
                               >
                                 <Edit className="h-4 w-4" />
                               </Button>
                               <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => handleDeleteNeighborhood(neighborhood.id)}
+                                onClick={() =>
+                                  handleDeleteNeighborhood(neighborhood.id)
+                                }
                               >
                                 <Trash2 className="h-4 w-4" />
                               </Button>
@@ -513,7 +673,9 @@ export default function AdminLocations() {
                           </div>
                         ))
                       ) : (
-                        <p className="text-sm text-gray-500">No neighborhoods for this city</p>
+                        <p className="text-sm text-gray-500">
+                          No neighborhoods for this city
+                        </p>
                       )}
                     </div>
                   </CardContent>
@@ -526,4 +688,3 @@ export default function AdminLocations() {
     </div>
   );
 }
-

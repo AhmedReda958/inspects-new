@@ -9,6 +9,7 @@ export async function GET(request: NextRequest) {
       cities,
       propertyAges,
       inspectionPurposes,
+      roofedAreaFactorRule,
     ] = await Promise.all([
       prisma.package.findMany({
         where: { isActive: true },
@@ -57,6 +58,9 @@ export async function GET(request: NextRequest) {
         },
         orderBy: { displayOrder: "asc" },
       }),
+      prisma.calculationRule.findUnique({
+        where: { key: "roofed_area_calculation_factor", isActive: true },
+      }),
     ]);
 
     // Transform cities data to include neighborhoods mapping
@@ -71,6 +75,10 @@ export async function GET(request: NextRequest) {
     cities.forEach((city) => {
       cityNeighborhoods[city.name] = city.neighborhoods.map((n) => n.name);
     });
+
+    const roofedAreaFactor = roofedAreaFactorRule
+      ? parseFloat(roofedAreaFactorRule.value)
+      : 0.6;
 
     return NextResponse.json(
       {
@@ -97,6 +105,7 @@ export async function GET(request: NextRequest) {
             label: p.purpose,
             labelEn: p.purposeEn,
           })),
+          roofedAreaCalculationFactor: roofedAreaFactor,
         },
       },
       { status: 200 }
@@ -109,4 +118,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-

@@ -26,6 +26,7 @@ const calculationSchema = z.object({
   neighborhood: z.string().optional(),
   propertyAge: z.string().min(1, "يرجى اختيار عمر العقار"),
   landArea: z.string().min(1, "يرجى إدخال مساحة الأرض"),
+  numberOfLevels: z.string().optional(),
   coveredArea: z.string().min(1, "يرجى إدخال مسطحات البناء"),
 });
 
@@ -50,6 +51,9 @@ export async function POST(request: NextRequest) {
     // Parse numeric fields
     const landArea = parseFloat(data.landArea);
     const coveredArea = parseFloat(data.coveredArea);
+    const numberOfLevels = data.numberOfLevels
+      ? parseInt(data.numberOfLevels)
+      : undefined;
 
     if (
       isNaN(landArea) ||
@@ -83,6 +87,7 @@ export async function POST(request: NextRequest) {
       neighborhoodName: data.neighborhood,
       landArea,
       coveredArea,
+      numberOfLevels,
     };
 
     // Calculate the price

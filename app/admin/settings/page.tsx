@@ -18,6 +18,7 @@ const ruleSchema = z.object({
   base_area_threshold: z.string(),
   neighborhood_multiplier_threshold: z.string(),
   roofed_area_calculation_factor: z.string(),
+  basic_package_excess_area_price: z.string(),
 });
 
 type VatFormData = z.infer<typeof vatSchema>;
@@ -71,6 +72,7 @@ export default function AdminSettings() {
         rulesForm.setValue("base_area_threshold", rulesMap.base_area_threshold || "250");
         rulesForm.setValue("neighborhood_multiplier_threshold", rulesMap.neighborhood_multiplier_threshold || "500");
         rulesForm.setValue("roofed_area_calculation_factor", rulesMap.roofed_area_calculation_factor || "0.6");
+        rulesForm.setValue("basic_package_excess_area_price", rulesMap.basic_package_excess_area_price || "4");
       }
     } catch (error) {
       console.error("Error fetching settings:", error);
@@ -257,6 +259,19 @@ export default function AdminSettings() {
                   />
                   <p className="text-xs text-gray-500">
                     Factor for calculating roofed area (0.6 × area × levels)
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="basic_package_excess_price">Basic Package Excess Area Price (SAR/m²)</Label>
+                  <Input
+                    id="basic_package_excess_price"
+                    type="number"
+                    step="0.01"
+                    {...rulesForm.register("basic_package_excess_area_price")}
+                  />
+                  <p className="text-xs text-gray-500">
+                    Fixed price per square meter for excess area in basic package (default: 4 SAR/m²)
                   </p>
                 </div>
 

@@ -27,7 +27,6 @@ export async function GET(
       where: { id: params.id },
       include: {
         areaPriceTiers: {
-          where: { isActive: true },
           orderBy: { minArea: "asc" },
         },
       },

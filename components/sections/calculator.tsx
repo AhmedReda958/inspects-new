@@ -59,6 +59,12 @@ const calculatorSchema = z.object({
     .regex(/^\d+(\.\d+)?$/, {
       message: "يرجى إدخال رقم صحيح",
     }),
+  numberOfLevels: z
+    .string()
+    .optional()
+    .refine((val) => !val || /^\d+$/.test(val), {
+      message: "يرجى إدخال رقم صحيح",
+    }),
   coveredArea: z
     .string()
     .min(1, { message: "يرجى إدخال مسطحات البناء" })
@@ -116,6 +122,7 @@ interface CalcConfig {
   cityNeighborhoods: Record<string, string[]>;
   propertyAges: Array<{ value: string; label: string }>;
   inspectionPurposes: Array<{ value: string; label: string }>;
+  roofedAreaCalculationFactor?: number;
 }
 
 export default function CalculatorSection() {
@@ -130,6 +137,7 @@ export default function CalculatorSection() {
   >([]);
   const [config, setConfig] = useState<CalcConfig | null>(null);
   const [isLoadingConfig, setIsLoadingConfig] = useState(true);
+  const [roofedAreaFactor, setRoofedAreaFactor] = useState<number>(0.6);
   const searchParams = useSearchParams();
 
   const totalSteps = 4;
@@ -148,6 +156,9 @@ export default function CalculatorSection() {
 
         if (data.success && data.data) {
           setConfig(data.data);
+          if (data.data.roofedAreaCalculationFactor) {
+            setRoofedAreaFactor(data.data.roofedAreaCalculationFactor);
+          }
         } else {
           throw new Error("فشل في تحميل بيانات النموذج");
         }
@@ -174,6 +185,7 @@ export default function CalculatorSection() {
       neighborhood: "",
       propertyAge: "",
       landArea: "",
+      numberOfLevels: "",
       coveredArea: "",
     },
   });
@@ -204,6 +216,32 @@ export default function CalculatorSection() {
       setAvailableNeighborhoods([]);
     }
   }, [selectedCity, config, form]);
+
+  // Auto-calculate roofed area when land area and number of levels are provided
+  const landArea = form.watch("landArea");
+  const numberOfLevels = form.watch("numberOfLevels");
+
+  useEffect(() => {
+    if (landArea && numberOfLevels) {
+      const landAreaNum = parseFloat(landArea);
+      const levelsNum = parseInt(numberOfLevels);
+      if (
+        !isNaN(landAreaNum) &&
+        !isNaN(levelsNum) &&
+        landAreaNum > 0 &&
+        levelsNum > 0
+      ) {
+        const calculatedRoofedArea = (
+          roofedAreaFactor *
+          landAreaNum *
+          levelsNum
+        ).toFixed(2);
+        form.setValue("coveredArea", calculatedRoofedArea, {
+          shouldValidate: false,
+        });
+      }
+    }
+  }, [landArea, numberOfLevels, roofedAreaFactor, form]);
 
   async function validateStep(step: number): Promise<boolean> {
     let fieldsToValidate: (keyof CalculatorFormValues)[] = [];
@@ -604,6 +642,26 @@ export default function CalculatorSection() {
                               placeholder="مثال 300 م²"
                               {...field}
                               type="text"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    {/* Number of Levels */}
+                    <FormField
+                      control={form.control}
+                      name="numberOfLevels"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>عدد الأدوار</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="مثال 2"
+                              {...field}
+                              type="number"
+                              min="1"
                             />
                           </FormControl>
                           <FormMessage />

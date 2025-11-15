@@ -24,7 +24,6 @@ export async function GET(request: NextRequest) {
       orderBy: { displayOrder: "asc" },
       include: {
         areaPriceTiers: {
-          where: { isActive: true },
           orderBy: { minArea: "asc" },
         },
         _count: {

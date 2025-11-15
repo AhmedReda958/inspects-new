@@ -73,8 +73,18 @@ export async function calculateInspectionCost(
   }
 
   // 2. Fetch calculation rules
-  const baseAreaThreshold = await getCalculationRule("base_area_threshold", 250);
-  const neighborhoodThreshold = await getCalculationRule("neighborhood_multiplier_threshold", 500);
+  const baseAreaThreshold = await getCalculationRule(
+    "base_area_threshold",
+    250
+  );
+  const neighborhoodThreshold = await getCalculationRule(
+    "neighborhood_multiplier_threshold",
+    500
+  );
+  const basicPackageExcessAreaPrice = await getCalculationRule(
+    "basic_package_excess_area_price",
+    4
+  );
 
   // 3. Fetch property age multiplier
   const ageMultiplierData = await prisma.propertyAgeMultiplier.findUnique({
@@ -82,16 +92,21 @@ export async function calculateInspectionCost(
   });
 
   if (!ageMultiplierData) {
-    throw new Error(`Property age range "${input.propertyAgeRange}" not found or inactive`);
+    throw new Error(
+      `Property age range "${input.propertyAgeRange}" not found or inactive`
+    );
   }
 
   // 4. Fetch inspection purpose multiplier
-  const purposeMultiplierData = await prisma.inspectionPurposeMultiplier.findUnique({
-    where: { purpose: input.inspectionPurpose, isActive: true },
-  });
+  const purposeMultiplierData =
+    await prisma.inspectionPurposeMultiplier.findUnique({
+      where: { purpose: input.inspectionPurpose, isActive: true },
+    });
 
   if (!purposeMultiplierData) {
-    throw new Error(`Inspection purpose "${input.inspectionPurpose}" not found or inactive`);
+    throw new Error(
+      `Inspection purpose "${input.inspectionPurpose}" not found or inactive`
+    );
   }
 
   // 5. Fetch neighborhood if provided
@@ -148,14 +163,7 @@ export async function calculateInspectionCost(
     }
 
     pricePerSqm = Number(tier.pricePerSqm);
-    
-    // For basic package: base price + (excess area * price per sqm)
-    // For other packages: total area * price per sqm
-    if (input.packageName === "basic") {
-      basePrice = Number(packageData.basePrice) + (areaAboveThreshold * pricePerSqm);
-    } else {
-      basePrice = input.coveredArea * pricePerSqm;
-    }
+    basePrice = input.coveredArea * pricePerSqm;
   }
 
   const step1Result = {
@@ -286,11 +294,12 @@ export async function saveCalculatorSubmission(
     where: { name: input.cityName },
   });
 
-  const neighborhoodData = input.neighborhoodName && cityData
-    ? await prisma.neighborhood.findFirst({
-        where: { cityId: cityData.id, name: input.neighborhoodName },
-      })
-    : null;
+  const neighborhoodData =
+    input.neighborhoodName && cityData
+      ? await prisma.neighborhood.findFirst({
+          where: { cityId: cityData.id, name: input.neighborhoodName },
+        })
+      : null;
 
   const ageData = await prisma.propertyAgeMultiplier.findUnique({
     where: { ageRange: input.propertyAgeRange },
@@ -332,4 +341,3 @@ export async function saveCalculatorSubmission(
 
   return submission;
 }
-
