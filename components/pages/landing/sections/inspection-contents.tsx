@@ -126,7 +126,7 @@ export default function InspectionContentsSection() {
                 <Fragment key={tab.id}>
                   <TabsTrigger
                     value={tab.id}
-                    className="p-4 lg:p-0 text-base font-semibold cursor-pointer flex items-center gap-3"
+                    className="p-4 lg:p-0 text-base font-semibold cursor-pointer flex items-center gap-3 data-[state=active]:bg-transparent"
                   >
                     <div className="lg:p-1 lg:bg-background flex-shrink-0">
                       <Image
