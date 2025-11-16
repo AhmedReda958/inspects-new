@@ -82,7 +82,7 @@ export function ProblemsGallerySlider() {
                 >
                   <Image
                     src={image.src}
-                    alt={image.alt}
+                    alt={image.title}
                     fill
                     priority={index < 5}
                     className="object-cover"
@@ -104,7 +104,7 @@ export function ProblemsGallerySlider() {
 
           {/* Problem Name */}
           <p className="text-sm lg:text-xl font-medium text-center">
-            {problemImages[current].alt}
+            {problemImages[current].title}
           </p>
 
           <button
