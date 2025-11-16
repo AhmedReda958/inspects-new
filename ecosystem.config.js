@@ -2,8 +2,8 @@ module.exports = {
   apps: [
     {
       name: "inspects",
-      script: "node_modules/.bin/next",
-      args: "start",
+      script: "node",
+      args: "node_modules/next/dist/bin/next-start",
       cwd: __dirname,
       exec_mode: "fork",
       env: {
