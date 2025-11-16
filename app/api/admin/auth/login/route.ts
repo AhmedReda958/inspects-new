@@ -42,10 +42,12 @@ export async function POST(request: NextRequest) {
     );
 
     // Set HTTP-only cookie
+    // In production, ensure secure is true and use proper sameSite
+    const isProduction = process.env.NODE_ENV === "production";
     response.cookies.set("admin_token", result.token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: isProduction,
+      sameSite: isProduction ? "lax" : "lax",
       maxAge: 60 * 60 * 24 * 7, // 7 days
       path: "/",
     });

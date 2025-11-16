@@ -34,7 +34,7 @@ export function LoginForm({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          placeholder="admin@inspectex.com"
+          placeholder="user@example.com"
         />
       </div>
 

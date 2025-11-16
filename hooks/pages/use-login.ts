@@ -28,7 +28,9 @@ export function useLogin() {
         throw new Error(data.error || "Login failed");
       }
 
-      router.push("/admin/dashboard");
+      // Use window.location for full page reload to ensure cookie is sent
+      // This ensures the middleware can properly read the cookie
+      window.location.href = "/admin/dashboard";
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
     } finally {

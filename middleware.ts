@@ -73,7 +73,14 @@ export async function middleware(request: NextRequest) {
     const response = NextResponse.redirect(
       new URL("/admin/login", request.url)
     );
-    // response.cookies.delete("admin_token");
+    // Clear the invalid cookie with same path as it was set
+    response.cookies.set("admin_token", "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 0,
+      path: "/",
+    });
     return response;
   }
 
