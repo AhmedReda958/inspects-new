@@ -146,9 +146,17 @@ export async function authenticateUser(
   email: string,
   password: string
 ): Promise<{ user: AuthUser; token: string } | null> {
-  // Find user
+  // Find user - explicitly select only needed fields to avoid issues with missing columns
   const user = await prisma.adminUser.findUnique({
     where: { email, isActive: true },
+    select: {
+      id: true,
+      email: true,
+      password: true,
+      name: true,
+      role: true,
+      isActive: true,
+    },
   });
 
   if (!user) {
@@ -240,6 +248,10 @@ export function generateResetToken(): string {
 export async function requestPasswordReset(email: string): Promise<boolean> {
   const user = await prisma.adminUser.findUnique({
     where: { email, isActive: true },
+    select: {
+      id: true,
+      email: true,
+    },
   });
 
   // Always return true for security (don't reveal if email exists)
