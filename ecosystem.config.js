@@ -5,8 +5,7 @@ module.exports = {
       script: "npm",
       args: "start",
       cwd: __dirname,
-      instances: 2,
-      exec_mode: "cluster",
+      exec_mode: "fork",
       env: {
         NODE_ENV: "production",
         PORT: 3008,
@@ -21,4 +20,3 @@ module.exports = {
     },
   ],
 };
-
