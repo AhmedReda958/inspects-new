@@ -84,7 +84,7 @@ export function ResetPasswordForm({
         </div>
       )}
 
-      <Button type="submit" className="w-full" disabled={loading}>
+      <Button type="submit" className="w-full h-14 " disabled={loading}>
         {loading ? "Resetting..." : "Reset Password"}
       </Button>
 
@@ -99,4 +99,3 @@ export function ResetPasswordForm({
     </form>
   );
 }
-

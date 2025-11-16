@@ -3,6 +3,7 @@
 import { Card } from "@/components/ui/card";
 import { ForgotPasswordForm } from "./forgot-password-form";
 import { useForgotPassword } from "@/hooks/pages/use-forgot-password";
+import Image from "next/image";
 
 export function ForgotPasswordPage() {
   const { email, setEmail, error, success, loading, handleSubmit } =
@@ -11,6 +12,13 @@ export function ForgotPasswordPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <Card className="w-full max-w-md p-8">
+        <Image
+          src="/logo-full.svg"
+          alt="Inspectex Logo"
+          width={100}
+          height={100}
+          className="mx-auto"
+        />
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-primary">Forgot Password</h1>
           <p className="mt-2">Enter your email to reset your password</p>

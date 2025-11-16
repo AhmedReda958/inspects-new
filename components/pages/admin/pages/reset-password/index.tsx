@@ -82,4 +82,3 @@ export function ResetPasswordPage({ token, isValid }: ResetPasswordPageProps) {
     </div>
   );
 }
-
