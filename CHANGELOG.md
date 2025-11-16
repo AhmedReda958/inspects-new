@@ -7,12 +7,14 @@ All notable changes to the Inspectex Calculator Backend project.
 ### Added
 
 #### Database & Backend
+
 - PostgreSQL database schema with Prisma ORM
 - Complete database migration system
 - Seed data with default configuration
 - Automatic database backup scripts
 
 #### Authentication System
+
 - JWT-based authentication
 - Secure login/logout endpoints
 - Session management with HTTP-only cookies
@@ -20,6 +22,7 @@ All notable changes to the Inspectex Calculator Backend project.
 - Password hashing with bcrypt
 
 #### Calculator System
+
 - Dynamic calculation engine based on database rules
 - Multi-step pricing algorithm:
   - Base price calculation (fixed for ≤250m² or per-sqm for >250m²)
@@ -32,6 +35,7 @@ All notable changes to the Inspectex Calculator Backend project.
 - Detailed calculation breakdown in response
 
 #### Admin API Endpoints
+
 - **Packages Management:** CRUD operations for inspection packages
 - **Cities Management:** CRUD operations for cities
 - **Neighborhoods Management:** CRUD operations with level-based multipliers
@@ -43,6 +47,7 @@ All notable changes to the Inspectex Calculator Backend project.
 - **Audit Logs:** Track all configuration changes with user accountability
 
 #### Admin Dashboard UI
+
 - Modern responsive admin interface
 - Login page with authentication
 - Dashboard with statistics:
@@ -58,6 +63,7 @@ All notable changes to the Inspectex Calculator Backend project.
 - Quick access to all configuration sections
 
 #### Frontend Integration
+
 - Dynamic calculator configuration fetching
 - Real-time dropdown options from database
 - City-neighborhood cascading selection
@@ -66,6 +72,7 @@ All notable changes to the Inspectex Calculator Backend project.
 - Fallback to static content if API unavailable
 
 #### Documentation
+
 - Comprehensive API documentation
 - Database setup guide
 - Deployment instructions
@@ -74,6 +81,7 @@ All notable changes to the Inspectex Calculator Backend project.
 - Troubleshooting guides
 
 #### DevOps & Deployment
+
 - PM2 ecosystem configuration
 - Nginx reverse proxy setup
 - SSL/HTTPS setup with Let's Encrypt
@@ -82,6 +90,7 @@ All notable changes to the Inspectex Calculator Backend project.
 - Deployment scripts for Ubuntu/VPS
 
 ### Security Features
+
 - JWT token expiration (7 days)
 - HTTP-only secure cookies
 - CORS configuration
@@ -92,6 +101,7 @@ All notable changes to the Inspectex Calculator Backend project.
 - IP address logging
 
 ### Performance
+
 - Connection pooling for database
 - Optimized database queries
 - Prisma Client generation
@@ -100,6 +110,7 @@ All notable changes to the Inspectex Calculator Backend project.
 - Database indexing on frequently queried columns
 
 ### Configuration
+
 - Environment-based configuration
 - Flexible VAT settings
 - Customizable calculation rules
@@ -110,7 +121,8 @@ All notable changes to the Inspectex Calculator Backend project.
 ## Future Enhancements
 
 ### Planned Features
-- ✅ Email notifications for new leads (Implemented)
+
+- Email notifications for new leads
 - WhatsApp API integration for notifications
 - Export leads to CSV/Excel
 - Advanced reporting and analytics
@@ -124,6 +136,7 @@ All notable changes to the Inspectex Calculator Backend project.
 - Integration with CRM systems
 
 ### Known Limitations
+
 - Admin UI is basic and can be enhanced
 - No real-time notifications yet
 - Limited reporting capabilities
@@ -133,6 +146,7 @@ All notable changes to the Inspectex Calculator Backend project.
 ## Migration Notes
 
 If upgrading from the old static system:
+
 1. Export existing data from content.ts
 2. Run database migrations
 3. Import data using seed script
@@ -149,4 +163,3 @@ If upgrading from the old static system:
 ## License
 
 Proprietary - Inspectex © 2024
-
