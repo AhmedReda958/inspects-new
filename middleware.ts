@@ -74,9 +74,12 @@ export async function middleware(request: NextRequest) {
       new URL("/admin/login", request.url)
     );
     // Clear the invalid cookie with same path as it was set
+    const isHttps =
+      request.url.startsWith("https://") ||
+      request.headers.get("x-forwarded-proto") === "https";
     response.cookies.set("admin_token", "", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: isHttps, // Match the secure setting from login
       sameSite: "lax",
       maxAge: 0,
       path: "/",
