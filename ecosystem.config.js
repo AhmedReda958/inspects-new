@@ -1,11 +1,12 @@
 module.exports = {
   apps: [
     {
-      name: "inspects",
-      script: "node",
-      args: "node_modules/next/dist/bin/next-start",
+      name: "inspectex",
+      script: "npm",
+      args: "start",
+      exec_mode: "cluster",
+      instances: "max",
       cwd: __dirname,
-      exec_mode: "fork",
       env: {
         NODE_ENV: "production",
         PORT: 3008,
