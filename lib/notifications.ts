@@ -46,6 +46,14 @@ function createTransporter() {
     tls: {
       rejectUnauthorized: false,
     },
+    // Connection timeout settings
+    connectionTimeout: 10000, // 10 seconds
+    socketTimeout: 10000, // 10 seconds
+    greetingTimeout: 10000, // 10 seconds
+    // Retry configuration
+    pool: true,
+    maxConnections: 1,
+    maxMessages: 3,
   });
 }
 
@@ -55,35 +63,51 @@ function createTransporter() {
 export async function sendNewLeadNotification(
   submission: SubmissionWithRelations
 ): Promise<void> {
-  const adminEmail = process.env.ADMIN_EMAIL || "admin@inspectex.com";
-  const smtpFrom = process.env.SMTP_FROM || process.env.SMTP_USER || adminEmail;
+  // This function is fire-and-forget and should never throw errors
+  // All errors are caught and logged internally
+  try {
+    const adminEmail = process.env.ADMIN_EMAIL || "admin@inspectex.com";
+    const smtpFrom =
+      process.env.SMTP_FROM || process.env.SMTP_USER || adminEmail;
 
-  const transporter = createTransporter();
-  if (!transporter) {
-    // Log that notification was skipped due to missing configuration
-    await prisma.leadNotification.create({
-      data: {
-        submissionId: submission.id,
-        type: "email",
-        recipient: adminEmail,
-        status: "failed",
-        failureReason: "SMTP configuration is missing",
-      },
-    });
-    return;
-  }
+    const transporter = createTransporter();
+    if (!transporter) {
+      // Log that notification was skipped due to missing configuration
+      // Wrap in try-catch to ensure it never throws
+      try {
+        await prisma.leadNotification.create({
+          data: {
+            submissionId: submission.id,
+            type: "email",
+            recipient: adminEmail,
+            status: "failed",
+            failureReason: "SMTP configuration is missing",
+          },
+        });
+      } catch (dbError) {
+        console.error(
+          "Failed to log notification status to database:",
+          dbError
+        );
+        // Don't throw - this is a non-critical operation
+      }
+      return;
+    }
 
-  // Format the email content
-  const customerName = `${submission.firstName} ${submission.familyName}`;
-  const packageName = submission.package?.nameAr || "غير محدد";
-  const cityName = submission.city?.name || "غير محدد";
-  const neighborhoodName = submission.neighborhood?.name || "غير محدد";
-  const formattedDate = new Date(submission.createdAt).toLocaleString("ar-SA", {
-    dateStyle: "full",
-    timeStyle: "short",
-  });
+    // Format the email content
+    const customerName = `${submission.firstName} ${submission.familyName}`;
+    const packageName = submission.package?.nameAr || "غير محدد";
+    const cityName = submission.city?.name || "غير محدد";
+    const neighborhoodName = submission.neighborhood?.name || "غير محدد";
+    const formattedDate = new Date(submission.createdAt).toLocaleString(
+      "ar-SA",
+      {
+        dateStyle: "full",
+        timeStyle: "short",
+      }
+    );
 
-  const emailHtml = `
+    const emailHtml = `
     <!DOCTYPE html>
     <html dir="rtl" lang="ar">
     <head>
@@ -200,17 +224,17 @@ export async function sendNewLeadNotification(
       </div>
     </body>
     </html>
-  `;
+    `;
 
-  const mailOptions = {
-    from: smtpFrom,
-    to: adminEmail,
-    subject: `عميل جديد: ${customerName} - ${submission.finalPrice.toFixed(
-      2
-    )} ريال`,
-    html: emailHtml,
-    // Plain text fallback
-    text: `
+    const mailOptions = {
+      from: smtpFrom,
+      to: adminEmail,
+      subject: `عميل جديد: ${customerName} - ${submission.finalPrice.toFixed(
+        2
+      )} ريال`,
+      html: emailHtml,
+      // Plain text fallback
+      text: `
 إشعار تسجيل عميل جديد
 
 الاسم: ${customerName}
@@ -223,42 +247,81 @@ ${neighborhoodName !== "غير محدد" ? `الحي: ${neighborhoodName}` : ""}
 تاريخ التسجيل: ${formattedDate}
 
 معرف الطلب: ${submission.id}
-    `.trim(),
-  };
+      `.trim(),
+    };
 
-  try {
-    await transporter.sendMail(mailOptions);
+    try {
+      await transporter.sendMail(mailOptions);
 
-    // Log successful notification in database
-    await prisma.leadNotification.create({
-      data: {
-        submissionId: submission.id,
-        type: "email",
-        recipient: adminEmail,
-        status: "sent",
-        sentAt: new Date(),
-      },
-    });
+      // Log successful notification in database
+      // Wrap in try-catch to ensure it never throws
+      try {
+        await prisma.leadNotification.create({
+          data: {
+            submissionId: submission.id,
+            type: "email",
+            recipient: adminEmail,
+            status: "sent",
+            sentAt: new Date(),
+          },
+        });
+      } catch (dbError) {
+        console.error(
+          "Failed to log successful notification to database:",
+          dbError
+        );
+        // Don't throw - email was sent successfully, logging is non-critical
+      }
 
-    console.log(
-      `✅ Email notification sent successfully for lead ${submission.id}`
-    );
+      console.log(
+        `✅ Email notification sent successfully for lead ${submission.id}`
+      );
+    } catch (error) {
+      let errorMessage = "Unknown error occurred";
+
+      if (error instanceof Error) {
+        errorMessage = error.message;
+
+        // Provide more specific error messages for common issues
+        if (
+          errorMessage.includes("ETIMEDOUT") ||
+          errorMessage.includes("timeout")
+        ) {
+          errorMessage = `Connection timeout: Unable to connect to SMTP server. Please check your network connection and SMTP server settings.`;
+        } else if (errorMessage.includes("ECONNREFUSED")) {
+          errorMessage = `Connection refused: SMTP server is not accepting connections. Please verify the SMTP host and port.`;
+        } else if (errorMessage.includes("EAUTH")) {
+          errorMessage = `Authentication failed: Invalid SMTP credentials. Please check your SMTP username and password.`;
+        }
+      }
+
+      console.error("❌ Failed to send email notification:", errorMessage);
+
+      // Log failed notification in database
+      // Wrap in try-catch to ensure it never throws
+      try {
+        await prisma.leadNotification.create({
+          data: {
+            submissionId: submission.id,
+            type: "email",
+            recipient: adminEmail,
+            status: "failed",
+            failureReason: errorMessage,
+          },
+        });
+      } catch (dbError) {
+        console.error(
+          "Failed to log failed notification to database:",
+          dbError
+        );
+        // Don't throw - logging is non-critical
+      }
+    }
   } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error occurred";
-
-    console.error("❌ Failed to send email notification:", errorMessage);
-
-    // Log failed notification in database
-    await prisma.leadNotification.create({
-      data: {
-        submissionId: submission.id,
-        type: "email",
-        recipient: adminEmail,
-        status: "failed",
-        failureReason: errorMessage,
-      },
-    });
+    // Catch any unexpected errors in the entire function
+    // This ensures the function never throws and blocks the main process
+    console.error("Unexpected error in sendNewLeadNotification:", error);
+    // Don't throw - this is a fire-and-forget function
   }
 }
 
@@ -407,8 +470,24 @@ ${resetLink}
     await transporter.sendMail(mailOptions);
     console.log(`✅ Password reset email sent successfully to ${email}`);
   } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error occurred";
+    let errorMessage = "Unknown error occurred";
+
+    if (error instanceof Error) {
+      errorMessage = error.message;
+
+      // Provide more specific error messages for common issues
+      if (
+        errorMessage.includes("ETIMEDOUT") ||
+        errorMessage.includes("timeout")
+      ) {
+        errorMessage = `Connection timeout: Unable to connect to SMTP server. Please check your network connection and SMTP server settings.`;
+      } else if (errorMessage.includes("ECONNREFUSED")) {
+        errorMessage = `Connection refused: SMTP server is not accepting connections. Please verify the SMTP host and port.`;
+      } else if (errorMessage.includes("EAUTH")) {
+        errorMessage = `Authentication failed: Invalid SMTP credentials. Please check your SMTP username and password.`;
+      }
+    }
+
     console.error("❌ Failed to send password reset email:", errorMessage);
     throw error;
   }
