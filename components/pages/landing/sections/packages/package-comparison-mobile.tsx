@@ -56,12 +56,15 @@ function PackageComparisonMobile({
       const params = new URLSearchParams(searchParams.toString());
       params.set("package", calculatorValue);
       router.push(`?${params.toString()}`, { scroll: false });
-      
+
       // Scroll to calculator section
       setTimeout(() => {
         const calculatorElement = document.getElementById("calculator");
         if (calculatorElement) {
-          calculatorElement.scrollIntoView({ behavior: "smooth", block: "start" });
+          calculatorElement.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
         }
       }, 100);
     }
@@ -180,42 +183,66 @@ function PackageComparisonMobile({
   );
 }
 
-export function PackageComparisonMobileList() {
+interface PackageComparisonMobileListProps {
+  packages?: Array<{
+    id: string;
+    title: string;
+    price: string;
+  }>;
+  loading?: boolean;
+}
+
+export function PackageComparisonMobileList({
+  packages: dynamicPackages,
+  loading = false,
+}: PackageComparisonMobileListProps) {
   const [openPackage, setOpenPackage] = React.useState<string | null>(null);
 
   function togglePackage(packageId: string) {
     setOpenPackage((prev) => (prev === packageId ? null : packageId));
   }
 
-  const packages = [
-    {
-      id: "advanced" as const,
-      title:
-        content.packages.items.find((item) => item.id === "advanced")?.title ||
-        "",
-      price:
-        content.packages.items.find((item) => item.id === "advanced")?.price ||
-        "",
-    },
-    {
-      id: "comprehensive" as const,
-      title:
-        content.packages.items.find((item) => item.id === "comprehensive")
-          ?.title || "",
-      price:
-        content.packages.items.find((item) => item.id === "comprehensive")
-          ?.price || "",
-    },
-    {
-      id: "visual" as const,
-      title:
-        content.packages.items.find((item) => item.id === "visual")?.title ||
-        "",
-      price:
-        content.packages.items.find((item) => item.id === "visual")?.price ||
-        "",
-    },
-  ];
+  // Use dynamic packages if available, otherwise fallback to content.ts
+  const packages = React.useMemo(() => {
+    if (dynamicPackages && dynamicPackages.length > 0) {
+      return dynamicPackages.map((pkg) => ({
+        id: pkg.id as "advanced" | "comprehensive" | "visual",
+        title: pkg.title,
+        price: pkg.price,
+      }));
+    }
+
+    // Fallback to content.ts
+    return [
+      {
+        id: "advanced" as const,
+        title:
+          content.packages.items.find((item) => item.id === "advanced")
+            ?.title || "",
+        price:
+          content.packages.items.find((item) => item.id === "advanced")
+            ?.price || "",
+      },
+      {
+        id: "comprehensive" as const,
+        title:
+          content.packages.items.find((item) => item.id === "comprehensive")
+            ?.title || "",
+        price:
+          content.packages.items.find((item) => item.id === "comprehensive")
+            ?.price || "",
+      },
+      {
+        id: "visual" as const,
+        title:
+          content.packages.items.find((item) => item.id === "visual")?.title ||
+          "",
+        price:
+          content.packages.items.find((item) => item.id === "visual")?.price ||
+          "",
+      },
+    ];
+  }, [dynamicPackages]);
 
   return (
     <div className="space-y-4">
