@@ -7,6 +7,7 @@ import {
   Sparkles,
   Phone,
   Settings,
+  Download,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
@@ -59,6 +60,12 @@ const quickLinks: QuickLinkItem[] = [
     label: "System Settings",
     icon: <Settings className="w-6 h-6" />,
     gradient: "from-gray-500 to-gray-600",
+  },
+  {
+    href: "/admin/report-downloads",
+    label: "Report Downloads",
+    icon: <Download className="w-6 h-6" />,
+    gradient: "from-indigo-500 to-indigo-600",
   },
 ];
 
