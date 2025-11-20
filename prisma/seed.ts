@@ -11,10 +11,10 @@ async function main() {
   const hashedPassword = await bcrypt.hash("admin123", 10);
 
   const adminUser = await prisma.adminUser.upsert({
-    where: { email: "admin@inspectex.com" },
+    where: { email: "ayman@inspectex.sa" },
     update: {},
     create: {
-      email: "admin@inspectex.com",
+      email: "ayman@inspectex.sa",
       password: hashedPassword,
       name: "Admin User",
       role: "superadmin",
@@ -122,10 +122,7 @@ async function main() {
   if (basicPackage && premiumPackage && vipPackage) {
     // Basic package - area tiers based on seed data
     const basicTiers = [
-      { id: "basic-tier-1", minArea: 251, maxArea: 500, pricePerSqm: 9 },
-      { id: "basic-tier-2", minArea: 501, maxArea: 750, pricePerSqm: 10 },
-      { id: "basic-tier-3", minArea: 751, maxArea: 1000, pricePerSqm: 11 },
-      { id: "basic-tier-4", minArea: 1001, maxArea: null, pricePerSqm: 12 },
+      { id: "basic-tier-1", minArea: 251, maxArea: null, pricePerSqm: 4 },
     ];
 
     for (const tier of basicTiers) {
