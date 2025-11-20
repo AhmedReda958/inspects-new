@@ -82,7 +82,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar" className="scroll-smooth">
-      <body className={`${lamaSans.variable} antialiased`}>
+      <head>
         <Script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-WX6M8YY0CY"
@@ -96,6 +96,35 @@ export default function RootLayout({
             gtag('config', 'G-WX6M8YY0CY');
           `}
         </Script>
+
+        {/* Google Tag Manager */}
+        <Script
+          id="google-tag-manager"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+							(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+							new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+							j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+							'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+							})(window,document,'script','dataLayer','GTM-TV3DMFJZ');
+						`,
+          }}
+        />
+        {/* End Google Tag Manager */}
+      </head>
+      <body className={`${lamaSans.variable} antialiased`}>
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-TV3DMFJZ"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          ></iframe>
+        </noscript>
+        {/* End Google Tag Manager (noscript) */}
+
         {children}
         <Toaster />
       </body>
