@@ -22,12 +22,17 @@ export function ProblemsGallerySlider() {
   React.useEffect(() => {
     if (!api) return;
 
-    setCurrent(api.selectedScrollSnap());
+    const updateCurrent = () => {
+      const selectedIndex = api.selectedScrollSnap();
+      // Normalize index to handle carousel looping
+      const normalizedIndex = selectedIndex % problemImages.length;
+      setCurrent(normalizedIndex);
+    };
 
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap());
-    });
-  }, [api]);
+    updateCurrent();
+
+    api.on("select", updateCurrent);
+  }, [api, problemImages.length]);
 
   React.useEffect(() => {
     if (api && setApi) {
@@ -36,15 +41,18 @@ export function ProblemsGallerySlider() {
   }, [api, setApi]);
 
   const getItemSize = (index: number) => {
-    const distance = Math.abs(index - current);
+    // Normalize indices to handle carousel looping
+    const normalizedIndex = index % problemImages.length;
+    const normalizedCurrent = current % problemImages.length;
+    const distance = Math.abs(normalizedIndex - normalizedCurrent);
 
-    if (index === current) {
+    if (normalizedIndex === normalizedCurrent) {
       // Active item - biggest
       return "w-[300px] h-[370px] shadow-xl z-20";
     } else if (
       distance === 1 ||
-      index === problemImages.length - 1 ||
-      index === 0
+      normalizedIndex === problemImages.length - 1 ||
+      normalizedIndex === 0
     ) {
       // Adjacent items - normal
       return "w-[240px] h-[320px]";
@@ -104,7 +112,7 @@ export function ProblemsGallerySlider() {
 
           {/* Problem Name */}
           <p className="text-sm lg:text-xl font-medium text-center">
-            {problemImages[current].title}
+            {problemImages[current % problemImages.length]?.title || ""}
           </p>
 
           <button
