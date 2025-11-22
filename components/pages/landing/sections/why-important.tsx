@@ -8,6 +8,7 @@ interface ReasonCardProps {
   description: string;
   highlighted?: boolean;
   className?: string;
+  isActiveOnMobile?: boolean;
 }
 
 function ReasonCard({
@@ -15,25 +16,38 @@ function ReasonCard({
   title,
   description,
   className,
+  isActiveOnMobile = false,
 }: ReasonCardProps) {
   return (
     <div
       className={cn(
         "p-[2px] group md:hover:z-10 transition-all duration-500 relative cursor-pointer",
         "bg-gradient-to-bl from-transparent via-transparent to-transparent",
+        isActiveOnMobile && "md:bg-gradient-to-bl md:from-transparent md:via-transparent md:to-transparent bg-gradient-to-bl from-secondary via-white to-white",
         "md:hover:bg-gradient-to-bl md:hover:from-secondary md:hover:via-white md:hover:to-white",
+        isActiveOnMobile && "md:shadow-none shadow-[0_58px_83px_rgba(93,104,126,0.09),0_132px_112px_rgba(93,104,126,0.05),0_234px_132px_rgba(93,104,126,0.01)]",
         "md:hover:shadow-[0_58px_83px_rgba(93,104,126,0.09),0_132px_112px_rgba(93,104,126,0.05),0_234px_132px_rgba(93,104,126,0.01)]",
         className
       )}
     >
-      <div className="h-full p-8 pb-16 space-y-6 bg-background md:group-hover:bg-white">
+      <div className={cn(
+        "h-full p-8 pb-16 space-y-6 bg-background",
+        isActiveOnMobile && "md:bg-background bg-white",
+        "md:group-hover:bg-white"
+      )}>
         {/* Number */}
         <div
           className={cn(
-            "w-16 h-16 rotate-45 md:group-hover:rotate-0 flex items-center justify-center text-white font-bold text-xl bg-primary-light md:group-hover:bg-secondary transition-all duration-300 will-change-auto cursor-pointer"
+            "w-16 h-16 rotate-45 flex items-center justify-center text-white font-bold text-xl transition-all duration-300 will-change-auto cursor-pointer",
+            isActiveOnMobile ? "md:rotate-45 rotate-0 bg-secondary md:bg-primary-light" : "bg-primary-light",
+            "md:group-hover:rotate-0 md:group-hover:bg-secondary"
           )}
         >
-          <span className="-rotate-45 md:group-hover:-rotate-0 transition-all duration-300">
+          <span className={cn(
+            "-rotate-45 transition-all duration-300",
+            isActiveOnMobile && "md:-rotate-45 rotate-0",
+            "md:group-hover:-rotate-0"
+          )}>
             {number}
           </span>
         </div>
@@ -71,6 +85,7 @@ export default function WhyImportantSection() {
                 title={reason.title}
                 description={reason.description}
                 highlighted={reason.highlighted}
+                isActiveOnMobile={index % 2 === 0}
               />
             ))}
           </div>

@@ -1,6 +1,7 @@
 import content from "@/content";
 import { SectionTitle } from "@/components/ui/section-title";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 // Import icons using SVGR
 import Icon1 from "@/icons/why-us/icon-1.svg";
@@ -12,7 +13,6 @@ import Icon5 from "@/icons/why-us/icon-5.svg";
 interface Feature {
   title: string;
   description: string;
-  highlighted?: boolean;
 }
 
 // Icon mapping for features
@@ -34,16 +34,11 @@ export default function WhyInspectexSection() {
           </div>
           {/* content */}
           {content.whyInspectex.features.map((feature, index) => (
-            <FeatureCard
-              key={index}
-              feature={feature}
-              iconIndex={index}
-              highlighted={feature.highlighted || false}
-            />
+            <FeatureCard key={index} feature={feature} iconIndex={index} />
           ))}
         </div>
       </div>
-      <div className="absolute -top-14 left-0 h-full z-20 w-1/2">
+      <div className="absolute -top-14 left-0 h-full  w-1/2">
         <Image
           src="/images/bg/why-inspectex-bg.svg"
           alt="Why Inspectex Background"
@@ -58,42 +53,68 @@ export default function WhyInspectexSection() {
 function FeatureCard({
   feature,
   iconIndex,
-  highlighted,
 }: {
   feature: Feature;
   iconIndex: number;
-  highlighted?: boolean;
 }) {
   const IconComponent = iconMap[iconIndex];
 
   return (
     <div
-      className={`p-8 pb-14 border-1 relative bg-primary ${
-        highlighted ? "border-white" : "border-white/70"
-      }`}
+      className={cn(
+        "p-8 pb-14 border-1 relative bg-transparent group transition-all duration-300 cursor-pointer z-20",
+        // Default border for all cards
+        "border-white/70",
+        // Hover effect for ALL cards on desktop
+        "md:hover:border-white",
+        // Mobile: active styles for odd cards only
+        "max-md:odd:border-white"
+      )}
     >
       {/* Icon */}
       {
         <div
           className={`w-24 h-24 bg-primary rounded-full flex items-center justify-center absolute -top-12  right-8 `}
         >
-          <IconComponent className="w-[75px] h-[75px] text-white" />
+          <IconComponent
+            className={cn(
+              "w-[75px] h-[75px] transition-colors duration-300",
+              // Default: white for all cards
+              "text-white",
+              // Hover effect for ALL cards on desktop
+              "md:group-hover:text-secondary",
+              // Mobile: active styles for odd cards only
+              "max-md:odd:text-secondary"
+            )}
+          />
         </div>
       }
 
       {/* Content */}
       <div className="pt-8 space-y-4 text-right">
         <h3
-          className={`text-xl font-bold ${
-            highlighted ? "text-secondary" : "text-white"
-          }`}
+          className={cn(
+            "text-xl font-bold transition-colors duration-300",
+            // Default: white for all cards
+            "text-white",
+            // Hover effect for ALL cards on desktop
+            "md:group-hover:text-secondary",
+            // Mobile: active styles for odd cards only
+            "max-md:odd:text-secondary"
+          )}
         >
           {feature.title}
         </h3>
         <p
-          className={`leading-10 ${
-            highlighted ? "text-white" : "text-white/60"
-          }`}
+          className={cn(
+            "leading-10 transition-colors duration-300",
+            // Default: white/60 for all cards
+            "text-white/60",
+            // Hover effect for ALL cards on desktop
+            "md:group-hover:text-white",
+            // Mobile: active styles for odd cards only
+            "max-md:odd:text-white"
+          )}
         >
           {feature.description}
         </p>
