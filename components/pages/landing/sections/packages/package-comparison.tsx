@@ -26,7 +26,7 @@ interface ComparisonSectionProps {
 
 function ComparisonSection({
   section,
-  isOpen = true,
+  isOpen = false,
   onToggle,
 }: ComparisonSectionProps) {
   return (
