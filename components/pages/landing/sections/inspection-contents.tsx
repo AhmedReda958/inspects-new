@@ -72,11 +72,11 @@ function TabContentSection({ items, image, imageMobile }: TabContentProps) {
               </AccordionTrigger>
               {item.subItems.length > 0 && (
                 <AccordionContent className="pb-6 pt-0">
-                  <ul className="space-y-5 text-right">
+                  <ul className="space-y-5 text-right list-disc list-outside ms-8">
                     {item.subItems.map((subItem, subIndex) => (
                       <li
                         key={subIndex}
-                        className="lg:text-primary text-base lg:text-xl leading-[1.45]"
+                        className="lg:text-primary text-base lg:text-xl leading-[1.45] "
                       >
                         {subItem}
                       </li>
