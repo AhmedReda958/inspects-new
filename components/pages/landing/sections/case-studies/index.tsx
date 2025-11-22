@@ -17,10 +17,9 @@ export function CaseStudies() {
   const { caseStudies } = content;
   const [api, setApi] = useState<CarouselApi>();
   const contentRef = useRef<HTMLDivElement>(null);
-  const isMobile = useIsMobile();
 
   useEffect(() => {
-    if (!api || !isMobile) return;
+    if (!api) return;
 
     const onSelect = () => {
       // Scroll to the beginning of the content when carousel changes (mobile only)
@@ -38,7 +37,7 @@ export function CaseStudies() {
     return () => {
       api.off("select", onSelect);
     };
-  }, [api, isMobile]);
+  }, [api]);
 
   return (
     <section className="py-16 bg-white" id="case-studies">
