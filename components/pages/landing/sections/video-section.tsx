@@ -1,24 +1,34 @@
 import { FaPlay } from "react-icons/fa6";
 import content from "@/content";
+import { SectionTitle } from "@/components/ui/section-title";
 
 import React from "react";
 import Link from "next/link";
 
 const VideoSection = () => {
   return (
-    <section className="h-[600px] relative bg-[url('/images/bg/video-thumbnail.png')] bg-cover bg-top">
-      <Link
-        className="absolute inset-0 w-full h-full flex items-center justify-center cursor-pointer"
-        href={content.video.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={content.video.url}
-      >
-        <div className="relative h-16 w-16 lg:h-28 lg:w-28 bg-white rounded-full z-10 flex items-center justify-center">
-          <FaPlay className="w-8 h-8 text-primary" />
-        </div>
-      </Link>
-      <div className="absolute inset-0 w-full h-full bg-primary/50"></div>
+    <section className="bg-white pt-16">
+      <SectionTitle variant="center">
+        {content.video.title}
+        <br />
+        <span className="text-lg font-bold text-primary-light -mt-2">
+          {content.video.subtitle}
+        </span>
+      </SectionTitle>
+      <div className="h-[600px] relative bg-[url('/images/bg/video-thumbnail.png')] bg-cover bg-top flex items-center justify-center mt-12">
+        <Link
+          className="absolute inset-0 w-full h-full flex items-center justify-center cursor-pointer z-10"
+          href={content.video.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={content.video.url}
+        >
+          <div className="relative h-16 w-16 lg:h-28 lg:w-28 bg-white rounded-full z-10 flex items-center justify-center">
+            <FaPlay className="w-8 h-8 text-primary" />
+          </div>
+        </Link>
+        <div className="absolute inset-0 w-full h-full bg-primary/50"></div>
+      </div>
     </section>
   );
 };

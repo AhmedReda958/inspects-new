@@ -1274,7 +1274,9 @@ const content = {
     ],
   },
   video: {
-    url: "https://youtu.be/BKNlGhCKghs?si=tRznOOhRNa78BoSC",
+    title: "فهم الفحص الشامل في دقيقة",
+    subtitle: "شاهد الآن",
+    url: "https://www.youtube.com/watch?v=LPuZS4pMNWc",
   },
   packages: {
     title: "الباقات",
