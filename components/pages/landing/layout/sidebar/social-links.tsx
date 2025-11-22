@@ -29,7 +29,7 @@ export function SocialLinks() {
         <Button
           key={link.href}
           variant="outline"
-          className="rounded-none border-white !bg-transparent text-white cursor-pointer"
+          className="rounded-none border-white hover:text-white !bg-transparent text-white cursor-pointer"
           size={"icon"}
           asChild
         >
