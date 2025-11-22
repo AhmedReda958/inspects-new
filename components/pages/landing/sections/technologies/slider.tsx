@@ -97,7 +97,11 @@ export function TechnologiesSlider() {
                 key={index}
                 onClick={() => api?.scrollTo(index)}
                 className={`w-2.5 h-2.5 rounded-full transition-all duration-200 ${
-                  current === index
+                  current === index * 5 ||
+                  current === index * 5 + 1 ||
+                  current === index * 5 + 2 ||
+                  current === index * 5 + 3 ||
+                  current === index * 5 + 4
                     ? "bg-secondary"
                     : "bg-gray-300 hover:bg-gray-400"
                 }`}
