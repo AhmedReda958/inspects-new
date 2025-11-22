@@ -20,13 +20,13 @@ const navigationItems: NavigationItem[] = [
     label: "لماذا الفحص مهم قبل شراء العقار؟",
     href: "#why-important",
   },
-  { label: "لماذا انسبكتكس؟", href: "#why-inspectex" },
+  { label: "لماذا إنسبكتكس؟", href: "#why-inspectex" },
   {
     label: "محتويات الفحص الهندسي",
     href: "#inspection-contents",
   },
   {
-    label: "آلية العمل في انسبكتكس",
+    label: "آلية العمل في إنسبكتكس",
     href: "#work-mechanism",
   },
   {
@@ -34,7 +34,7 @@ const navigationItems: NavigationItem[] = [
     href: "#technologies",
   },
   {
-    label: "المقارنة بين انسبكتكس والمنافسين",
+    label: "المقارنة بين إنسبكتكس والمنافسين",
     href: "#comparison",
   },
   { label: "دراسة الحالة", href: "#case-studies" },

@@ -27,7 +27,7 @@ export function ReportSampleSection() {
         <div className=" container max-w-[1070px] mx-auto  py-16 lg:py-44 flex flex-col lg:flex-row items-center justify-between gap-8">
           <Image
             src="/logo-full-dark.svg"
-            alt="انسبكتكس"
+            alt="إنسبكتكس"
             width={144}
             height={144}
             className="w-36 h-36"

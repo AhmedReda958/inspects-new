@@ -33,12 +33,12 @@ export function Comparison() {
               <div className="flex items-center justify-start gap-3">
                 <Image
                   src={"/logo.svg"}
-                  alt={"انسبكتكس"}
+                  alt={"إنسبكتكس"}
                   width={50}
                   height={50}
                   className="w-12 h-12"
                 />
-                <h3 className="text-primary">انسبكتكس</h3>
+                <h3 className="text-primary">إنسبكتكس</h3>
               </div>
             </div>
             <div className="p-10 ">
@@ -119,13 +119,13 @@ export function Comparison() {
                     <div className="flex items-center justify-start gap-3 mb-4">
                       <Image
                         src={"/logo.svg"}
-                        alt={"انسبكتكس"}
+                        alt={"إنسبكتكس"}
                         width={50}
                         height={50}
                         className="w-12 h-12"
                       />
                       <h5 className="text-xl font-bold text-primary">
-                        انسبكتكس
+                        إنسبكتكس
                       </h5>
                     </div>
                     <ul className="space-y-3">
