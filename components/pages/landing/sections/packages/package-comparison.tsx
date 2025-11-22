@@ -161,7 +161,10 @@ function ComparisonSection({
 export function PackageComparison() {
   const [openSections, setOpenSections] = React.useState<
     Record<string, boolean>
-  >({});
+  >(() => {
+    const firstSectionId = content.packages.comparison.sections[0]?.id;
+    return firstSectionId ? { [firstSectionId]: true } : {};
+  });
 
   function toggleSection(sectionId: string) {
     setOpenSections((prev) => ({
