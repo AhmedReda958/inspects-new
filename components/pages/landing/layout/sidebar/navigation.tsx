@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSidebar } from "./sidebar-context";
 import SidbarSquaresIcon from "@/icons/sidebar-square.svg";
 interface NavigationItem {
@@ -55,6 +55,7 @@ const navigationItems: NavigationItem[] = [
 export function Navigation() {
   const [activeSection, setActiveSection] = useState<string>("");
   const { closeMobileSidebar } = useSidebar();
+  const activeSectionRef = useRef<string>("");
 
   useEffect(() => {
     // Add check to ensure we're on the client side
@@ -71,25 +72,49 @@ export function Navigation() {
 
       if (sections.length === 0) return;
 
-      let currentActiveSection = "";
+      const viewportHeight = window.innerHeight;
+      const viewportTop = 0;
+      const viewportMiddle = viewportHeight * 0.3;
 
-      // Find the section that is currently most visible in the viewport
+      let currentActiveSection = "";
+      let maxVisibility = 0;
+
+      // Find the section with the most visibility in the viewport
       for (const section of sections) {
         if (section.element) {
           const rect = section.element.getBoundingClientRect();
-          // A section is active if it's in the top half of the viewport
-          if (rect.top <= window.innerHeight * 0.3 && rect.bottom > 0) {
-            currentActiveSection = section.id;
+
+          // Calculate how much of the section is visible in the viewport
+          const visibleTop = Math.max(rect.top, viewportTop);
+          const visibleBottom = Math.min(rect.bottom, viewportHeight);
+          const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+
+          // Prioritize sections near the top of the viewport
+          // A section is more likely to be active if:
+          // 1. Its top is above the middle threshold (30% from top)
+          // 2. It has significant visibility
+          if (rect.top <= viewportMiddle && rect.bottom > 0) {
+            // Calculate a score based on visibility and position
+            const positionScore =
+              Math.max(0, viewportMiddle - rect.top) / viewportMiddle;
+            const visibilityScore = visibleHeight / Math.max(rect.height, 1);
+            const totalScore = positionScore * 0.6 + visibilityScore * 0.4;
+
+            if (totalScore > maxVisibility) {
+              maxVisibility = totalScore;
+              currentActiveSection = section.id;
+            }
           }
         }
       }
 
-      // If no section found, default to the first one
-      if (!currentActiveSection && sections.length > 0) {
-        currentActiveSection = sections[0].id;
-      }
-
-      if (currentActiveSection && currentActiveSection !== activeSection) {
+      // Only update if we found a valid section and it's different from current
+      // Don't default to first section to avoid flickering
+      if (
+        currentActiveSection &&
+        currentActiveSection !== activeSectionRef.current
+      ) {
+        activeSectionRef.current = currentActiveSection;
         setActiveSection(currentActiveSection);
       }
     };
@@ -129,7 +154,7 @@ export function Navigation() {
         window.removeEventListener("scroll", throttledHandleScroll);
       }
     };
-  }, [activeSection]);
+  }, []);
 
   return (
     <nav
